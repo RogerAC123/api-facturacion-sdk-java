@@ -15,6 +15,8 @@ jobs:
         with:
           java-version: "21"
           distribution: "temurin"
+      - name: Dar permiso de ejecucion al wrapper
+        run: chmod +x ./gradlew
       - name: Publish y release a Maven Central
         run: ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
         env:

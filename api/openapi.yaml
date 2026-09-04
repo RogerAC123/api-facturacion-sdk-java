@@ -1,0 +1,5177 @@
+openapi: 3.1.0
+info:
+  description: "API REST para emisión de comprobantes electrónicos ante SUNAT Perú\
+    \ (Facturas, Boletas, Notas, Guías de Remisión, Resúmenes)."
+  title: API de Facturación Electrónica SUNAT
+  version: 1.0.0
+servers:
+- description: Local
+  url: http://localhost:3000
+tags:
+- description: "Facturas y Boletas (01, 03)"
+  name: invoice
+- description: "Notas de Crédito/Débito (07, 08)"
+  name: note
+- description: Guías de Remisión (09 — GRE REST)
+  name: despatch
+- description: Resumen Diario / Comunicación de Baja
+  name: summary
+- description: Consulta y gestión de documentos
+  name: documents
+- description: CRUD de empresas emisoras
+  name: company
+- description: Estado de las colas BullMQ
+  name: queues
+- description: Cuentas cliente del SaaS (poseen Companies y ApiKeys) — solo master
+  name: tenants
+- description: "Signup, login y sesión de usuarios humanos"
+  name: auth
+- description: Suscripciones a eventos vía webhook
+  name: webhooks
+- description: Sucursales / establecimientos anexos registrados en SUNAT SOL
+  name: branches
+- description: Gestión de API keys (solo accesible con MASTER_API_KEY)
+  name: api-keys
+- description: Audit log de acciones mutantes (solo master)
+  name: audit
+- description: Endpoints públicos sin auth (consulta de comprobantes por clientes
+    finales)
+  name: public
+- description: Health check / utilidades
+  name: system
+paths:
+  /health:
+    get:
+      responses:
+        "200":
+          description: Default Response
+      summary: Health check del servicio (DB + Redis + SUNAT env)
+      tags:
+      - system
+      x-accepts:
+      - application/json
+  /internal/certificates/expiring:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: days
+        required: false
+        schema:
+          default: 30
+          exclusiveMinimum: true
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          description: Default Response
+      summary: List certificates expiring within N days (internal)
+      tags:
+      - system
+      x-accepts:
+      - application/json
+  /internal/webhooks/stats:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: days
+        required: false
+        schema:
+          default: 7
+          exclusiveMinimum: true
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          description: Default Response
+      summary: Webhook delivery statistics (internal)
+      tags:
+      - system
+      x-accepts:
+      - application/json
+  /api/v1/invoice/send:
+    post:
+      description: "Genera el XML UBL 2.1, lo firma digitalmente y lo encola para\
+        \ envío asíncrono a SUNAT. Responde 202 inmediatamente. Para conocer el resultado\
+        \ final consultar GET /documents/{id}. Idempotente por (RUC emisor, tipoDoc,\
+        \ serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya\
+        \ fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue\
+        \ en proceso responde 409 (esperá el resultado, no cambies el correlativo).\
+        \ Solo un RECHAZADO exige un correlativo nuevo."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_invoice_send_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Enviar factura (01) o boleta (03) a SUNAT
+      tags:
+      - invoice
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/invoice/compute:
+    post:
+      description: "Motor de cálculo: recibe ítems crudos (cantidad, valorUnitario\
+        \ sin IGV, afectación, descuento) y un descuento global opcional, y devuelve\
+        \ TODOS los importes fiscales calculados (bases, IGV, descuentos, totales,\
+        \ monto en letras). No emite ni persiste nada — úsalo para previsualizar o\
+        \ para alimentar POST /invoice/send."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_invoice_compute_post_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_compute_post_200_response"
+          description: Default Response
+      summary: "Calcular importes (IGV, descuentos, totales) sin emitir"
+      tags:
+      - invoice
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/invoice/{id}/pdf:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          default: a4
+          enum:
+          - a4
+          - ticket
+          - ticket80
+          - ticket58
+          type: string
+        style: form
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: "Obtener PDF (A4 oficina, ticket 80mm o ticket 58mm POS)"
+      tags:
+      - invoice
+      x-accepts:
+      - application/json
+  /api/v1/invoice/{id}/xml:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Descargar XML firmado
+      tags:
+      - invoice
+      x-accepts:
+      - application/json
+  /api/v1/invoice/{id}/cdr:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Descargar CDR (constancia de SUNAT)
+      tags:
+      - invoice
+      x-accepts:
+      - application/json
+  /api/v1/note/send:
+    post:
+      description: "Genera XML UBL 2.1, firma y encola. Responde 202. Consultar GET\
+        \ /documents/{id} para el resultado final. Idempotente por (RUC emisor, tipoDoc,\
+        \ serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya\
+        \ fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue\
+        \ en proceso responde 409 (esperá el resultado, no cambies el correlativo).\
+        \ Solo un RECHAZADO exige un correlativo nuevo."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_note_send_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_note_send_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Enviar nota de crédito (07) o débito (08) a SUNAT
+      tags:
+      - note
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/note/compute:
+    post:
+      description: "Motor de cálculo para notas: recibe ítems crudos (cantidad, valorUnitario\
+        \ sin IGV, afectación, descuento) y un descuento global opcional, y devuelve\
+        \ TODOS los importes fiscales calculados. No emite ni persiste nada — úsalo\
+        \ para previsualizar o para alimentar POST /note/send (agrega tú el documento\
+        \ afectado y el motivo)."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_note_compute_post_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_compute_post_200_response"
+          description: Default Response
+      summary: "Calcular importes (IGV, descuentos, totales) sin emitir"
+      tags:
+      - note
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/note/{id}/pdf:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Obtener PDF de la nota
+      tags:
+      - note
+      x-accepts:
+      - application/json
+  /api/v1/note/{id}/xml:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Descargar XML firmado
+      tags:
+      - note
+      x-accepts:
+      - application/json
+  /api/v1/note/{id}/cdr:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Descargar CDR (constancia de SUNAT)
+      tags:
+      - note
+      x-accepts:
+      - application/json
+  /api/v1/despatch/send:
+    post:
+      description: "Genera XML UBL 2.1, firma y encola. El worker obtiene token OAuth2,\
+        \ envía a SUNAT GRE, guarda ticket y luego hace polling de getStatus. Idempotente\
+        \ por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante\
+        \ NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar\
+        \ nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no\
+        \ cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_despatch_send_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_note_send_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Enviar guía de remisión (09) via API GRE REST
+      tags:
+      - despatch
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/despatch/send-multi:
+    post:
+      description: Recibe datos comunes de transporte + array de destinos. Genera
+        una guía por cada destino con correlativo auto-asignado. Cada guía se encola
+        independientemente para envío a SUNAT GRE.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Enviar múltiples guías de remisión por destino
+      tags:
+      - despatch
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/despatch-transportista/send:
+    post:
+      description: "Guía emitida por la empresa de transporte (emisor=transportista).\
+        \ Incluye remitente (dueño de los bienes) y destinatario. Genera XML UBL 2.1,\
+        \ firma y encola para envío a SUNAT GRE."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_despatch_transportista_send_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_note_send_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Enviar guía de remisión TRANSPORTISTA (31) via API GRE REST
+      tags:
+      - despatch
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/despatch/{id}/xml:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Descargar XML firmado de la guía
+      tags:
+      - despatch
+      x-accepts:
+      - application/json
+  /api/v1/despatch/{id}/pdf:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          default: a4
+          enum:
+          - a4
+          - ticket
+          - ticket80
+          - ticket58
+          type: string
+        style: form
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: "Obtener PDF de la guía (A4 oficina, ticket 80mm o 58mm POS)"
+      tags:
+      - despatch
+      x-accepts:
+      - application/json
+  /api/v1/despatch/{id}/cdr:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Descargar CDR (constancia de SUNAT)
+      tags:
+      - despatch
+      x-accepts:
+      - application/json
+  /api/v1/summary/send:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_summary_send_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_summary_send_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Enviar resumen diario de boletas (RC)
+      tags:
+      - summary
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/voided/send:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_voided_send_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_summary_send_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Enviar comunicación de baja (RA)
+      tags:
+      - summary
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/ticket/{ticket}/status:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: ruc
+        required: true
+        schema:
+          maxLength: 11
+          minLength: 11
+          type: string
+        style: form
+      - explode: false
+        in: path
+        name: ticket
+        required: true
+        schema:
+          maxLength: 100
+          minLength: 1
+          pattern: "^[A-Za-z0-9-]+$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_ticket__ticket__status_get_200_response"
+          description: Default Response
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_ticket__ticket__status_get_202_response"
+          description: Default Response
+      summary: Consultar estado de ticket asíncrono (SOAP o GRE)
+      tags:
+      - summary
+      x-accepts:
+      - application/json
+  /api/v1/invoice/cancel:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_invoice_cancel_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_summary_send_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Anular factura via comunicación de baja
+      tags:
+      - summary
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/boleta/cancel:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_boleta_cancel_post_request"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_summary_send_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Anular boleta via resumen diario (estado=3)
+      tags:
+      - summary
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/documents:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: ruc
+        required: false
+        schema:
+          maxLength: 11
+          minLength: 11
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: tipoDoc
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: serie
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: estado
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: env
+        required: false
+        schema:
+          enum:
+          - live
+          - test
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: fechaDesde
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: fechaHasta
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: clienteNumDoc
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          exclusiveMinimum: true
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 20
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_documents_get_200_response"
+          description: Default Response
+      summary: Listar documentos con filtros y paginación
+      tags:
+      - documents
+      x-accepts:
+      - application/json
+  /api/v1/documents/{id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Detalle completo de un documento
+      tags:
+      - documents
+      x-accepts:
+      - application/json
+  /api/v1/documents/{id}/retry:
+    post:
+      description: Útil cuando un documento quedó en estado COLA_FALLIDA tras agotar
+        los reintentos automáticos.
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_documents__id__retry_post_202_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Re-encolar un documento fallido
+      tags:
+      - documents
+      x-accepts:
+      - application/json
+  /api/v1/documents/{id}/recover:
+    post:
+      description: "Consulta el estado REAL en SUNAT (getStatusCdr / billConsultService)\
+        \ SIN reenviar y corrige la BD. Útil cuando un documento quedó desincronizado\
+        \ (ej. una boleta ACEPTADA figurando RECHAZADO/COLA_FALLIDA/ENCOLADO). Solo\
+        \ comprobantes 01/03/07/08, solo en producción. Restringido al master API\
+        \ key."
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_documents__id__recover_post_200_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: "Reconciliar un documento con SUNAT (consulta de CDR, solo master)"
+      tags:
+      - documents
+      x-accepts:
+      - application/json
+  /api/v1/cdr/consultar:
+    post:
+      description: "Recupera el CDR oficial (billConsultService / getStatusCdr) de\
+        \ un comprobante 01/03/07/08 por RUC+serie+número, aunque no exista en esta\
+        \ BD. Útil para recuperar el histórico emitido por otro PSE. Solo en producció\
+        n; usa la Clave SOL de la empresa (debe existir y estar en scope de la API\
+        \ key)."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_cdr_consultar_post_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_cdr_consultar_post_200_response"
+          description: Default Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Consultar el CDR de un comprobante en SUNAT por referencia
+      tags:
+      - documents
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/queues/stats:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_queues_stats_get_200_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Estado de las colas BullMQ
+      tags:
+      - queues
+      x-accepts:
+      - application/json
+  /api/v1/documents/next-correlativo:
+    get:
+      description: Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie
+        y retorna el siguiente. Útil para auto-numeración.
+      parameters:
+      - explode: true
+        in: query
+        name: companyRuc
+        required: true
+        schema:
+          maxLength: 11
+          minLength: 11
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: tipoDoc
+        required: true
+        schema:
+          maxLength: 2
+          minLength: 1
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: serie
+        required: true
+        schema:
+          maxLength: 4
+          minLength: 4
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_documents_next_correlativo_get_200_response"
+          description: Default Response
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+          description: Default Response
+      summary: Obtener el siguiente correlativo disponible para una serie
+      tags:
+      - documents
+      x-accepts:
+      - application/json
+  /api/v1/companies:
+    get:
+      responses:
+        "200":
+          description: Default Response
+      summary: Listar empresas emisoras
+      tags:
+      - company
+      x-accepts:
+      - application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_companies_post_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: Crear empresa emisora
+      tags:
+      - company
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/companies/{id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Detalle de empresa
+      tags:
+      - company
+      x-accepts:
+      - application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_companies__id__put_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: Actualizar empresa
+      tags:
+      - company
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/companies/claim:
+    post:
+      description: "Prueba de titularidad = certificado digital del RUC. Si la cuenta\
+        \ que lo tiene no acreditó titularidad y no emitió documentos, el RUC pasa\
+        \ a tu cuenta."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_companies_claim_post_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: "Reclamar un RUC registrado por otra cuenta, con su certificado"
+      tags:
+      - company
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/companies/{id}/logo:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Obtener logo de la empresa (PNG/JPG)
+      tags:
+      - company
+      x-accepts:
+      - application/json
+  /api/v1/webhooks:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: ruc
+        required: false
+        schema:
+          maxLength: 11
+          minLength: 11
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Default Response
+      summary: Listar webhooks (filtra por RUC opcional)
+      tags:
+      - webhooks
+      x-accepts:
+      - application/json
+    post:
+      description: Registra una URL que recibirá POSTs cuando ocurran los eventos
+        suscritos. Sin `empresaRuc` el webhook cubre TODAS las empresas de tu cuenta
+        (un solo secret; el `empresaRuc` viaja en cada payload). La respuesta incluye
+        el `secret` (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_webhooks_post_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: Crear endpoint webhook
+      tags:
+      - webhooks
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/webhooks/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Eliminar webhook (también elimina su historial de deliveries)
+      tags:
+      - webhooks
+      x-accepts:
+      - application/json
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Detalle de webhook (sin secret)
+      tags:
+      - webhooks
+      x-accepts:
+      - application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_webhooks__id__put_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: "Actualizar webhook (url, eventos, activación)"
+      tags:
+      - webhooks
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/webhooks/{id}/deliveries:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 50
+          maximum: 200
+          minimum: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: success
+        required: false
+        schema:
+          enum:
+          - "true"
+          - "false"
+          type: string
+        style: form
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Log de entregas del webhook
+      tags:
+      - webhooks
+      x-accepts:
+      - application/json
+  /api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: deliveryId
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Reintentar manualmente una entrega
+      tags:
+      - webhooks
+      x-accepts:
+      - application/json
+  /api/v1/webhooks/{id}/test:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Enviar un evento de prueba (webhook.test)
+      tags:
+      - webhooks
+      x-accepts:
+      - application/json
+  /api/v1/webhooks/{id}/rotate-secret:
+    post:
+      description: Genera un nuevo secret HMAC y lo devuelve una única vez. Las firmas
+        de entregas posteriores usarán el nuevo secret; actualiza tu receptor antes
+        de rotar.
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Rotar el secret de firma (devuelto UNA sola vez)
+      tags:
+      - webhooks
+      x-accepts:
+      - application/json
+  /api/v1/companies/{id}/branches:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Listar establecimientos (sucursales) de una empresa
+      tags:
+      - branches
+      x-accepts:
+      - application/json
+    post:
+      description: El código debe coincidir con el que SUNAT asignó a la sucursal
+        al registrarla en el portal SOL (Mis Trámites > Establecimientos Anexos).
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_companies__id__branches_post_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: Crear establecimiento (sucursal)
+      tags:
+      - branches
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/companies/{id}/branches/{branchId}:
+    delete:
+      description: No se elimina físicamente porque puede haber documentos emitidos
+        desde ahí. Solo se desactiva (isActive=false).
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: branchId
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Desactivar establecimiento (soft-delete)
+      tags:
+      - branches
+      x-accepts:
+      - application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: branchId
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_companies__id__branches__branchId__put_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: Actualizar establecimiento
+      tags:
+      - branches
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/plans:
+    get:
+      responses:
+        "200":
+          description: Default Response
+      summary: Listar planes (solo master)
+      tags:
+      - plans
+      x-accepts:
+      - application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_plans_post_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: Crear plan
+      tags:
+      - plans
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/plans/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Desactivar plan (soft-delete)
+      tags:
+      - plans
+      x-accepts:
+      - application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_plans__id__put_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: "Actualizar plan (precio, docs, nombre, estado)"
+      tags:
+      - plans
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/auth/signup:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_auth_signup_post_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: "Registro público: crea Tenant + User + sesión"
+      tags:
+      - auth
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/auth/login:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/_api_v1_auth_login_post_request"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+      summary: Login email+password
+      tags:
+      - auth
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/auth/refresh:
+    post:
+      responses:
+        "200":
+          description: Default Response
+      summary: Renovar access token con refresh cookie
+      tags:
+      - auth
+      x-accepts:
+      - application/json
+  /api/v1/auth/logout:
+    post:
+      responses:
+        "200":
+          description: Default Response
+      summary: Cerrar sesión actual (revoca refresh)
+      tags:
+      - auth
+      x-accepts:
+      - application/json
+  /api/v1/auth/verify-email:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: token
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 64
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Default Response
+      summary: "Confirmar email con token (one-time, 24h)"
+      tags:
+      - auth
+      x-accepts:
+      - application/json
+  /api/v1/auth/verify-email/resend:
+    post:
+      responses:
+        "200":
+          description: Default Response
+      summary: Re-enviar email de verificación al usuario logueado
+      tags:
+      - auth
+      x-accepts:
+      - application/json
+  /api/v1/auth/me:
+    get:
+      responses:
+        "200":
+          description: Default Response
+      summary: Datos del usuario actual
+      tags:
+      - auth
+      x-accepts:
+      - application/json
+  /api/v1/auth/sessions:
+    get:
+      responses:
+        "200":
+          description: Default Response
+      summary: Lista de sesiones activas del usuario
+      tags:
+      - auth
+      x-accepts:
+      - application/json
+  /api/v1/auth/sessions/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Revocar una sesión activa por ID
+      tags:
+      - auth
+      x-accepts:
+      - application/json
+  /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}:
+    get:
+      description: Verificación pública de un comprobante emitido. Retorna datos mínimos
+        no sensibles. El parámetro `total` es opcional pero recomendado como anti-scraping
+        (debe coincidir con el monto total).
+      parameters:
+      - explode: true
+        in: query
+        name: total
+        required: false
+        schema:
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: fecha
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: receptor
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - explode: false
+        in: path
+        name: ruc
+        required: true
+        schema:
+          maxLength: 11
+          minLength: 11
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: tipoDoc
+        required: true
+        schema:
+          maxLength: 2
+          minLength: 2
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: serie
+        required: true
+        schema:
+          maxLength: 4
+          minLength: 4
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: numero
+        required: true
+        schema:
+          maxLength: 8
+          minLength: 1
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: "Consultar un comprobante (público, sin auth)"
+      tags:
+      - public
+      x-accepts:
+      - application/json
+  /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}/pdf:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: ruc
+        required: true
+        schema:
+          maxLength: 11
+          minLength: 11
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: tipoDoc
+        required: true
+        schema:
+          maxLength: 2
+          minLength: 2
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: serie
+        required: true
+        schema:
+          maxLength: 4
+          minLength: 4
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: numero
+        required: true
+        schema:
+          maxLength: 8
+          minLength: 1
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Descargar PDF del comprobante (público)
+      tags:
+      - public
+      x-accepts:
+      - application/json
+  /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}/xml:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: ruc
+        required: true
+        schema:
+          maxLength: 11
+          minLength: 11
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: tipoDoc
+        required: true
+        schema:
+          maxLength: 2
+          minLength: 2
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: serie
+        required: true
+        schema:
+          maxLength: 4
+          minLength: 4
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: numero
+        required: true
+        schema:
+          maxLength: 8
+          minLength: 1
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Descargar XML firmado (público)
+      tags:
+      - public
+      x-accepts:
+      - application/json
+  /api/v1/catalogs:
+    get:
+      description: "Devuelve los catálogos SUNAT más usados y los específicos de guí\
+        as de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado,\
+        \ 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.)."
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_api_v1_catalogs_get_200_response"
+          description: Default Response
+      summary: Listar catálogos SUNAT (código → descripción)
+      tags:
+      - system
+      x-accepts:
+      - application/json
+  /api/v1/catalogs/{key}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: key
+        required: true
+        schema:
+          nullable: true
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Default Response
+      summary: Obtener un catálogo por clave
+      tags:
+      - system
+      x-accepts:
+      - application/json
+components:
+  schemas:
+    _api_v1_invoice_send_post_request_detalle_inner:
+      properties:
+        unidad:
+          maxLength: 20
+          minLength: 1
+          type: string
+        cantidad:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        codProducto:
+          maxLength: 50
+          minLength: 1
+          type: string
+        descripcion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        marca:
+          maxLength: 100
+          type: string
+        montoValorUnitario:
+          minimum: 0
+          type: number
+        montoBaseIgv:
+          minimum: 0
+          type: number
+        porcentajeIgv:
+          default: 18
+          minimum: 0
+          type: number
+        igv:
+          minimum: 0
+          type: number
+        tipAfeIgv:
+          default: "10"
+          maxLength: 2
+          minLength: 1
+          type: string
+        totalImpuestos:
+          minimum: 0
+          type: number
+        montoPrecioUnitario:
+          minimum: 0
+          type: number
+        montoValorVenta:
+          minimum: 0
+          type: number
+        descuento:
+          minimum: 0
+          type: number
+        descuentoItem:
+          minimum: 0
+          type: number
+        factorIcbper:
+          default: 0
+          minimum: 0
+          type: number
+        codProdSunat:
+          nullable: true
+          type: string
+      required:
+      - cantidad
+      - codProducto
+      - descripcion
+      - igv
+      - montoBaseIgv
+      - montoPrecioUnitario
+      - montoValorUnitario
+      - montoValorVenta
+      - totalImpuestos
+      - unidad
+    _api_v1_invoice_send_post_request_formaPago_inner:
+      properties:
+        tipo:
+          enum:
+          - Contado
+          - Credito
+          type: string
+        monto:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        cuota:
+          default: 0
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        fechaPago:
+          nullable: true
+          type: string
+      required:
+      - fechaPago
+      - monto
+      - tipo
+    _api_v1_invoice_send_post_request_leyendas_inner:
+      properties:
+        legendCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+        legendValue:
+          maxLength: 500
+          minLength: 1
+          type: string
+      required:
+      - legendCode
+      - legendValue
+    _api_v1_invoice_send_post_request_pagos_inner:
+      properties:
+        metodoPago:
+          maxLength: 40
+          type: string
+        monto:
+          type: number
+      required:
+      - metodoPago
+      - monto
+    _api_v1_invoice_send_post_request_detraccion:
+      properties:
+        codBienServicio:
+          pattern: "^\\d{3}$"
+          type: string
+        cuentaBanco:
+          maxLength: 30
+          minLength: 1
+          type: string
+        porcentaje:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        monto:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        medioPago:
+          default: "001"
+          type: string
+      required:
+      - codBienServicio
+      - cuentaBanco
+      - monto
+      - porcentaje
+    _api_v1_invoice_send_post_request_guiaRemision_inner:
+      properties:
+        tipoDoc:
+          default: "09"
+          enum:
+          - "31"
+          - "09"
+          type: string
+        nroDoc:
+          pattern: "^[A-Z][A-Z0-9]{3}-\\d{1,8}$"
+          type: string
+      required:
+      - nroDoc
+    _api_v1_invoice_send_post_request:
+      properties:
+        tipoOperacion:
+          default: "0101"
+          maxLength: 4
+          minLength: 1
+          type: string
+        tipoDoc:
+          enum:
+          - "01"
+          - "03"
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        tipoMoneda:
+          default: PEN
+          maxLength: 3
+          minLength: 3
+          type: string
+        fechaEmision:
+          type: string
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        establecimientoCodigo:
+          default: "0000"
+          pattern: "^\\d{4}$"
+          type: string
+        clienteTipoDoc:
+          maxLength: 1
+          minLength: 1
+          type: string
+        clienteNumDoc:
+          maxLength: 20
+          minLength: 1
+          type: string
+        clienteRazonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        clienteDireccion:
+          maxLength: 500
+          type: string
+        clienteDistrito:
+          maxLength: 100
+          type: string
+        clienteProvincia:
+          maxLength: 100
+          type: string
+        clienteDepartamento:
+          maxLength: 100
+          type: string
+        montoOperGravadas:
+          default: 0
+          minimum: 0
+          type: number
+        montoOperExoneradas:
+          default: 0
+          minimum: 0
+          type: number
+        montoOperInafectas:
+          default: 0
+          minimum: 0
+          type: number
+        montoOperGratuitas:
+          default: 0
+          minimum: 0
+          type: number
+        montoIgv:
+          minimum: 0
+          type: number
+        totalImpuestos:
+          minimum: 0
+          type: number
+        valorVenta:
+          minimum: 0
+          type: number
+        subTotal:
+          minimum: 0
+          type: number
+        montoImpVenta:
+          minimum: 0
+          type: number
+        descuentoGlobal:
+          minimum: 0
+          type: number
+        descuentoGlobalBase:
+          minimum: 0
+          type: number
+        detalle:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_detalle_inner"
+          maxItems: 1000
+          minItems: 1
+          type: array
+          default: null
+        formaPago:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_formaPago_inner"
+          maxItems: 100
+          minItems: 1
+          type: array
+          default: null
+        leyendas:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_leyendas_inner"
+          maxItems: 50
+          minItems: 1
+          type: array
+          default: null
+        observacion:
+          maxLength: 1000
+          type: string
+        vendedor:
+          maxLength: 120
+          type: string
+        pagos:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_pagos_inner"
+          maxItems: 20
+          type: array
+          default: null
+        detraccion:
+          $ref: "#/components/schemas/_api_v1_invoice_send_post_request_detraccion"
+        guiaRemision:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_guiaRemision_inner"
+          maxItems: 20
+          type: array
+          default: null
+      required:
+      - clienteNumDoc
+      - clienteRazonSocial
+      - clienteTipoDoc
+      - correlativo
+      - detalle
+      - empresaRuc
+      - fechaEmision
+      - formaPago
+      - leyendas
+      - montoIgv
+      - montoImpVenta
+      - serie
+      - subTotal
+      - tipoDoc
+      - totalImpuestos
+      - valorVenta
+    _api_v1_invoice_send_post_202_response_data:
+      additionalProperties: {}
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        estado: estado
+        hash: hash
+        signatureValue: signatureValue
+        jobId: jobId
+      properties:
+        id:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        estado:
+          nullable: true
+          type: string
+        hash:
+          nullable: true
+          type: string
+        signatureValue:
+          nullable: true
+          type: string
+        jobId:
+          nullable: true
+          type: string
+      required:
+      - estado
+      - hash
+      - id
+      - signatureValue
+    _api_v1_invoice_send_post_202_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        data:
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          estado: estado
+          hash: hash
+          signatureValue: signatureValue
+          jobId: jobId
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        data:
+          $ref: "#/components/schemas/_api_v1_invoice_send_post_202_response_data"
+      required:
+      - message
+      - success
+    _api_v1_invoice_send_post_400_response_errors_inner:
+      additionalProperties: {}
+      example:
+        path: path
+        message: message
+      properties:
+        path:
+          nullable: true
+          type: string
+        message:
+          nullable: true
+          type: string
+      required:
+      - message
+      - path
+    _api_v1_invoice_send_post_400_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        code: code
+        errors:
+        - path: path
+          message: message
+        - path: path
+          message: message
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        code:
+          nullable: true
+          type: string
+        errors:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response_errors_inner"
+          type: array
+          default: null
+      required:
+      - message
+      - success
+    _api_v1_invoice_compute_post_request_items_inner_descuento:
+      properties:
+        porcentaje:
+          maximum: 100
+          minimum: 0
+          type: number
+        monto:
+          minimum: 0
+          type: number
+    _api_v1_invoice_compute_post_request_items_inner:
+      properties:
+        descripcion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        cantidad:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        valorUnitario:
+          minimum: 0
+          type: number
+        unidad:
+          maxLength: 20
+          minLength: 1
+          type: string
+        codProducto:
+          maxLength: 50
+          type: string
+        afectacion:
+          default: "10"
+          maxLength: 2
+          minLength: 1
+          type: string
+        igvPorcentaje:
+          default: 18
+          maximum: 100
+          minimum: 0
+          type: number
+        descuento:
+          $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner_descuento"
+        factorIcbper:
+          default: 0
+          minimum: 0
+          type: number
+        marca:
+          maxLength: 100
+          type: string
+        codProdSunat:
+          nullable: true
+          type: string
+      required:
+      - cantidad
+      - descripcion
+      - valorUnitario
+    _api_v1_invoice_compute_post_request:
+      properties:
+        tipoMoneda:
+          default: PEN
+          maxLength: 3
+          minLength: 3
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner"
+          maxItems: 1000
+          minItems: 1
+          type: array
+          default: null
+        descuentoGlobal:
+          $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner_descuento"
+        preciosIncluyenIgv:
+          default: false
+          type: boolean
+      required:
+      - items
+    _api_v1_invoice_compute_post_200_response_data_items_inner:
+      additionalProperties: {}
+      example:
+        unidad: unidad
+        cantidad: 0.8008281904610115
+        codProducto: codProducto
+        descripcion: descripcion
+        marca: marca
+        tipAfeIgv: tipAfeIgv
+        porcentajeIgv: 6.027456183070403
+        montoValorUnitario: 1.4658129805029452
+        descuento: 5.962133916683182
+        descuentoItem: 5.637376656633329
+        descuentoGlobalLinea: 2.3021358869347655
+        montoBruto: 7.061401241503109
+        montoValorVenta: 9.301444243932576
+        montoBaseIgv: 3.616076749251911
+        igv: 2.027123023002322
+        totalImpuestos: 4.145608029883936
+        montoPrecioUnitario: 7.386281948385884
+        factorIcbper: 1.2315135367772556
+        codProdSunat: codProdSunat
+      properties:
+        unidad:
+          nullable: true
+          type: string
+        cantidad:
+          type: number
+        codProducto:
+          nullable: true
+          type: string
+        descripcion:
+          nullable: true
+          type: string
+        marca:
+          nullable: true
+          type: string
+        tipAfeIgv:
+          nullable: true
+          type: string
+        porcentajeIgv:
+          type: number
+        montoValorUnitario:
+          type: number
+        descuento:
+          type: number
+        descuentoItem:
+          type: number
+        descuentoGlobalLinea:
+          type: number
+        montoBruto:
+          type: number
+        montoValorVenta:
+          type: number
+        montoBaseIgv:
+          type: number
+        igv:
+          type: number
+        totalImpuestos:
+          type: number
+        montoPrecioUnitario:
+          type: number
+        factorIcbper:
+          type: number
+        codProdSunat:
+          nullable: true
+          type: string
+      required:
+      - cantidad
+      - codProducto
+      - descripcion
+      - descuento
+      - descuentoGlobalLinea
+      - descuentoItem
+      - factorIcbper
+      - igv
+      - montoBaseIgv
+      - montoBruto
+      - montoPrecioUnitario
+      - montoValorUnitario
+      - montoValorVenta
+      - porcentajeIgv
+      - tipAfeIgv
+      - totalImpuestos
+      - unidad
+    _api_v1_invoice_compute_post_200_response_data:
+      additionalProperties: {}
+      example:
+        tipoMoneda: tipoMoneda
+        items:
+        - unidad: unidad
+          cantidad: 0.8008281904610115
+          codProducto: codProducto
+          descripcion: descripcion
+          marca: marca
+          tipAfeIgv: tipAfeIgv
+          porcentajeIgv: 6.027456183070403
+          montoValorUnitario: 1.4658129805029452
+          descuento: 5.962133916683182
+          descuentoItem: 5.637376656633329
+          descuentoGlobalLinea: 2.3021358869347655
+          montoBruto: 7.061401241503109
+          montoValorVenta: 9.301444243932576
+          montoBaseIgv: 3.616076749251911
+          igv: 2.027123023002322
+          totalImpuestos: 4.145608029883936
+          montoPrecioUnitario: 7.386281948385884
+          factorIcbper: 1.2315135367772556
+          codProdSunat: codProdSunat
+        - unidad: unidad
+          cantidad: 0.8008281904610115
+          codProducto: codProducto
+          descripcion: descripcion
+          marca: marca
+          tipAfeIgv: tipAfeIgv
+          porcentajeIgv: 6.027456183070403
+          montoValorUnitario: 1.4658129805029452
+          descuento: 5.962133916683182
+          descuentoItem: 5.637376656633329
+          descuentoGlobalLinea: 2.3021358869347655
+          montoBruto: 7.061401241503109
+          montoValorVenta: 9.301444243932576
+          montoBaseIgv: 3.616076749251911
+          igv: 2.027123023002322
+          totalImpuestos: 4.145608029883936
+          montoPrecioUnitario: 7.386281948385884
+          factorIcbper: 1.2315135367772556
+          codProdSunat: codProdSunat
+        montoOperGravadas: 1.0246457001441578
+        montoOperExoneradas: 1.4894159098541704
+        montoOperInafectas: 6.84685269835264
+        montoOperGratuitas: 7.457744773683766
+        montoOperExportacion: 1.1730742509559433
+        montoIgv: 4.965218492984954
+        montoIcbper: 5.025004791520295
+        descuentoGlobal: 9.965781217890562
+        descuentoGlobalBase: 9.369310271410669
+        totalDescuentos: 6.683562403749608
+        totalImpuestos: 8.762042012749001
+        valorVenta: 9.018348186070783
+        subTotal: 6.438423552598547
+        montoImpVenta: 3.5571952270680973
+        montoEnLetras: montoEnLetras
+      properties:
+        tipoMoneda:
+          nullable: true
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_compute_post_200_response_data_items_inner"
+          type: array
+          default: null
+        montoOperGravadas:
+          type: number
+        montoOperExoneradas:
+          type: number
+        montoOperInafectas:
+          type: number
+        montoOperGratuitas:
+          type: number
+        montoOperExportacion:
+          type: number
+        montoIgv:
+          type: number
+        montoIcbper:
+          type: number
+        descuentoGlobal:
+          type: number
+        descuentoGlobalBase:
+          type: number
+        totalDescuentos:
+          type: number
+        totalImpuestos:
+          type: number
+        valorVenta:
+          type: number
+        subTotal:
+          type: number
+        montoImpVenta:
+          type: number
+        montoEnLetras:
+          nullable: true
+          type: string
+      required:
+      - descuentoGlobal
+      - descuentoGlobalBase
+      - items
+      - montoEnLetras
+      - montoIcbper
+      - montoIgv
+      - montoImpVenta
+      - montoOperExoneradas
+      - montoOperExportacion
+      - montoOperGratuitas
+      - montoOperGravadas
+      - montoOperInafectas
+      - subTotal
+      - tipoMoneda
+      - totalDescuentos
+      - totalImpuestos
+      - valorVenta
+    _api_v1_invoice_compute_post_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        data:
+          tipoMoneda: tipoMoneda
+          items:
+          - unidad: unidad
+            cantidad: 0.8008281904610115
+            codProducto: codProducto
+            descripcion: descripcion
+            marca: marca
+            tipAfeIgv: tipAfeIgv
+            porcentajeIgv: 6.027456183070403
+            montoValorUnitario: 1.4658129805029452
+            descuento: 5.962133916683182
+            descuentoItem: 5.637376656633329
+            descuentoGlobalLinea: 2.3021358869347655
+            montoBruto: 7.061401241503109
+            montoValorVenta: 9.301444243932576
+            montoBaseIgv: 3.616076749251911
+            igv: 2.027123023002322
+            totalImpuestos: 4.145608029883936
+            montoPrecioUnitario: 7.386281948385884
+            factorIcbper: 1.2315135367772556
+            codProdSunat: codProdSunat
+          - unidad: unidad
+            cantidad: 0.8008281904610115
+            codProducto: codProducto
+            descripcion: descripcion
+            marca: marca
+            tipAfeIgv: tipAfeIgv
+            porcentajeIgv: 6.027456183070403
+            montoValorUnitario: 1.4658129805029452
+            descuento: 5.962133916683182
+            descuentoItem: 5.637376656633329
+            descuentoGlobalLinea: 2.3021358869347655
+            montoBruto: 7.061401241503109
+            montoValorVenta: 9.301444243932576
+            montoBaseIgv: 3.616076749251911
+            igv: 2.027123023002322
+            totalImpuestos: 4.145608029883936
+            montoPrecioUnitario: 7.386281948385884
+            factorIcbper: 1.2315135367772556
+            codProdSunat: codProdSunat
+          montoOperGravadas: 1.0246457001441578
+          montoOperExoneradas: 1.4894159098541704
+          montoOperInafectas: 6.84685269835264
+          montoOperGratuitas: 7.457744773683766
+          montoOperExportacion: 1.1730742509559433
+          montoIgv: 4.965218492984954
+          montoIcbper: 5.025004791520295
+          descuentoGlobal: 9.965781217890562
+          descuentoGlobalBase: 9.369310271410669
+          totalDescuentos: 6.683562403749608
+          totalImpuestos: 8.762042012749001
+          valorVenta: 9.018348186070783
+          subTotal: 6.438423552598547
+          montoImpVenta: 3.5571952270680973
+          montoEnLetras: montoEnLetras
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        data:
+          $ref: "#/components/schemas/_api_v1_invoice_compute_post_200_response_data"
+      required:
+      - data
+      - message
+      - success
+    _api_v1_note_send_post_request_detalle_inner:
+      properties:
+        unidad:
+          maxLength: 20
+          minLength: 1
+          type: string
+        cantidad:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        codProducto:
+          maxLength: 50
+          minLength: 1
+          type: string
+        descripcion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        marca:
+          maxLength: 100
+          type: string
+        montoValorUnitario:
+          minimum: 0
+          type: number
+        montoBaseIgv:
+          minimum: 0
+          type: number
+        porcentajeIgv:
+          default: 18
+          minimum: 0
+          type: number
+        igv:
+          minimum: 0
+          type: number
+        tipAfeIgv:
+          default: "10"
+          maxLength: 2
+          minLength: 1
+          type: string
+        totalImpuestos:
+          minimum: 0
+          type: number
+        montoPrecioUnitario:
+          minimum: 0
+          type: number
+        montoValorVenta:
+          minimum: 0
+          type: number
+        descuento:
+          minimum: 0
+          type: number
+        descuentoItem:
+          minimum: 0
+          type: number
+        factorIcbper:
+          default: 0
+          minimum: 0
+          type: number
+        codProdSunat:
+          type: string
+      required:
+      - cantidad
+      - codProducto
+      - descripcion
+      - igv
+      - montoBaseIgv
+      - montoPrecioUnitario
+      - montoValorUnitario
+      - montoValorVenta
+      - totalImpuestos
+      - unidad
+    _api_v1_note_send_post_request:
+      properties:
+        tipoOperacion:
+          default: "0101"
+          maxLength: 4
+          minLength: 1
+          type: string
+        tipoDoc:
+          enum:
+          - "07"
+          - "08"
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        tipoMoneda:
+          default: PEN
+          maxLength: 3
+          minLength: 3
+          type: string
+        fechaEmision:
+          nullable: true
+          type: string
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        establecimientoCodigo:
+          default: "0000"
+          pattern: "^\\d{4}$"
+          type: string
+        clienteTipoDoc:
+          maxLength: 1
+          minLength: 1
+          type: string
+        clienteNumDoc:
+          maxLength: 20
+          minLength: 1
+          type: string
+        clienteRazonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        clienteDireccion:
+          maxLength: 500
+          type: string
+        clienteDistrito:
+          maxLength: 100
+          type: string
+        clienteProvincia:
+          maxLength: 100
+          type: string
+        clienteDepartamento:
+          maxLength: 100
+          type: string
+        afectadoTipoDoc:
+          enum:
+          - "01"
+          - "03"
+          type: string
+        afectadoNumDoc:
+          pattern: "^[A-Z][A-Z0-9]{3}-\\d{1,8}$"
+          type: string
+        motivoCod:
+          maxLength: 2
+          minLength: 1
+          type: string
+        motivoDes:
+          maxLength: 255
+          minLength: 1
+          type: string
+        montoOperGravadas:
+          default: 0
+          minimum: 0
+          type: number
+        montoOperExoneradas:
+          default: 0
+          minimum: 0
+          type: number
+        montoOperInafectas:
+          default: 0
+          minimum: 0
+          type: number
+        montoIgv:
+          minimum: 0
+          type: number
+        totalImpuestos:
+          minimum: 0
+          type: number
+        valorVenta:
+          minimum: 0
+          type: number
+        subTotal:
+          minimum: 0
+          type: number
+        montoImpVenta:
+          minimum: 0
+          type: number
+        descuentoGlobal:
+          minimum: 0
+          type: number
+        descuentoGlobalBase:
+          minimum: 0
+          type: number
+        detalle:
+          items:
+            $ref: "#/components/schemas/_api_v1_note_send_post_request_detalle_inner"
+          maxItems: 1000
+          minItems: 1
+          type: array
+          default: null
+        leyendas:
+          items:
+            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_leyendas_inner"
+          maxItems: 50
+          minItems: 1
+          type: array
+          default: null
+        observacion:
+          maxLength: 500
+          type: string
+      required:
+      - afectadoNumDoc
+      - afectadoTipoDoc
+      - clienteNumDoc
+      - clienteRazonSocial
+      - clienteTipoDoc
+      - correlativo
+      - detalle
+      - empresaRuc
+      - fechaEmision
+      - leyendas
+      - montoIgv
+      - montoImpVenta
+      - motivoCod
+      - motivoDes
+      - serie
+      - subTotal
+      - tipoDoc
+      - totalImpuestos
+      - valorVenta
+    _api_v1_note_send_post_202_response_data:
+      additionalProperties: false
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        estado: estado
+        hash: hash
+        signatureValue: signatureValue
+        jobId: jobId
+      properties:
+        id:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        estado:
+          type: string
+        hash:
+          nullable: true
+          type: string
+        signatureValue:
+          nullable: true
+          type: string
+        jobId:
+          type: string
+      required:
+      - estado
+      - hash
+      - id
+      - signatureValue
+    _api_v1_note_send_post_202_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        data:
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          estado: estado
+          hash: hash
+          signatureValue: signatureValue
+          jobId: jobId
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        data:
+          $ref: "#/components/schemas/_api_v1_note_send_post_202_response_data"
+      required:
+      - message
+      - success
+    _api_v1_note_compute_post_request_items_inner:
+      properties:
+        descripcion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        cantidad:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        valorUnitario:
+          minimum: 0
+          type: number
+        unidad:
+          maxLength: 20
+          minLength: 1
+          type: string
+        codProducto:
+          maxLength: 50
+          type: string
+        afectacion:
+          default: "10"
+          maxLength: 2
+          minLength: 1
+          type: string
+        igvPorcentaje:
+          default: 18
+          maximum: 100
+          minimum: 0
+          type: number
+        descuento:
+          $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner_descuento"
+        factorIcbper:
+          default: 0
+          minimum: 0
+          type: number
+        marca:
+          maxLength: 100
+          type: string
+        codProdSunat:
+          type: string
+      required:
+      - cantidad
+      - descripcion
+      - valorUnitario
+    _api_v1_note_compute_post_request:
+      properties:
+        tipoMoneda:
+          default: PEN
+          maxLength: 3
+          minLength: 3
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/_api_v1_note_compute_post_request_items_inner"
+          maxItems: 1000
+          minItems: 1
+          type: array
+          default: null
+        descuentoGlobal:
+          $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner_descuento"
+        preciosIncluyenIgv:
+          default: false
+          type: boolean
+      required:
+      - items
+    _api_v1_despatch_send_post_request_chofer_inner:
+      properties:
+        tipo:
+          enum:
+          - Principal
+          - Secundario
+          type: string
+        tipoDoc:
+          maxLength: 1
+          minLength: 1
+          type: string
+        nroDoc:
+          maxLength: 20
+          minLength: 1
+          type: string
+        licencia:
+          maxLength: 20
+          minLength: 1
+          type: string
+        nombres:
+          maxLength: 200
+          minLength: 1
+          type: string
+        apellidos:
+          maxLength: 200
+          minLength: 1
+          type: string
+      required:
+      - apellidos
+      - licencia
+      - nombres
+      - nroDoc
+      - tipo
+      - tipoDoc
+    _api_v1_despatch_send_post_request_indicadores:
+      properties:
+        transbordoProgramado:
+          type: boolean
+        vehiculoM1L:
+          type: boolean
+        retornoVehiculoEnvaseVacio:
+          type: boolean
+        retornoVehiculoVacio:
+          type: boolean
+        trasladoTotalDamDs:
+          type: boolean
+        registroTransportista:
+          type: boolean
+        trasladoContenedorManifiesto:
+          type: boolean
+    _api_v1_despatch_send_post_request_contenedores_inner:
+      properties:
+        numero:
+          maxLength: 20
+          minLength: 1
+          type: string
+        precinto:
+          maxLength: 100
+          type: string
+      required:
+      - numero
+    _api_v1_despatch_send_post_request_vehiculosSecundarios_inner:
+      properties:
+        placa:
+          maxLength: 8
+          minLength: 1
+          type: string
+        tuc:
+          maxLength: 15
+          type: string
+        autorizacion:
+          maxLength: 50
+          type: string
+        autorizacionEntidad:
+          maxLength: 2
+          type: string
+      required:
+      - placa
+    _api_v1_despatch_send_post_request_guiaPartidaGeo:
+      properties:
+        lat:
+          nullable: true
+          type: string
+        lon:
+          nullable: true
+          type: string
+      required:
+      - lat
+      - lon
+    _api_v1_despatch_send_post_request_guiaLlegadaGeo:
+      properties:
+        lat:
+          type: string
+        lon:
+          type: string
+      required:
+      - lat
+      - lon
+    _api_v1_despatch_send_post_request_documentosRelacionados_inner:
+      properties:
+        codTipo:
+          maxLength: 2
+          minLength: 1
+          type: string
+        numero:
+          maxLength: 50
+          minLength: 1
+          type: string
+        tipoDesc:
+          maxLength: 100
+          type: string
+        emisorRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+      required:
+      - codTipo
+      - numero
+    _api_v1_despatch_send_post_request_detalle_inner:
+      properties:
+        unidad:
+          maxLength: 20
+          minLength: 1
+          type: string
+        cantidad:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        codProducto:
+          maxLength: 50
+          minLength: 1
+          type: string
+        descripcion:
+          maxLength: 500
+          minLength: 1
+          type: string
+      required:
+      - cantidad
+      - codProducto
+      - descripcion
+      - unidad
+    _api_v1_despatch_send_post_request:
+      properties:
+        tipoDoc:
+          enum:
+          - "09"
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        observacion:
+          maxLength: 500
+          type: string
+        fechaEmision:
+          nullable: true
+          type: string
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        establecimientoCodigo:
+          default: "0000"
+          pattern: "^\\d{4}$"
+          type: string
+        clienteTipoDoc:
+          maxLength: 1
+          minLength: 1
+          type: string
+        clienteNumDoc:
+          maxLength: 20
+          minLength: 1
+          type: string
+        clienteRazonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        clienteDireccion:
+          maxLength: 500
+          type: string
+        clienteDistrito:
+          maxLength: 100
+          type: string
+        clienteProvincia:
+          maxLength: 100
+          type: string
+        clienteDepartamento:
+          maxLength: 100
+          type: string
+        destinatarioContacto:
+          maxLength: 200
+          type: string
+        destinatarioTelefono:
+          maxLength: 50
+          type: string
+        destinatarioEmail:
+          maxLength: 120
+          nullable: true
+          type: string
+        entregaReferencia:
+          maxLength: 500
+          type: string
+        modalidadEntrega:
+          enum:
+          - DOMICILIO
+          - AGENCIA
+          type: string
+        agenciaNombre:
+          maxLength: 150
+          type: string
+        agenciaSede:
+          maxLength: 150
+          type: string
+        guiaCodTraslado:
+          maxLength: 2
+          minLength: 1
+          type: string
+        guiaModTraslado:
+          enum:
+          - "01"
+          - "02"
+          type: string
+        guiaPesoTotal:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        guiaUndPesoTotal:
+          default: KGM
+          type: string
+        guiaFecTraslado:
+          nullable: true
+          type: string
+        guiaVehiculoPlaca:
+          maxLength: 10
+          type: string
+        transportistaTipoDoc:
+          nullable: true
+          type: string
+        transportistaNumDoc:
+          nullable: true
+          type: string
+        transportistaRazonSocial:
+          nullable: true
+          type: string
+        transportistaNroMtc:
+          pattern: "^[A-Z0-9]{1,20}$"
+          type: string
+        guiaPartidaUbigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        guiaPartidaDireccion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        guiaPartidaCiudad:
+          maxLength: 200
+          type: string
+        guiaLlegadaUbigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        guiaLlegadaDireccion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        guiaLlegadaCiudad:
+          maxLength: 200
+          type: string
+        chofer:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_chofer_inner"
+          maxItems: 10
+          type: array
+          default: null
+        guiaFecEntrega:
+          nullable: true
+          type: string
+        guiaDesTraslado:
+          maxLength: 100
+          type: string
+        guiaPesoNeto:
+          minimum: 0
+          type: number
+        guiaSustentoPeso:
+          maxLength: 250
+          type: string
+        guiaNumBultos:
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        indicadores:
+          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_indicadores"
+        contenedores:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_contenedores_inner"
+          maxItems: 2
+          type: array
+          default: null
+        guiaVehiculoTuc:
+          maxLength: 15
+          type: string
+        guiaVehiculoAutorizacion:
+          maxLength: 50
+          type: string
+        guiaVehiculoAutorizacionEntidad:
+          maxLength: 2
+          type: string
+        vehiculosSecundarios:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_vehiculosSecundarios_inner"
+          maxItems: 2
+          type: array
+          default: null
+        transportistaAutorizacion:
+          maxLength: 50
+          type: string
+        transportistaAutorizacionEntidad:
+          maxLength: 2
+          type: string
+        guiaPartidaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        guiaPartidaCodLocal:
+          maxLength: 4
+          type: string
+        guiaPartidaGeo:
+          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_guiaPartidaGeo"
+        guiaLlegadaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        guiaLlegadaCodLocal:
+          maxLength: 4
+          type: string
+        guiaLlegadaGeo:
+          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_guiaLlegadaGeo"
+        documentosRelacionados:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_documentosRelacionados_inner"
+          maxItems: 20
+          type: array
+          default: null
+        remitenteAutorizacion:
+          maxLength: 50
+          type: string
+        remitenteAutorizacionEntidad:
+          maxLength: 2
+          type: string
+        proveedorTipoDoc:
+          maxLength: 1
+          type: string
+        proveedorNumDoc:
+          maxLength: 20
+          type: string
+        proveedorRazonSocial:
+          maxLength: 255
+          type: string
+        compradorTipoDoc:
+          maxLength: 1
+          type: string
+        compradorNumDoc:
+          maxLength: 20
+          type: string
+        compradorRazonSocial:
+          maxLength: 255
+          type: string
+        puertoCodigo:
+          maxLength: 10
+          type: string
+        puertoNombre:
+          maxLength: 100
+          type: string
+        puertoTipo:
+          maxLength: 1
+          type: string
+        detalle:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_detalle_inner"
+          maxItems: 1000
+          minItems: 1
+          type: array
+          default: null
+      required:
+      - clienteNumDoc
+      - clienteRazonSocial
+      - clienteTipoDoc
+      - correlativo
+      - detalle
+      - empresaRuc
+      - fechaEmision
+      - guiaCodTraslado
+      - guiaFecTraslado
+      - guiaLlegadaDireccion
+      - guiaLlegadaUbigeo
+      - guiaModTraslado
+      - guiaPartidaDireccion
+      - guiaPartidaUbigeo
+      - guiaPesoTotal
+      - serie
+      - tipoDoc
+    _api_v1_despatch_send_multi_post_request_destinos_inner:
+      properties:
+        clienteTipoDoc:
+          maxLength: 1
+          minLength: 1
+          type: string
+        clienteNumDoc:
+          maxLength: 20
+          minLength: 1
+          type: string
+        clienteRazonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        clienteDireccion:
+          maxLength: 500
+          type: string
+        clienteDistrito:
+          maxLength: 100
+          type: string
+        clienteProvincia:
+          maxLength: 100
+          type: string
+        clienteDepartamento:
+          maxLength: 100
+          type: string
+        destinatarioContacto:
+          maxLength: 200
+          type: string
+        destinatarioTelefono:
+          maxLength: 50
+          type: string
+        destinatarioEmail:
+          maxLength: 120
+          nullable: true
+          type: string
+        entregaReferencia:
+          maxLength: 500
+          type: string
+        modalidadEntrega:
+          enum:
+          - DOMICILIO
+          - AGENCIA
+          type: string
+        agenciaNombre:
+          maxLength: 150
+          type: string
+        agenciaSede:
+          maxLength: 150
+          type: string
+        guiaLlegadaUbigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        guiaLlegadaDireccion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        guiaPesoTotal:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        guiaUndPesoTotal:
+          default: KGM
+          type: string
+        detalle:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_detalle_inner"
+          maxItems: 1000
+          minItems: 1
+          type: array
+          default: null
+      required:
+      - clienteNumDoc
+      - clienteRazonSocial
+      - clienteTipoDoc
+      - detalle
+      - guiaLlegadaDireccion
+      - guiaLlegadaUbigeo
+      - guiaPesoTotal
+    _api_v1_despatch_send_multi_post_request:
+      properties:
+        tipoDoc:
+          enum:
+          - "09"
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        observacion:
+          maxLength: 500
+          type: string
+        fechaEmision:
+          nullable: true
+          type: string
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        establecimientoCodigo:
+          default: "0000"
+          pattern: "^\\d{4}$"
+          type: string
+        guiaCodTraslado:
+          maxLength: 2
+          minLength: 1
+          type: string
+        guiaModTraslado:
+          enum:
+          - "01"
+          - "02"
+          type: string
+        guiaFecTraslado:
+          nullable: true
+          type: string
+        guiaVehiculoPlaca:
+          maxLength: 10
+          type: string
+        transportistaTipoDoc:
+          nullable: true
+          type: string
+        transportistaNumDoc:
+          nullable: true
+          type: string
+        transportistaRazonSocial:
+          nullable: true
+          type: string
+        transportistaNroMtc:
+          pattern: "^[A-Z0-9]{1,20}$"
+          type: string
+        guiaPartidaUbigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        guiaPartidaDireccion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        chofer:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_chofer_inner"
+          maxItems: 10
+          type: array
+          default: null
+        guiaFecEntrega:
+          nullable: true
+          type: string
+        guiaDesTraslado:
+          maxLength: 100
+          type: string
+        guiaPesoNeto:
+          minimum: 0
+          type: number
+        guiaSustentoPeso:
+          maxLength: 250
+          type: string
+        guiaNumBultos:
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        indicadores:
+          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_indicadores"
+        contenedores:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_contenedores_inner"
+          maxItems: 2
+          type: array
+          default: null
+        guiaVehiculoTuc:
+          maxLength: 15
+          type: string
+        guiaVehiculoAutorizacion:
+          maxLength: 50
+          type: string
+        guiaVehiculoAutorizacionEntidad:
+          maxLength: 2
+          type: string
+        vehiculosSecundarios:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_vehiculosSecundarios_inner"
+          maxItems: 2
+          type: array
+          default: null
+        transportistaAutorizacion:
+          maxLength: 50
+          type: string
+        transportistaAutorizacionEntidad:
+          maxLength: 2
+          type: string
+        guiaPartidaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        guiaPartidaCodLocal:
+          maxLength: 4
+          type: string
+        guiaPartidaGeo:
+          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_guiaLlegadaGeo"
+        guiaLlegadaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        guiaLlegadaCodLocal:
+          maxLength: 4
+          type: string
+        guiaLlegadaGeo:
+          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_guiaLlegadaGeo"
+        documentosRelacionados:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_documentosRelacionados_inner"
+          maxItems: 20
+          type: array
+          default: null
+        remitenteAutorizacion:
+          maxLength: 50
+          type: string
+        remitenteAutorizacionEntidad:
+          maxLength: 2
+          type: string
+        proveedorTipoDoc:
+          maxLength: 1
+          type: string
+        proveedorNumDoc:
+          maxLength: 20
+          type: string
+        proveedorRazonSocial:
+          maxLength: 255
+          type: string
+        compradorTipoDoc:
+          maxLength: 1
+          type: string
+        compradorNumDoc:
+          maxLength: 20
+          type: string
+        compradorRazonSocial:
+          maxLength: 255
+          type: string
+        puertoCodigo:
+          maxLength: 10
+          type: string
+        puertoNombre:
+          maxLength: 100
+          type: string
+        puertoTipo:
+          maxLength: 1
+          type: string
+        destinos:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_request_destinos_inner"
+          maxItems: 50
+          minItems: 1
+          type: array
+          default: null
+      required:
+      - destinos
+      - empresaRuc
+      - fechaEmision
+      - guiaCodTraslado
+      - guiaFecTraslado
+      - guiaModTraslado
+      - guiaPartidaDireccion
+      - guiaPartidaUbigeo
+      - serie
+      - tipoDoc
+    _api_v1_despatch_send_multi_post_202_response_data_guias_inner:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        code: code
+        destino: 5.962133916683182
+        data:
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          estado: estado
+          hash: hash
+          signatureValue: signatureValue
+          jobId: jobId
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        code:
+          nullable: true
+          type: string
+        destino:
+          type: number
+        data:
+          $ref: "#/components/schemas/_api_v1_note_send_post_202_response_data"
+      required:
+      - destino
+      - message
+      - success
+    _api_v1_despatch_send_multi_post_202_response_data:
+      additionalProperties: {}
+      example:
+        total: 0.8008281904610115
+        emitidas: 6.027456183070403
+        fallidas: 1.4658129805029452
+        guias:
+        - success: true
+          message: message
+          code: code
+          destino: 5.962133916683182
+          data:
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            estado: estado
+            hash: hash
+            signatureValue: signatureValue
+            jobId: jobId
+        - success: true
+          message: message
+          code: code
+          destino: 5.962133916683182
+          data:
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            estado: estado
+            hash: hash
+            signatureValue: signatureValue
+            jobId: jobId
+      properties:
+        total:
+          type: number
+        emitidas:
+          type: number
+        fallidas:
+          type: number
+        guias:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_202_response_data_guias_inner"
+          type: array
+          default: null
+      required:
+      - emitidas
+      - fallidas
+      - guias
+      - total
+    _api_v1_despatch_send_multi_post_202_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        data:
+          total: 0.8008281904610115
+          emitidas: 6.027456183070403
+          fallidas: 1.4658129805029452
+          guias:
+          - success: true
+            message: message
+            code: code
+            destino: 5.962133916683182
+            data:
+              id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              estado: estado
+              hash: hash
+              signatureValue: signatureValue
+              jobId: jobId
+          - success: true
+            message: message
+            code: code
+            destino: 5.962133916683182
+            data:
+              id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              estado: estado
+              hash: hash
+              signatureValue: signatureValue
+              jobId: jobId
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        data:
+          $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_202_response_data"
+      required:
+      - message
+      - success
+    _api_v1_despatch_transportista_send_post_request_vehiculosSecundarios_inner:
+      properties:
+        placa:
+          maxLength: 8
+          minLength: 1
+          type: string
+        tuc:
+          maxLength: 15
+          type: string
+      required:
+      - placa
+    _api_v1_despatch_transportista_send_post_request:
+      properties:
+        tipoDoc:
+          enum:
+          - "31"
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        observacion:
+          maxLength: 500
+          type: string
+        fechaEmision:
+          nullable: true
+          type: string
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        establecimientoCodigo:
+          default: "0000"
+          pattern: "^\\d{4}$"
+          type: string
+        transportistaNroMtc:
+          pattern: "^[A-Z0-9]{1,20}$"
+          type: string
+        destinatarioTipoDoc:
+          maxLength: 1
+          minLength: 1
+          type: string
+        destinatarioNumDoc:
+          maxLength: 20
+          minLength: 1
+          type: string
+        destinatarioRazonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        destinatarioDireccion:
+          maxLength: 500
+          type: string
+        destinatarioDistrito:
+          maxLength: 100
+          type: string
+        destinatarioProvincia:
+          maxLength: 100
+          type: string
+        destinatarioDepartamento:
+          maxLength: 100
+          type: string
+        destinatarioContacto:
+          maxLength: 200
+          type: string
+        destinatarioTelefono:
+          maxLength: 50
+          type: string
+        destinatarioEmail:
+          maxLength: 120
+          nullable: true
+          type: string
+        entregaReferencia:
+          maxLength: 500
+          type: string
+        modalidadEntrega:
+          enum:
+          - DOMICILIO
+          - AGENCIA
+          type: string
+        agenciaNombre:
+          maxLength: 150
+          type: string
+        agenciaSede:
+          maxLength: 150
+          type: string
+        remitenteTipoDoc:
+          maxLength: 1
+          minLength: 1
+          type: string
+        remitenteNumDoc:
+          maxLength: 20
+          minLength: 1
+          type: string
+        remitenteRazonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        guiaCodTraslado:
+          maxLength: 2
+          minLength: 1
+          type: string
+        guiaDesTraslado:
+          maxLength: 100
+          type: string
+        guiaPesoTotal:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        guiaUndPesoTotal:
+          default: KGM
+          type: string
+        guiaNumBultos:
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        guiaFecTraslado:
+          nullable: true
+          type: string
+        chofer:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_chofer_inner"
+          maxItems: 10
+          minItems: 1
+          type: array
+          default: null
+        guiaVehiculoPlaca:
+          maxLength: 8
+          minLength: 1
+          type: string
+        guiaVehiculoTuc:
+          maxLength: 15
+          type: string
+        vehiculosSecundarios:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_transportista_send_post_request_vehiculosSecundarios_inner"
+          maxItems: 2
+          type: array
+          default: null
+        guiaPartidaUbigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        guiaPartidaDireccion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        guiaLlegadaUbigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        guiaLlegadaDireccion:
+          maxLength: 500
+          minLength: 1
+          type: string
+        documentosRelacionados:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_documentosRelacionados_inner"
+          maxItems: 10
+          type: array
+          default: null
+        detalle:
+          items:
+            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_detalle_inner"
+          maxItems: 1000
+          minItems: 1
+          type: array
+          default: null
+      required:
+      - chofer
+      - correlativo
+      - destinatarioNumDoc
+      - destinatarioRazonSocial
+      - destinatarioTipoDoc
+      - detalle
+      - empresaRuc
+      - fechaEmision
+      - guiaCodTraslado
+      - guiaFecTraslado
+      - guiaLlegadaDireccion
+      - guiaLlegadaUbigeo
+      - guiaPartidaDireccion
+      - guiaPartidaUbigeo
+      - guiaPesoTotal
+      - guiaVehiculoPlaca
+      - remitenteNumDoc
+      - remitenteRazonSocial
+      - remitenteTipoDoc
+      - serie
+      - tipoDoc
+    _api_v1_summary_send_post_request_items_inner:
+      properties:
+        tipoDoc:
+          nullable: true
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        clienteTipoDoc:
+          nullable: true
+          type: string
+        clienteNumDoc:
+          nullable: true
+          type: string
+        estadoItem:
+          enum:
+          - "1"
+          - "2"
+          - "3"
+          type: string
+        tipoMoneda:
+          default: PEN
+          type: string
+        montoOperGravadas:
+          default: 0
+          type: number
+        montoOperExoneradas:
+          default: 0
+          type: number
+        montoOperInafectas:
+          default: 0
+          type: number
+        montoOperGratuitas:
+          default: 0
+          type: number
+        montoIgv:
+          default: 0
+          type: number
+        montoIsc:
+          default: 0
+          type: number
+        montoOtrosCargos:
+          default: 0
+          type: number
+        montoTotal:
+          type: number
+      required:
+      - clienteNumDoc
+      - clienteTipoDoc
+      - correlativo
+      - estadoItem
+      - montoTotal
+      - serie
+      - tipoDoc
+    _api_v1_summary_send_post_request:
+      properties:
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        fechaEmision:
+          nullable: true
+          type: string
+        fechaReferencia:
+          nullable: true
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/_api_v1_summary_send_post_request_items_inner"
+          maxItems: 5000
+          minItems: 1
+          type: array
+          default: null
+      required:
+      - correlativo
+      - empresaRuc
+      - fechaEmision
+      - fechaReferencia
+      - items
+    _api_v1_summary_send_post_202_response_data:
+      additionalProperties: {}
+      example:
+        id: id
+        estado: estado
+        ticket: ticket
+        hash: hash
+      properties:
+        id:
+          nullable: true
+          type: string
+        estado:
+          nullable: true
+          type: string
+        ticket:
+          nullable: true
+          type: string
+        hash:
+          nullable: true
+          type: string
+    _api_v1_summary_send_post_202_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        data:
+          id: id
+          estado: estado
+          ticket: ticket
+          hash: hash
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        data:
+          $ref: "#/components/schemas/_api_v1_summary_send_post_202_response_data"
+      required:
+      - message
+      - success
+    _api_v1_voided_send_post_request_items_inner:
+      properties:
+        tipoDoc:
+          nullable: true
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        motivoBaja:
+          minLength: 1
+          type: string
+      required:
+      - correlativo
+      - motivoBaja
+      - serie
+      - tipoDoc
+    _api_v1_voided_send_post_request:
+      properties:
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        fechaEmision:
+          nullable: true
+          type: string
+        fechaReferencia:
+          nullable: true
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/_api_v1_voided_send_post_request_items_inner"
+          maxItems: 5000
+          minItems: 1
+          type: array
+          default: null
+      required:
+      - correlativo
+      - empresaRuc
+      - fechaEmision
+      - fechaReferencia
+      - items
+    _api_v1_ticket__ticket__status_get_200_response_cdrResponse:
+      additionalProperties: {}
+      example:
+        id: id
+        code: code
+        description: description
+        notes:
+        - notes
+        - notes
+      properties:
+        id:
+          nullable: true
+          type: string
+        code:
+          nullable: true
+          type: string
+        description:
+          nullable: true
+          type: string
+        notes:
+          items:
+            nullable: true
+            type: string
+          type: array
+          default: null
+      required:
+      - code
+      - description
+      - id
+      - notes
+    _api_v1_ticket__ticket__status_get_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        statusCode: statusCode
+        cdrResponse:
+          id: id
+          code: code
+          description: description
+          notes:
+          - notes
+          - notes
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        statusCode:
+          nullable: true
+          type: string
+        cdrResponse:
+          $ref: "#/components/schemas/_api_v1_ticket__ticket__status_get_200_response_cdrResponse"
+      required:
+      - message
+      - statusCode
+      - success
+    _api_v1_ticket__ticket__status_get_202_response_cdrResponse:
+      additionalProperties: {}
+      example:
+        id: id
+        code: code
+        description: description
+        notes:
+        - notes
+        - notes
+      properties:
+        id:
+          nullable: true
+          type: string
+        code:
+          nullable: true
+          type: string
+        description:
+          nullable: true
+          type: string
+        notes:
+          items:
+            type: string
+          type: array
+          default: null
+      required:
+      - code
+      - description
+      - id
+      - notes
+    _api_v1_ticket__ticket__status_get_202_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        statusCode: statusCode
+        cdrResponse:
+          id: id
+          code: code
+          description: description
+          notes:
+          - notes
+          - notes
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        statusCode:
+          nullable: true
+          type: string
+        cdrResponse:
+          $ref: "#/components/schemas/_api_v1_ticket__ticket__status_get_202_response_cdrResponse"
+      required:
+      - message
+      - statusCode
+      - success
+    _api_v1_invoice_cancel_post_request:
+      properties:
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        tipoDoc:
+          enum:
+          - "01"
+          - "07"
+          - "08"
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        motivoBaja:
+          maxLength: 250
+          minLength: 1
+          type: string
+        raCorrelativo:
+          pattern: ^\d+$
+          type: string
+      required:
+      - correlativo
+      - empresaRuc
+      - motivoBaja
+      - serie
+      - tipoDoc
+    _api_v1_boleta_cancel_post_request:
+      properties:
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        serie:
+          pattern: "^[A-Z0-9]{4}$"
+          type: string
+        correlativo:
+          pattern: "^\\d{1,8}$"
+          type: string
+        motivoBaja:
+          maxLength: 250
+          minLength: 1
+          type: string
+        rcCorrelativo:
+          pattern: ^\d+$
+          type: string
+      required:
+      - correlativo
+      - empresaRuc
+      - motivoBaja
+      - serie
+    _api_v1_documents_get_200_response_data_inner_company:
+      additionalProperties: {}
+      example:
+        ruc: ruc
+        razonSocial: razonSocial
+      properties:
+        ruc:
+          nullable: true
+          type: string
+        razonSocial:
+          nullable: true
+          type: string
+      required:
+      - razonSocial
+      - ruc
+    _api_v1_documents_get_200_response_data_inner:
+      additionalProperties: {}
+      example:
+        id: id
+        env: live
+        tipoDoc: tipoDoc
+        serie: serie
+        correlativo: correlativo
+        fechaEmision: fechaEmision
+        tipoMoneda: tipoMoneda
+        clienteNumDoc: clienteNumDoc
+        clienteRazonSocial: clienteRazonSocial
+        montoImpVenta: montoImpVenta
+        montoIgv: montoIgv
+        estadoSunat: estadoSunat
+        codigoRespuesta: codigoRespuesta
+        descripcionRespuesta: descripcionRespuesta
+        hashCdr: hashCdr
+        createdAt: createdAt
+        company:
+          ruc: ruc
+          razonSocial: razonSocial
+      properties:
+        id:
+          nullable: true
+          type: string
+        env:
+          enum:
+          - live
+          - test
+          type: string
+        tipoDoc:
+          nullable: true
+          type: string
+        serie:
+          nullable: true
+          type: string
+        correlativo:
+          nullable: true
+          type: string
+        fechaEmision:
+          nullable: true
+          type: string
+        tipoMoneda:
+          nullable: true
+          type: string
+        clienteNumDoc:
+          nullable: true
+          type: string
+        clienteRazonSocial:
+          nullable: true
+          type: string
+        montoImpVenta:
+          nullable: true
+          type: string
+        montoIgv:
+          nullable: true
+          type: string
+        estadoSunat:
+          nullable: true
+          type: string
+        codigoRespuesta:
+          nullable: true
+          type: string
+        descripcionRespuesta:
+          nullable: true
+          type: string
+        hashCdr:
+          nullable: true
+          type: string
+        createdAt:
+          nullable: true
+          type: string
+        company:
+          $ref: "#/components/schemas/_api_v1_documents_get_200_response_data_inner_company"
+      required:
+      - clienteNumDoc
+      - clienteRazonSocial
+      - codigoRespuesta
+      - company
+      - correlativo
+      - createdAt
+      - env
+      - estadoSunat
+      - fechaEmision
+      - hashCdr
+      - id
+      - montoImpVenta
+      - serie
+      - tipoDoc
+      - tipoMoneda
+    _api_v1_documents_get_200_response_pagination:
+      additionalProperties: {}
+      example:
+        page: 0.8008281904610115
+        limit: 6.027456183070403
+        total: 1.4658129805029452
+        totalPages: 5.962133916683182
+      properties:
+        page:
+          type: number
+        limit:
+          type: number
+        total:
+          type: number
+        totalPages:
+          type: number
+      required:
+      - limit
+      - page
+      - total
+      - totalPages
+    _api_v1_documents_get_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        data:
+        - id: id
+          env: live
+          tipoDoc: tipoDoc
+          serie: serie
+          correlativo: correlativo
+          fechaEmision: fechaEmision
+          tipoMoneda: tipoMoneda
+          clienteNumDoc: clienteNumDoc
+          clienteRazonSocial: clienteRazonSocial
+          montoImpVenta: montoImpVenta
+          montoIgv: montoIgv
+          estadoSunat: estadoSunat
+          codigoRespuesta: codigoRespuesta
+          descripcionRespuesta: descripcionRespuesta
+          hashCdr: hashCdr
+          createdAt: createdAt
+          company:
+            ruc: ruc
+            razonSocial: razonSocial
+        - id: id
+          env: live
+          tipoDoc: tipoDoc
+          serie: serie
+          correlativo: correlativo
+          fechaEmision: fechaEmision
+          tipoMoneda: tipoMoneda
+          clienteNumDoc: clienteNumDoc
+          clienteRazonSocial: clienteRazonSocial
+          montoImpVenta: montoImpVenta
+          montoIgv: montoIgv
+          estadoSunat: estadoSunat
+          codigoRespuesta: codigoRespuesta
+          descripcionRespuesta: descripcionRespuesta
+          hashCdr: hashCdr
+          createdAt: createdAt
+          company:
+            ruc: ruc
+            razonSocial: razonSocial
+        pagination:
+          page: 0.8008281904610115
+          limit: 6.027456183070403
+          total: 1.4658129805029452
+          totalPages: 5.962133916683182
+      properties:
+        success:
+          type: boolean
+        data:
+          items:
+            $ref: "#/components/schemas/_api_v1_documents_get_200_response_data_inner"
+          type: array
+          default: null
+        pagination:
+          $ref: "#/components/schemas/_api_v1_documents_get_200_response_pagination"
+      required:
+      - data
+      - pagination
+      - success
+    _api_v1_documents__id__retry_post_202_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        jobId: jobId
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        jobId:
+          nullable: true
+          type: string
+      required:
+      - message
+      - success
+    _api_v1_documents__id__recover_post_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        estado: estado
+        codigo: codigo
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        estado:
+          nullable: true
+          type: string
+        codigo:
+          nullable: true
+          type: string
+      required:
+      - message
+      - success
+    _api_v1_cdr_consultar_post_request:
+      properties:
+        ruc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        tipoDoc:
+          enum:
+          - "01"
+          - "03"
+          - "07"
+          - "08"
+          type: string
+        serie:
+          maxLength: 4
+          minLength: 1
+          type: string
+        numero:
+          maxLength: 8
+          minLength: 1
+          type: string
+      required:
+      - numero
+      - ruc
+      - serie
+      - tipoDoc
+    _api_v1_cdr_consultar_post_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        available: true
+        message: message
+        statusCode: statusCode
+        codigo: codigo
+        descripcion: descripcion
+        cdrZipBase64: cdrZipBase64
+      properties:
+        success:
+          type: boolean
+        available:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        statusCode:
+          nullable: true
+          type: string
+        codigo:
+          nullable: true
+          type: string
+        descripcion:
+          nullable: true
+          type: string
+        cdrZipBase64:
+          nullable: true
+          type: string
+      required:
+      - available
+      - message
+      - success
+    _api_v1_queues_stats_get_200_response_data:
+      additionalProperties: {}
+      example:
+        sunat-send:
+          key: 0.8008281904610115
+        sunat-summary:
+          key: 6.027456183070403
+        sunat-ticket-poll:
+          key: 1.4658129805029452
+        sunat-gre-send:
+          key: 5.962133916683182
+        sunat-gre-ticket-poll:
+          key: 5.637376656633329
+      properties:
+        sunat-send:
+          additionalProperties:
+            type: number
+          type: object
+        sunat-summary:
+          additionalProperties:
+            type: number
+          type: object
+        sunat-ticket-poll:
+          additionalProperties:
+            type: number
+          type: object
+        sunat-gre-send:
+          additionalProperties:
+            type: number
+          type: object
+        sunat-gre-ticket-poll:
+          additionalProperties:
+            type: number
+          type: object
+      required:
+      - sunat-gre-send
+      - sunat-gre-ticket-poll
+      - sunat-send
+      - sunat-summary
+      - sunat-ticket-poll
+    _api_v1_queues_stats_get_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        data:
+          sunat-send:
+            key: 0.8008281904610115
+          sunat-summary:
+            key: 6.027456183070403
+          sunat-ticket-poll:
+            key: 1.4658129805029452
+          sunat-gre-send:
+            key: 5.962133916683182
+          sunat-gre-ticket-poll:
+            key: 5.637376656633329
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/_api_v1_queues_stats_get_200_response_data"
+      required:
+      - data
+      - success
+    _api_v1_documents_next_correlativo_get_200_response_data:
+      additionalProperties: {}
+      example:
+        next: next
+      properties:
+        next:
+          nullable: true
+          type: string
+      required:
+      - next
+    _api_v1_documents_next_correlativo_get_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        data:
+          next: next
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/_api_v1_documents_next_correlativo_get_200_response_data"
+      required:
+      - data
+      - success
+    _api_v1_companies_post_request_cuentasBancarias_inner:
+      properties:
+        nombre:
+          maxLength: 40
+          minLength: 1
+          type: string
+        bancos:
+          default: []
+          items:
+            maxLength: 20
+            type: string
+          maxItems: 2
+          type: array
+        tipoLabel:
+          maxLength: 40
+          type: string
+        titularLabel:
+          maxLength: 20
+          type: string
+        titular:
+          maxLength: 80
+          type: string
+        titularRuc:
+          maxLength: 11
+          type: string
+        numero:
+          maxLength: 40
+          minLength: 1
+          type: string
+        cci:
+          maxLength: 40
+          type: string
+      required:
+      - nombre
+      - numero
+      - tipoLabel
+    _api_v1_companies_post_request:
+      properties:
+        ruc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        razonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        nombreComercial:
+          maxLength: 255
+          type: string
+        ubigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        direccion:
+          maxLength: 500
+          type: string
+        departamento:
+          maxLength: 100
+          type: string
+        provincia:
+          maxLength: 100
+          type: string
+        distrito:
+          maxLength: 100
+          type: string
+        urbanizacion:
+          maxLength: 200
+          type: string
+        telefono:
+          maxLength: 50
+          type: string
+        email:
+          format: email
+          maxLength: 120
+          pattern: "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\
+            -]*\\.)+[A-Za-z]{2,}$"
+          type: string
+        web:
+          maxLength: 120
+          nullable: true
+          type: string
+        solUser:
+          maxLength: 50
+          type: string
+        solPassword:
+          maxLength: 100
+          type: string
+        tenantId:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        greClientId:
+          maxLength: 100
+          type: string
+        greClientSecret:
+          maxLength: 255
+          type: string
+        sunatProduction:
+          type: boolean
+        cuentasBancarias:
+          items:
+            $ref: "#/components/schemas/_api_v1_companies_post_request_cuentasBancarias_inner"
+          maxItems: 6
+          type: array
+          default: null
+        terminosTitulo:
+          maxLength: 120
+          nullable: true
+          type: string
+        terminos:
+          items:
+            maxLength: 200
+            type: string
+          maxItems: 8
+          type: array
+          default: null
+        notaPagoTitulo:
+          maxLength: 60
+          nullable: true
+          type: string
+        notaPagoTexto:
+          maxLength: 300
+          nullable: true
+          type: string
+      required:
+      - razonSocial
+      - ruc
+    _api_v1_companies__id__put_request:
+      properties:
+        ruc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        razonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        nombreComercial:
+          maxLength: 255
+          type: string
+        ubigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        direccion:
+          maxLength: 500
+          type: string
+        departamento:
+          maxLength: 100
+          type: string
+        provincia:
+          maxLength: 100
+          type: string
+        distrito:
+          maxLength: 100
+          type: string
+        urbanizacion:
+          maxLength: 200
+          type: string
+        telefono:
+          maxLength: 50
+          type: string
+        email:
+          format: email
+          maxLength: 120
+          pattern: "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\
+            -]*\\.)+[A-Za-z]{2,}$"
+          type: string
+        web:
+          maxLength: 120
+          nullable: true
+          type: string
+        solUser:
+          maxLength: 50
+          type: string
+        solPassword:
+          maxLength: 100
+          type: string
+        tenantId:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        greClientId:
+          maxLength: 100
+          type: string
+        greClientSecret:
+          maxLength: 255
+          type: string
+        sunatProduction:
+          type: boolean
+        cuentasBancarias:
+          items:
+            $ref: "#/components/schemas/_api_v1_companies_post_request_cuentasBancarias_inner"
+          maxItems: 6
+          type: array
+          default: null
+        terminosTitulo:
+          maxLength: 120
+          nullable: true
+          type: string
+        terminos:
+          items:
+            maxLength: 200
+            type: string
+          maxItems: 8
+          type: array
+          default: null
+        notaPagoTitulo:
+          maxLength: 60
+          nullable: true
+          type: string
+        notaPagoTexto:
+          maxLength: 300
+          nullable: true
+          type: string
+    _api_v1_companies_claim_post_request:
+      properties:
+        ruc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        password:
+          maxLength: 255
+          minLength: 1
+          type: string
+        content:
+          description: Base64 del .p12/.pfx
+          maxLength: 200000
+          minLength: 1
+          type: string
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+        razonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        tenantId:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+      required:
+      - content
+      - password
+      - ruc
+    _api_v1_webhooks_post_request:
+      properties:
+        empresaRuc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        tenantId:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        url:
+          format: uri
+          maxLength: 500
+          type: string
+        events:
+          items:
+            enum:
+            - document.accepted
+            - document.rejected
+            - document.queue_failed
+            - document.retried
+            - ticket.resolved
+            type: string
+          maxItems: 5
+          minItems: 1
+          type: array
+          default: null
+        description:
+          maxLength: 500
+          type: string
+        secret:
+          maxLength: 200
+          minLength: 16
+          type: string
+      required:
+      - events
+      - url
+    _api_v1_webhooks__id__put_request:
+      properties:
+        url:
+          format: uri
+          maxLength: 500
+          type: string
+        events:
+          items:
+            enum:
+            - document.accepted
+            - document.rejected
+            - document.queue_failed
+            - document.retried
+            - ticket.resolved
+            type: string
+          maxItems: 5
+          minItems: 1
+          type: array
+          default: null
+        description:
+          maxLength: 500
+          type: string
+        isActive:
+          type: boolean
+    _api_v1_companies__id__branches_post_request:
+      properties:
+        codigo:
+          pattern: "^\\d{4}$"
+          type: string
+        nombre:
+          maxLength: 255
+          type: string
+        ubigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        direccion:
+          maxLength: 500
+          type: string
+        departamento:
+          maxLength: 100
+          type: string
+        provincia:
+          maxLength: 100
+          type: string
+        distrito:
+          maxLength: 100
+          type: string
+        urbanizacion:
+          maxLength: 200
+          type: string
+        isActive:
+          default: true
+          type: boolean
+      required:
+      - codigo
+    _api_v1_companies__id__branches__branchId__put_request:
+      properties:
+        nombre:
+          maxLength: 255
+          type: string
+        ubigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        direccion:
+          maxLength: 500
+          type: string
+        departamento:
+          maxLength: 100
+          type: string
+        provincia:
+          maxLength: 100
+          type: string
+        distrito:
+          maxLength: 100
+          type: string
+        urbanizacion:
+          maxLength: 200
+          type: string
+        isActive:
+          default: true
+          type: boolean
+    _api_v1_plans_post_request:
+      properties:
+        code:
+          maxLength: 30
+          minLength: 1
+          pattern: "^[a-z0-9_-]+$"
+          type: string
+        name:
+          maxLength: 100
+          minLength: 1
+          type: string
+        monthlyDocs:
+          default: 0
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        maxRucs:
+          default: 0
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        requestsPerMinute:
+          default: 0
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        allowDespatch:
+          default: true
+          type: boolean
+        price:
+          default: 0
+          minimum: 0
+          type: number
+        currency:
+          default: PEN
+          maxLength: 3
+          minLength: 3
+          type: string
+        sortOrder:
+          default: 0
+          maximum: 9007199254740991
+          minimum: -9007199254740991
+          type: integer
+        isActive:
+          default: true
+          type: boolean
+      required:
+      - code
+      - name
+    _api_v1_plans__id__put_request:
+      properties:
+        name:
+          maxLength: 100
+          minLength: 1
+          type: string
+        monthlyDocs:
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        maxRucs:
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        requestsPerMinute:
+          maximum: 9007199254740991
+          minimum: 0
+          type: integer
+        allowDespatch:
+          type: boolean
+        price:
+          minimum: 0
+          type: number
+        currency:
+          maxLength: 3
+          minLength: 3
+          type: string
+        sortOrder:
+          maximum: 9007199254740991
+          minimum: -9007199254740991
+          type: integer
+        isActive:
+          type: boolean
+    _api_v1_auth_signup_post_request:
+      properties:
+        email:
+          format: email
+          maxLength: 255
+          pattern: "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\
+            -]*\\.)+[A-Za-z]{2,}$"
+          type: string
+        password:
+          maxLength: 100
+          minLength: 8
+          type: string
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+        tenantName:
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - email
+      - password
+      - tenantName
+    _api_v1_auth_login_post_request:
+      properties:
+        email:
+          format: email
+          maxLength: 255
+          pattern: "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\
+            -]*\\.)+[A-Za-z]{2,}$"
+          type: string
+        password:
+          maxLength: 100
+          minLength: 1
+          type: string
+      required:
+      - email
+      - password
+    _api_v1_catalogs_get_200_response_data_inner_items_inner:
+      additionalProperties: {}
+      example:
+        code: code
+        label: label
+      properties:
+        code:
+          nullable: true
+          type: string
+        label:
+          nullable: true
+          type: string
+      required:
+      - code
+      - label
+    _api_v1_catalogs_get_200_response_data_inner:
+      additionalProperties: {}
+      example:
+        key: key
+        name: name
+        items:
+        - code: code
+          label: label
+        - code: code
+          label: label
+      properties:
+        key:
+          nullable: true
+          type: string
+        name:
+          nullable: true
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/_api_v1_catalogs_get_200_response_data_inner_items_inner"
+          type: array
+          default: null
+      required:
+      - items
+      - key
+      - name
+    _api_v1_catalogs_get_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        data:
+        - key: key
+          name: name
+          items:
+          - code: code
+            label: label
+          - code: code
+            label: label
+        - key: key
+          name: name
+          items:
+          - code: code
+            label: label
+          - code: code
+            label: label
+      properties:
+        success:
+          type: boolean
+        data:
+          items:
+            $ref: "#/components/schemas/_api_v1_catalogs_get_200_response_data_inner"
+          type: array
+          default: null
+      required:
+      - data
+      - success
+

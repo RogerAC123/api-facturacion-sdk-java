@@ -2,6 +2,7 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'java'
 apply plugin: 'com.diffplug.spotless'
+apply plugin: 'com.vanniktech.maven.publish'
 
 group = 'com.intifact'
 version = '1.0.0'
@@ -9,11 +10,49 @@ version = '1.0.0'
 buildscript {
     repositories {
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.+'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.11.0'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.37.0'
+    }
+}
+
+// Publicacion a Maven Central (Sonatype Central Portal). Credenciales via
+// ORG_GRADLE_PROJECT_mavenCentralUsername/Password (User Token de Sonatype)
+// y ORG_GRADLE_PROJECT_signingInMemoryKey/KeyPassword (llave GPG), inyectadas
+// como env vars en el workflow de GitHub Actions — nunca committeadas.
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+
+    coordinates(group as String, "intifact-sdk", version as String)
+
+    pom {
+        name = "Intifact SDK"
+        description = "SDK Java para la API de Facturacion Electronica SUNAT de Intifact (Peru)"
+        inceptionYear = "2026"
+        url = "https://github.com/RogerAC123/api-facturacion-sdk-java"
+        licenses {
+            license {
+                name = "MIT"
+                url = "https://opensource.org/licenses/MIT"
+            }
+        }
+        developers {
+            developer {
+                id = "RogerAC123"
+                name = "Roger"
+                email = "huallanca.roger@gmail.com"
+            }
+        }
+        scm {
+            url = "https://github.com/RogerAC123/api-facturacion-sdk-java"
+            connection = "scm:git:https://github.com/RogerAC123/api-facturacion-sdk-java.git"
+            developerConnection = "scm:git:ssh://git@github.com/RogerAC123/api-facturacion-sdk-java.git"
+        }
     }
 }
 
@@ -81,20 +120,10 @@ if(hasProperty('target') && target == 'android') {
 } else {
 
     apply plugin: 'java'
-    apply plugin: 'maven-publish'
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    publishing {
-        publications {
-            maven(MavenPublication) {
-               artifactId = 'intifact-sdk'
-               from components.java
-            }
-        }
     }
 
     task execute(type:JavaExec) {

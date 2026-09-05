@@ -27,12 +27,13 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1DespatchSendMultiPost202Response;
-import com.intifact.sdk.model.ApiV1DespatchSendMultiPostRequest;
-import com.intifact.sdk.model.ApiV1DespatchSendPostRequest;
-import com.intifact.sdk.model.ApiV1DespatchTransportistaSendPostRequest;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1NoteSendPost202Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.SendDespatchMulti202Response;
+import com.intifact.sdk.model.SendDespatchMultiRequest;
+import com.intifact.sdk.model.SendDespatchRequest;
+import com.intifact.sdk.model.SendDespatchTransportistaRequest;
+import com.intifact.sdk.model.SendInvoice202Response;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -79,7 +80,7 @@ public class DespatchApi {
     }
 
     /**
-     * Build call for apiV1DespatchIdCdrGet
+     * Build call for getDespatchCdr
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -88,10 +89,12 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchIdCdrGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getDespatchCdrCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -118,6 +121,7 @@ public class DespatchApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -131,18 +135,18 @@ public class DespatchApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DespatchIdCdrGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getDespatchCdrValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1DespatchIdCdrGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getDespatchCdr(Async)");
         }
 
-        return apiV1DespatchIdCdrGetCall(id, _callback);
+        return getDespatchCdrCall(id, _callback);
 
     }
 
@@ -155,11 +159,13 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1DespatchIdCdrGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1DespatchIdCdrGetWithHttpInfo(id);
+    public void getDespatchCdr(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getDespatchCdrWithHttpInfo(id);
     }
 
     /**
@@ -172,11 +178,13 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1DespatchIdCdrGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DespatchIdCdrGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getDespatchCdrWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getDespatchCdrValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -191,17 +199,19 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchIdCdrGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getDespatchCdrAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1DespatchIdCdrGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getDespatchCdrValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1DespatchIdPdfGet
+     * Build call for getDespatchPdf
      * @param id  (required)
      * @param format  (optional, default to a4)
      * @param _callback Callback for upload/download progress
@@ -211,10 +221,12 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchIdPdfGetCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getDespatchPdfCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -245,6 +257,7 @@ public class DespatchApi {
         }
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -258,18 +271,18 @@ public class DespatchApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DespatchIdPdfGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getDespatchPdfValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1DespatchIdPdfGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getDespatchPdf(Async)");
         }
 
-        return apiV1DespatchIdPdfGetCall(id, format, _callback);
+        return getDespatchPdfCall(id, format, _callback);
 
     }
 
@@ -283,11 +296,13 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1DespatchIdPdfGet(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format) throws ApiException {
-        apiV1DespatchIdPdfGetWithHttpInfo(id, format);
+    public void getDespatchPdf(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format) throws ApiException {
+        getDespatchPdfWithHttpInfo(id, format);
     }
 
     /**
@@ -301,11 +316,13 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1DespatchIdPdfGetWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DespatchIdPdfGetValidateBeforeCall(id, format, null);
+    public ApiResponse<Void> getDespatchPdfWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format) throws ApiException {
+        okhttp3.Call localVarCall = getDespatchPdfValidateBeforeCall(id, format, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -321,17 +338,19 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchIdPdfGetAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getDespatchPdfAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1DespatchIdPdfGetValidateBeforeCall(id, format, _callback);
+        okhttp3.Call localVarCall = getDespatchPdfValidateBeforeCall(id, format, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1DespatchIdXmlGet
+     * Build call for getDespatchXml
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -340,10 +359,12 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchIdXmlGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getDespatchXmlCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -370,6 +391,7 @@ public class DespatchApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -383,18 +405,18 @@ public class DespatchApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DespatchIdXmlGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getDespatchXmlValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1DespatchIdXmlGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getDespatchXml(Async)");
         }
 
-        return apiV1DespatchIdXmlGetCall(id, _callback);
+        return getDespatchXmlCall(id, _callback);
 
     }
 
@@ -407,11 +429,13 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1DespatchIdXmlGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1DespatchIdXmlGetWithHttpInfo(id);
+    public void getDespatchXml(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getDespatchXmlWithHttpInfo(id);
     }
 
     /**
@@ -424,11 +448,13 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1DespatchIdXmlGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DespatchIdXmlGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getDespatchXmlWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getDespatchXmlValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -443,18 +469,20 @@ public class DespatchApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchIdXmlGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getDespatchXmlAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1DespatchIdXmlGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getDespatchXmlValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1DespatchSendMultiPost
-     * @param apiV1DespatchSendMultiPostRequest  (required)
+     * Build call for sendDespatch
+     * @param sendDespatchRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -464,141 +492,13 @@ public class DespatchApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1DespatchSendMultiPostCall(@javax.annotation.Nonnull ApiV1DespatchSendMultiPostRequest apiV1DespatchSendMultiPostRequest, final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = apiV1DespatchSendMultiPostRequest;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/despatch/send-multi";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DespatchSendMultiPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1DespatchSendMultiPostRequest apiV1DespatchSendMultiPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1DespatchSendMultiPostRequest' is set
-        if (apiV1DespatchSendMultiPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1DespatchSendMultiPostRequest' when calling apiV1DespatchSendMultiPost(Async)");
-        }
-
-        return apiV1DespatchSendMultiPostCall(apiV1DespatchSendMultiPostRequest, _callback);
-
-    }
-
-    /**
-     * Enviar múltiples guías de remisión por destino
-     * Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
-     * @param apiV1DespatchSendMultiPostRequest  (required)
-     * @return ApiV1DespatchSendMultiPost202Response
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiV1DespatchSendMultiPost202Response apiV1DespatchSendMultiPost(@javax.annotation.Nonnull ApiV1DespatchSendMultiPostRequest apiV1DespatchSendMultiPostRequest) throws ApiException {
-        ApiResponse<ApiV1DespatchSendMultiPost202Response> localVarResp = apiV1DespatchSendMultiPostWithHttpInfo(apiV1DespatchSendMultiPostRequest);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Enviar múltiples guías de remisión por destino
-     * Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
-     * @param apiV1DespatchSendMultiPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1DespatchSendMultiPost202Response&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApiV1DespatchSendMultiPost202Response> apiV1DespatchSendMultiPostWithHttpInfo(@javax.annotation.Nonnull ApiV1DespatchSendMultiPostRequest apiV1DespatchSendMultiPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DespatchSendMultiPostValidateBeforeCall(apiV1DespatchSendMultiPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1DespatchSendMultiPost202Response>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Enviar múltiples guías de remisión por destino (asynchronously)
-     * Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
-     * @param apiV1DespatchSendMultiPostRequest  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1DespatchSendMultiPostAsync(@javax.annotation.Nonnull ApiV1DespatchSendMultiPostRequest apiV1DespatchSendMultiPostRequest, final ApiCallback<ApiV1DespatchSendMultiPost202Response> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1DespatchSendMultiPostValidateBeforeCall(apiV1DespatchSendMultiPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1DespatchSendMultiPost202Response>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1DespatchSendPost
-     * @param apiV1DespatchSendPostRequest  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchSendPostCall(@javax.annotation.Nonnull ApiV1DespatchSendPostRequest apiV1DespatchSendPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call sendDespatchCall(@javax.annotation.Nonnull SendDespatchRequest sendDespatchRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -612,7 +512,7 @@ public class DespatchApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1DespatchSendPostRequest;
+        Object localVarPostBody = sendDespatchRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/despatch/send";
@@ -639,26 +539,26 @@ public class DespatchApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DespatchSendPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1DespatchSendPostRequest apiV1DespatchSendPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1DespatchSendPostRequest' is set
-        if (apiV1DespatchSendPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1DespatchSendPostRequest' when calling apiV1DespatchSendPost(Async)");
+    private okhttp3.Call sendDespatchValidateBeforeCall(@javax.annotation.Nonnull SendDespatchRequest sendDespatchRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'sendDespatchRequest' is set
+        if (sendDespatchRequest == null) {
+            throw new ApiException("Missing the required parameter 'sendDespatchRequest' when calling sendDespatch(Async)");
         }
 
-        return apiV1DespatchSendPostCall(apiV1DespatchSendPostRequest, _callback);
+        return sendDespatchCall(sendDespatchRequest, _callback);
 
     }
 
     /**
      * Enviar guía de remisión (09) via API GRE REST
      * Genera XML UBL 2.1, firma y encola. El worker obtiene token OAuth2, envía a SUNAT GRE, guarda ticket y luego hace polling de getStatus. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1DespatchSendPostRequest  (required)
-     * @return ApiV1NoteSendPost202Response
+     * @param sendDespatchRequest  (required)
+     * @return SendInvoice202Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -666,19 +566,22 @@ public class DespatchApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1NoteSendPost202Response apiV1DespatchSendPost(@javax.annotation.Nonnull ApiV1DespatchSendPostRequest apiV1DespatchSendPostRequest) throws ApiException {
-        ApiResponse<ApiV1NoteSendPost202Response> localVarResp = apiV1DespatchSendPostWithHttpInfo(apiV1DespatchSendPostRequest);
+    public SendInvoice202Response sendDespatch(@javax.annotation.Nonnull SendDespatchRequest sendDespatchRequest) throws ApiException {
+        ApiResponse<SendInvoice202Response> localVarResp = sendDespatchWithHttpInfo(sendDespatchRequest);
         return localVarResp.getData();
     }
 
     /**
      * Enviar guía de remisión (09) via API GRE REST
      * Genera XML UBL 2.1, firma y encola. El worker obtiene token OAuth2, envía a SUNAT GRE, guarda ticket y luego hace polling de getStatus. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1DespatchSendPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1NoteSendPost202Response&gt;
+     * @param sendDespatchRequest  (required)
+     * @return ApiResponse&lt;SendInvoice202Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -686,19 +589,22 @@ public class DespatchApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1NoteSendPost202Response> apiV1DespatchSendPostWithHttpInfo(@javax.annotation.Nonnull ApiV1DespatchSendPostRequest apiV1DespatchSendPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DespatchSendPostValidateBeforeCall(apiV1DespatchSendPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1NoteSendPost202Response>(){}.getType();
+    public ApiResponse<SendInvoice202Response> sendDespatchWithHttpInfo(@javax.annotation.Nonnull SendDespatchRequest sendDespatchRequest) throws ApiException {
+        okhttp3.Call localVarCall = sendDespatchValidateBeforeCall(sendDespatchRequest, null);
+        Type localVarReturnType = new TypeToken<SendInvoice202Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Enviar guía de remisión (09) via API GRE REST (asynchronously)
      * Genera XML UBL 2.1, firma y encola. El worker obtiene token OAuth2, envía a SUNAT GRE, guarda ticket y luego hace polling de getStatus. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1DespatchSendPostRequest  (required)
+     * @param sendDespatchRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -708,19 +614,22 @@ public class DespatchApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchSendPostAsync(@javax.annotation.Nonnull ApiV1DespatchSendPostRequest apiV1DespatchSendPostRequest, final ApiCallback<ApiV1NoteSendPost202Response> _callback) throws ApiException {
+    public okhttp3.Call sendDespatchAsync(@javax.annotation.Nonnull SendDespatchRequest sendDespatchRequest, final ApiCallback<SendInvoice202Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1DespatchSendPostValidateBeforeCall(apiV1DespatchSendPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1NoteSendPost202Response>(){}.getType();
+        okhttp3.Call localVarCall = sendDespatchValidateBeforeCall(sendDespatchRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendInvoice202Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1DespatchTransportistaSendPost
-     * @param apiV1DespatchTransportistaSendPostRequest  (required)
+     * Build call for sendDespatchMulti
+     * @param sendDespatchMultiRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -730,10 +639,12 @@ public class DespatchApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchTransportistaSendPostCall(@javax.annotation.Nonnull ApiV1DespatchTransportistaSendPostRequest apiV1DespatchTransportistaSendPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call sendDespatchMultiCall(@javax.annotation.Nonnull SendDespatchMultiRequest sendDespatchMultiRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -747,7 +658,151 @@ public class DespatchApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1DespatchTransportistaSendPostRequest;
+        Object localVarPostBody = sendDespatchMultiRequest;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/despatch/send-multi";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call sendDespatchMultiValidateBeforeCall(@javax.annotation.Nonnull SendDespatchMultiRequest sendDespatchMultiRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'sendDespatchMultiRequest' is set
+        if (sendDespatchMultiRequest == null) {
+            throw new ApiException("Missing the required parameter 'sendDespatchMultiRequest' when calling sendDespatchMulti(Async)");
+        }
+
+        return sendDespatchMultiCall(sendDespatchMultiRequest, _callback);
+
+    }
+
+    /**
+     * Enviar múltiples guías de remisión por destino
+     * Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
+     * @param sendDespatchMultiRequest  (required)
+     * @return SendDespatchMulti202Response
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public SendDespatchMulti202Response sendDespatchMulti(@javax.annotation.Nonnull SendDespatchMultiRequest sendDespatchMultiRequest) throws ApiException {
+        ApiResponse<SendDespatchMulti202Response> localVarResp = sendDespatchMultiWithHttpInfo(sendDespatchMultiRequest);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Enviar múltiples guías de remisión por destino
+     * Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
+     * @param sendDespatchMultiRequest  (required)
+     * @return ApiResponse&lt;SendDespatchMulti202Response&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<SendDespatchMulti202Response> sendDespatchMultiWithHttpInfo(@javax.annotation.Nonnull SendDespatchMultiRequest sendDespatchMultiRequest) throws ApiException {
+        okhttp3.Call localVarCall = sendDespatchMultiValidateBeforeCall(sendDespatchMultiRequest, null);
+        Type localVarReturnType = new TypeToken<SendDespatchMulti202Response>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Enviar múltiples guías de remisión por destino (asynchronously)
+     * Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
+     * @param sendDespatchMultiRequest  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call sendDespatchMultiAsync(@javax.annotation.Nonnull SendDespatchMultiRequest sendDespatchMultiRequest, final ApiCallback<SendDespatchMulti202Response> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = sendDespatchMultiValidateBeforeCall(sendDespatchMultiRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendDespatchMulti202Response>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for sendDespatchTransportista
+     * @param sendDespatchTransportistaRequest  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call sendDespatchTransportistaCall(@javax.annotation.Nonnull SendDespatchTransportistaRequest sendDespatchTransportistaRequest, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = sendDespatchTransportistaRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/despatch-transportista/send";
@@ -774,26 +829,26 @@ public class DespatchApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DespatchTransportistaSendPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1DespatchTransportistaSendPostRequest apiV1DespatchTransportistaSendPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1DespatchTransportistaSendPostRequest' is set
-        if (apiV1DespatchTransportistaSendPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1DespatchTransportistaSendPostRequest' when calling apiV1DespatchTransportistaSendPost(Async)");
+    private okhttp3.Call sendDespatchTransportistaValidateBeforeCall(@javax.annotation.Nonnull SendDespatchTransportistaRequest sendDespatchTransportistaRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'sendDespatchTransportistaRequest' is set
+        if (sendDespatchTransportistaRequest == null) {
+            throw new ApiException("Missing the required parameter 'sendDespatchTransportistaRequest' when calling sendDespatchTransportista(Async)");
         }
 
-        return apiV1DespatchTransportistaSendPostCall(apiV1DespatchTransportistaSendPostRequest, _callback);
+        return sendDespatchTransportistaCall(sendDespatchTransportistaRequest, _callback);
 
     }
 
     /**
      * Enviar guía de remisión TRANSPORTISTA (31) via API GRE REST
      * Guía emitida por la empresa de transporte (emisor&#x3D;transportista). Incluye remitente (dueño de los bienes) y destinatario. Genera XML UBL 2.1, firma y encola para envío a SUNAT GRE.
-     * @param apiV1DespatchTransportistaSendPostRequest  (required)
-     * @return ApiV1NoteSendPost202Response
+     * @param sendDespatchTransportistaRequest  (required)
+     * @return SendInvoice202Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -801,19 +856,22 @@ public class DespatchApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1NoteSendPost202Response apiV1DespatchTransportistaSendPost(@javax.annotation.Nonnull ApiV1DespatchTransportistaSendPostRequest apiV1DespatchTransportistaSendPostRequest) throws ApiException {
-        ApiResponse<ApiV1NoteSendPost202Response> localVarResp = apiV1DespatchTransportistaSendPostWithHttpInfo(apiV1DespatchTransportistaSendPostRequest);
+    public SendInvoice202Response sendDespatchTransportista(@javax.annotation.Nonnull SendDespatchTransportistaRequest sendDespatchTransportistaRequest) throws ApiException {
+        ApiResponse<SendInvoice202Response> localVarResp = sendDespatchTransportistaWithHttpInfo(sendDespatchTransportistaRequest);
         return localVarResp.getData();
     }
 
     /**
      * Enviar guía de remisión TRANSPORTISTA (31) via API GRE REST
      * Guía emitida por la empresa de transporte (emisor&#x3D;transportista). Incluye remitente (dueño de los bienes) y destinatario. Genera XML UBL 2.1, firma y encola para envío a SUNAT GRE.
-     * @param apiV1DespatchTransportistaSendPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1NoteSendPost202Response&gt;
+     * @param sendDespatchTransportistaRequest  (required)
+     * @return ApiResponse&lt;SendInvoice202Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -821,19 +879,22 @@ public class DespatchApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1NoteSendPost202Response> apiV1DespatchTransportistaSendPostWithHttpInfo(@javax.annotation.Nonnull ApiV1DespatchTransportistaSendPostRequest apiV1DespatchTransportistaSendPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DespatchTransportistaSendPostValidateBeforeCall(apiV1DespatchTransportistaSendPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1NoteSendPost202Response>(){}.getType();
+    public ApiResponse<SendInvoice202Response> sendDespatchTransportistaWithHttpInfo(@javax.annotation.Nonnull SendDespatchTransportistaRequest sendDespatchTransportistaRequest) throws ApiException {
+        okhttp3.Call localVarCall = sendDespatchTransportistaValidateBeforeCall(sendDespatchTransportistaRequest, null);
+        Type localVarReturnType = new TypeToken<SendInvoice202Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Enviar guía de remisión TRANSPORTISTA (31) via API GRE REST (asynchronously)
      * Guía emitida por la empresa de transporte (emisor&#x3D;transportista). Incluye remitente (dueño de los bienes) y destinatario. Genera XML UBL 2.1, firma y encola para envío a SUNAT GRE.
-     * @param apiV1DespatchTransportistaSendPostRequest  (required)
+     * @param sendDespatchTransportistaRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -843,13 +904,16 @@ public class DespatchApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DespatchTransportistaSendPostAsync(@javax.annotation.Nonnull ApiV1DespatchTransportistaSendPostRequest apiV1DespatchTransportistaSendPostRequest, final ApiCallback<ApiV1NoteSendPost202Response> _callback) throws ApiException {
+    public okhttp3.Call sendDespatchTransportistaAsync(@javax.annotation.Nonnull SendDespatchTransportistaRequest sendDespatchTransportistaRequest, final ApiCallback<SendInvoice202Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1DespatchTransportistaSendPostValidateBeforeCall(apiV1DespatchTransportistaSendPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1NoteSendPost202Response>(){}.getType();
+        okhttp3.Call localVarCall = sendDespatchTransportistaValidateBeforeCall(sendDespatchTransportistaRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendInvoice202Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

@@ -7,6 +7,8 @@ info:
 servers:
 - description: Local
   url: http://localhost:3000
+security:
+- apiKey: []
 tags:
 - description: "Facturas y Boletas (01, 03)"
   name: invoice
@@ -42,9 +44,11 @@ tags:
 paths:
   /health:
     get:
+      operationId: healthGet
       responses:
         "200":
           description: Default Response
+      security: []
       summary: Health check del servicio (DB + Redis + SUNAT env)
       tags:
       - system
@@ -65,7 +69,23 @@ paths:
           type: integer
         style: form
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_401_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: List certificates expiring within N days (internal)
       tags:
@@ -87,7 +107,23 @@ paths:
           type: integer
         style: form
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Webhook delivery statistics (internal)
       tags:
@@ -103,30 +139,49 @@ paths:
         \ fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue\
         \ en proceso responde 409 (esperá el resultado, no cambies el correlativo).\
         \ Solo un RECHAZADO exige un correlativo nuevo."
+      operationId: sendInvoice
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_invoice_send_post_request"
+              $ref: "#/components/schemas/sendInvoice_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_202_response"
+                $ref: "#/components/schemas/sendInvoice_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "409":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Enviar factura (01) o boleta (03) a SUNAT
       tags:
@@ -141,18 +196,37 @@ paths:
         \ TODOS los importes fiscales calculados (bases, IGV, descuentos, totales,\
         \ monto en letras). No emite ni persiste nada — úsalo para previsualizar o\
         \ para alimentar POST /invoice/send."
+      operationId: computeInvoice
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_invoice_compute_post_request"
+              $ref: "#/components/schemas/computeInvoice_request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_compute_post_200_response"
+                $ref: "#/components/schemas/computeInvoice_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: "Calcular importes (IGV, descuentos, totales) sin emitir"
       tags:
@@ -162,6 +236,7 @@ paths:
       - application/json
   /api/v1/invoice/{id}/pdf:
     get:
+      operationId: getInvoicePdf
       parameters:
       - explode: true
         in: query
@@ -186,7 +261,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: "Obtener PDF (A4 oficina, ticket 80mm o ticket 58mm POS)"
       tags:
@@ -195,6 +286,7 @@ paths:
       - application/json
   /api/v1/invoice/{id}/xml:
     get:
+      operationId: getInvoiceXml
       parameters:
       - explode: false
         in: path
@@ -206,7 +298,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Descargar XML firmado
       tags:
@@ -215,6 +323,7 @@ paths:
       - application/json
   /api/v1/invoice/{id}/cdr:
     get:
+      operationId: getInvoiceCdr
       parameters:
       - explode: false
         in: path
@@ -226,7 +335,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Descargar CDR (constancia de SUNAT)
       tags:
@@ -241,30 +366,49 @@ paths:
         \ fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue\
         \ en proceso responde 409 (esperá el resultado, no cambies el correlativo).\
         \ Solo un RECHAZADO exige un correlativo nuevo."
+      operationId: sendNote
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_note_send_post_request"
+              $ref: "#/components/schemas/sendNote_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_note_send_post_202_response"
+                $ref: "#/components/schemas/sendInvoice_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "409":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Enviar nota de crédito (07) o débito (08) a SUNAT
       tags:
@@ -279,18 +423,37 @@ paths:
         \ TODOS los importes fiscales calculados. No emite ni persiste nada — úsalo\
         \ para previsualizar o para alimentar POST /note/send (agrega tú el documento\
         \ afectado y el motivo)."
+      operationId: computeNote
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_note_compute_post_request"
+              $ref: "#/components/schemas/computeInvoice_request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_compute_post_200_response"
+                $ref: "#/components/schemas/computeInvoice_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: "Calcular importes (IGV, descuentos, totales) sin emitir"
       tags:
@@ -300,6 +463,7 @@ paths:
       - application/json
   /api/v1/note/{id}/pdf:
     get:
+      operationId: getNotePdf
       parameters:
       - explode: false
         in: path
@@ -311,7 +475,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Obtener PDF de la nota
       tags:
@@ -320,6 +500,7 @@ paths:
       - application/json
   /api/v1/note/{id}/xml:
     get:
+      operationId: getNoteXml
       parameters:
       - explode: false
         in: path
@@ -331,7 +512,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Descargar XML firmado
       tags:
@@ -340,6 +537,7 @@ paths:
       - application/json
   /api/v1/note/{id}/cdr:
     get:
+      operationId: getNoteCdr
       parameters:
       - explode: false
         in: path
@@ -351,7 +549,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Descargar CDR (constancia de SUNAT)
       tags:
@@ -366,30 +580,49 @@ paths:
         \ NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar\
         \ nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no\
         \ cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo."
+      operationId: sendDespatch
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_despatch_send_post_request"
+              $ref: "#/components/schemas/sendDespatch_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_note_send_post_202_response"
+                $ref: "#/components/schemas/sendInvoice_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "409":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Enviar guía de remisión (09) via API GRE REST
       tags:
@@ -402,24 +635,43 @@ paths:
       description: Recibe datos comunes de transporte + array de destinos. Genera
         una guía por cada destino con correlativo auto-asignado. Cada guía se encola
         independientemente para envío a SUNAT GRE.
+      operationId: sendDespatchMulti
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_request"
+              $ref: "#/components/schemas/sendDespatchMulti_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_202_response"
+                $ref: "#/components/schemas/sendDespatchMulti_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Enviar múltiples guías de remisión por destino
       tags:
@@ -432,30 +684,49 @@ paths:
       description: "Guía emitida por la empresa de transporte (emisor=transportista).\
         \ Incluye remitente (dueño de los bienes) y destinatario. Genera XML UBL 2.1,\
         \ firma y encola para envío a SUNAT GRE."
+      operationId: sendDespatchTransportista
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_despatch_transportista_send_post_request"
+              $ref: "#/components/schemas/sendDespatchTransportista_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_note_send_post_202_response"
+                $ref: "#/components/schemas/sendInvoice_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "409":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Enviar guía de remisión TRANSPORTISTA (31) via API GRE REST
       tags:
@@ -465,6 +736,7 @@ paths:
       - application/json
   /api/v1/despatch/{id}/xml:
     get:
+      operationId: getDespatchXml
       parameters:
       - explode: false
         in: path
@@ -476,7 +748,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Descargar XML firmado de la guía
       tags:
@@ -485,6 +773,7 @@ paths:
       - application/json
   /api/v1/despatch/{id}/pdf:
     get:
+      operationId: getDespatchPdf
       parameters:
       - explode: true
         in: query
@@ -509,7 +798,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: "Obtener PDF de la guía (A4 oficina, ticket 80mm o 58mm POS)"
       tags:
@@ -518,6 +823,7 @@ paths:
       - application/json
   /api/v1/despatch/{id}/cdr:
     get:
+      operationId: getDespatchCdr
       parameters:
       - explode: false
         in: path
@@ -529,7 +835,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Descargar CDR (constancia de SUNAT)
       tags:
@@ -538,24 +860,43 @@ paths:
       - application/json
   /api/v1/summary/send:
     post:
+      operationId: sendSummary
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_summary_send_post_request"
+              $ref: "#/components/schemas/sendSummary_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_summary_send_post_202_response"
+                $ref: "#/components/schemas/sendSummary_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Enviar resumen diario de boletas (RC)
       tags:
@@ -565,24 +906,43 @@ paths:
       - application/json
   /api/v1/voided/send:
     post:
+      operationId: sendVoided
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_voided_send_post_request"
+              $ref: "#/components/schemas/sendVoided_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_summary_send_post_202_response"
+                $ref: "#/components/schemas/sendSummary_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Enviar comunicación de baja (RA)
       tags:
@@ -592,6 +952,7 @@ paths:
       - application/json
   /api/v1/ticket/{ticket}/status:
     get:
+      operationId: getTicketStatus
       parameters:
       - explode: true
         in: query
@@ -617,13 +978,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_ticket__ticket__status_get_200_response"
+                $ref: "#/components/schemas/getTicketStatus_200_response"
           description: Default Response
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_ticket__ticket__status_get_202_response"
+                $ref: "#/components/schemas/getTicketStatus_202_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Consultar estado de ticket asíncrono (SOAP o GRE)
       tags:
@@ -632,24 +1011,43 @@ paths:
       - application/json
   /api/v1/invoice/cancel:
     post:
+      operationId: cancelInvoice
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_invoice_cancel_post_request"
+              $ref: "#/components/schemas/cancelInvoice_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_summary_send_post_202_response"
+                $ref: "#/components/schemas/sendSummary_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Anular factura via comunicación de baja
       tags:
@@ -659,24 +1057,43 @@ paths:
       - application/json
   /api/v1/boleta/cancel:
     post:
+      operationId: cancelBoleta
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_boleta_cancel_post_request"
+              $ref: "#/components/schemas/cancelBoleta_request"
         required: true
       responses:
         "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_summary_send_post_202_response"
+                $ref: "#/components/schemas/sendSummary_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Anular boleta via resumen diario (estado=3)
       tags:
@@ -686,6 +1103,7 @@ paths:
       - application/json
   /api/v1/documents:
     get:
+      operationId: listDocuments
       parameters:
       - explode: true
         in: query
@@ -780,7 +1198,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_documents_get_200_response"
+                $ref: "#/components/schemas/listDocuments_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Listar documentos con filtros y paginación
       tags:
@@ -789,6 +1225,7 @@ paths:
       - application/json
   /api/v1/documents/{id}:
     get:
+      operationId: getDocument
       parameters:
       - explode: false
         in: path
@@ -800,7 +1237,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Detalle completo de un documento
       tags:
@@ -811,6 +1264,7 @@ paths:
     post:
       description: Útil cuando un documento quedó en estado COLA_FALLIDA tras agotar
         los reintentos automáticos.
+      operationId: retryDocument
       parameters:
       - explode: false
         in: path
@@ -826,13 +1280,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_documents__id__retry_post_202_response"
+                $ref: "#/components/schemas/retryDocument_202_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Re-encolar un documento fallido
       tags:
@@ -846,6 +1318,7 @@ paths:
         \ (ej. una boleta ACEPTADA figurando RECHAZADO/COLA_FALLIDA/ENCOLADO). Solo\
         \ comprobantes 01/03/07/08, solo en producción. Restringido al master API\
         \ key."
+      operationId: reconcileDocument
       parameters:
       - explode: false
         in: path
@@ -861,25 +1334,37 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_documents__id__recover_post_200_response"
+                $ref: "#/components/schemas/reconcileDocument_200_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "403":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: "Reconciliar un documento con SUNAT (consulta de CDR, solo master)"
       tags:
@@ -893,30 +1378,49 @@ paths:
         \ BD. Útil para recuperar el histórico emitido por otro PSE. Solo en producció\
         n; usa la Clave SOL de la empresa (debe existir y estar en scope de la API\
         \ key)."
+      operationId: consultarCdr
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_cdr_consultar_post_request"
+              $ref: "#/components/schemas/consultarCdr_request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_cdr_consultar_post_200_response"
+                $ref: "#/components/schemas/consultarCdr_200_response"
           description: Default Response
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Consultar el CDR de un comprobante en SUNAT por referencia
       tags:
@@ -926,18 +1430,31 @@ paths:
       - application/json
   /api/v1/queues/stats:
     get:
+      operationId: getQueueStats
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_queues_stats_get_200_response"
+                $ref: "#/components/schemas/getQueueStats_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "403":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Estado de las colas BullMQ
       tags:
@@ -948,6 +1465,7 @@ paths:
     get:
       description: Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie
         y retorna el siguiente. Útil para auto-numeración.
+      operationId: getNextCorrelativo
       parameters:
       - explode: true
         in: query
@@ -981,13 +1499,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_documents_next_correlativo_get_200_response"
+                $ref: "#/components/schemas/getNextCorrelativo_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
           description: Default Response
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response"
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Obtener el siguiente correlativo disponible para una serie
       tags:
@@ -996,8 +1532,25 @@ paths:
       - application/json
   /api/v1/companies:
     get:
+      operationId: listCompanies
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Listar empresas emisoras
       tags:
@@ -1005,14 +1558,31 @@ paths:
       x-accepts:
       - application/json
     post:
+      operationId: createCompany
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_companies_post_request"
+              $ref: "#/components/schemas/createCompany_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Crear empresa emisora
       tags:
@@ -1022,6 +1592,7 @@ paths:
       - application/json
   /api/v1/companies/{id}:
     get:
+      operationId: getCompany
       parameters:
       - explode: false
         in: path
@@ -1033,7 +1604,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Detalle de empresa
       tags:
@@ -1041,6 +1628,7 @@ paths:
       x-accepts:
       - application/json
     put:
+      operationId: updateCompany
       parameters:
       - explode: false
         in: path
@@ -1055,10 +1643,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_companies__id__put_request"
+              $ref: "#/components/schemas/updateCompany_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Actualizar empresa
       tags:
@@ -1071,14 +1675,31 @@ paths:
       description: "Prueba de titularidad = certificado digital del RUC. Si la cuenta\
         \ que lo tiene no acreditó titularidad y no emitió documentos, el RUC pasa\
         \ a tu cuenta."
+      operationId: claimCompany
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_companies_claim_post_request"
+              $ref: "#/components/schemas/claimCompany_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: "Reclamar un RUC registrado por otra cuenta, con su certificado"
       tags:
@@ -1088,6 +1709,7 @@ paths:
       - application/json
   /api/v1/companies/{id}/logo:
     get:
+      operationId: getCompanyLogo
       parameters:
       - explode: false
         in: path
@@ -1099,7 +1721,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Obtener logo de la empresa (PNG/JPG)
       tags:
@@ -1108,6 +1746,7 @@ paths:
       - application/json
   /api/v1/webhooks:
     get:
+      operationId: listWebhooks
       parameters:
       - explode: true
         in: query
@@ -1119,7 +1758,23 @@ paths:
           type: string
         style: form
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Listar webhooks (filtra por RUC opcional)
       tags:
@@ -1131,14 +1786,31 @@ paths:
         suscritos. Sin `empresaRuc` el webhook cubre TODAS las empresas de tu cuenta
         (un solo secret; el `empresaRuc` viaja en cada payload). La respuesta incluye
         el `secret` (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
+      operationId: createWebhook
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_webhooks_post_request"
+              $ref: "#/components/schemas/createWebhook_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Crear endpoint webhook
       tags:
@@ -1148,6 +1820,7 @@ paths:
       - application/json
   /api/v1/webhooks/{id}:
     delete:
+      operationId: deleteWebhook
       parameters:
       - explode: false
         in: path
@@ -1159,7 +1832,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Eliminar webhook (también elimina su historial de deliveries)
       tags:
@@ -1167,6 +1856,7 @@ paths:
       x-accepts:
       - application/json
     get:
+      operationId: getWebhook
       parameters:
       - explode: false
         in: path
@@ -1178,7 +1868,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Detalle de webhook (sin secret)
       tags:
@@ -1186,6 +1892,7 @@ paths:
       x-accepts:
       - application/json
     put:
+      operationId: updateWebhook
       parameters:
       - explode: false
         in: path
@@ -1200,10 +1907,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_webhooks__id__put_request"
+              $ref: "#/components/schemas/updateWebhook_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: "Actualizar webhook (url, eventos, activación)"
       tags:
@@ -1213,6 +1936,7 @@ paths:
       - application/json
   /api/v1/webhooks/{id}/deliveries:
     get:
+      operationId: listWebhookDeliveries
       parameters:
       - explode: true
         in: query
@@ -1244,7 +1968,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Log de entregas del webhook
       tags:
@@ -1253,6 +1993,7 @@ paths:
       - application/json
   /api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver:
     post:
+      operationId: redeliverWebhookDelivery
       parameters:
       - explode: false
         in: path
@@ -1273,7 +2014,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Reintentar manualmente una entrega
       tags:
@@ -1282,6 +2039,7 @@ paths:
       - application/json
   /api/v1/webhooks/{id}/test:
     post:
+      operationId: testWebhook
       parameters:
       - explode: false
         in: path
@@ -1293,7 +2051,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Enviar un evento de prueba (webhook.test)
       tags:
@@ -1305,6 +2079,7 @@ paths:
       description: Genera un nuevo secret HMAC y lo devuelve una única vez. Las firmas
         de entregas posteriores usarán el nuevo secret; actualiza tu receptor antes
         de rotar.
+      operationId: rotateWebhookSecret
       parameters:
       - explode: false
         in: path
@@ -1316,7 +2091,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Rotar el secret de firma (devuelto UNA sola vez)
       tags:
@@ -1325,6 +2116,7 @@ paths:
       - application/json
   /api/v1/companies/{id}/branches:
     get:
+      operationId: listBranches
       parameters:
       - explode: false
         in: path
@@ -1336,7 +2128,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Listar establecimientos (sucursales) de una empresa
       tags:
@@ -1346,6 +2154,7 @@ paths:
     post:
       description: El código debe coincidir con el que SUNAT asignó a la sucursal
         al registrarla en el portal SOL (Mis Trámites > Establecimientos Anexos).
+      operationId: createBranch
       parameters:
       - explode: false
         in: path
@@ -1360,10 +2169,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_companies__id__branches_post_request"
+              $ref: "#/components/schemas/createBranch_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Crear establecimiento (sucursal)
       tags:
@@ -1375,6 +2200,7 @@ paths:
     delete:
       description: No se elimina físicamente porque puede haber documentos emitidos
         desde ahí. Solo se desactiva (isActive=false).
+      operationId: deactivateBranch
       parameters:
       - explode: false
         in: path
@@ -1395,7 +2221,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Desactivar establecimiento (soft-delete)
       tags:
@@ -1403,6 +2245,7 @@ paths:
       x-accepts:
       - application/json
     put:
+      operationId: updateBranch
       parameters:
       - explode: false
         in: path
@@ -1426,10 +2269,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_companies__id__branches__branchId__put_request"
+              $ref: "#/components/schemas/updateBranch_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Actualizar establecimiento
       tags:
@@ -1439,8 +2298,25 @@ paths:
       - application/json
   /api/v1/plans:
     get:
+      operationId: listPlans
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Listar planes (solo master)
       tags:
@@ -1448,14 +2324,31 @@ paths:
       x-accepts:
       - application/json
     post:
+      operationId: createPlan
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_plans_post_request"
+              $ref: "#/components/schemas/createPlan_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Crear plan
       tags:
@@ -1465,6 +2358,7 @@ paths:
       - application/json
   /api/v1/plans/{id}:
     delete:
+      operationId: deactivatePlan
       parameters:
       - explode: false
         in: path
@@ -1476,7 +2370,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Desactivar plan (soft-delete)
       tags:
@@ -1484,6 +2394,7 @@ paths:
       x-accepts:
       - application/json
     put:
+      operationId: updatePlan
       parameters:
       - explode: false
         in: path
@@ -1498,10 +2409,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_plans__id__put_request"
+              $ref: "#/components/schemas/updatePlan_request"
         required: true
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: "Actualizar plan (precio, docs, nombre, estado)"
       tags:
@@ -1511,15 +2438,17 @@ paths:
       - application/json
   /api/v1/auth/signup:
     post:
+      operationId: signup
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_auth_signup_post_request"
+              $ref: "#/components/schemas/signup_request"
         required: true
       responses:
         "200":
           description: Default Response
+      security: []
       summary: "Registro público: crea Tenant + User + sesión"
       tags:
       - auth
@@ -1528,15 +2457,17 @@ paths:
       - application/json
   /api/v1/auth/login:
     post:
+      operationId: login
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/_api_v1_auth_login_post_request"
+              $ref: "#/components/schemas/login_request"
         required: true
       responses:
         "200":
           description: Default Response
+      security: []
       summary: Login email+password
       tags:
       - auth
@@ -1545,9 +2476,11 @@ paths:
       - application/json
   /api/v1/auth/refresh:
     post:
+      operationId: refreshToken
       responses:
         "200":
           description: Default Response
+      security: []
       summary: Renovar access token con refresh cookie
       tags:
       - auth
@@ -1555,9 +2488,11 @@ paths:
       - application/json
   /api/v1/auth/logout:
     post:
+      operationId: logout
       responses:
         "200":
           description: Default Response
+      security: []
       summary: Cerrar sesión actual (revoca refresh)
       tags:
       - auth
@@ -1565,6 +2500,7 @@ paths:
       - application/json
   /api/v1/auth/verify-email:
     get:
+      operationId: verifyEmail
       parameters:
       - explode: true
         in: query
@@ -1578,6 +2514,7 @@ paths:
       responses:
         "200":
           description: Default Response
+      security: []
       summary: "Confirmar email con token (one-time, 24h)"
       tags:
       - auth
@@ -1585,8 +2522,25 @@ paths:
       - application/json
   /api/v1/auth/verify-email/resend:
     post:
+      operationId: resendVerificationEmail
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Re-enviar email de verificación al usuario logueado
       tags:
@@ -1595,8 +2549,25 @@ paths:
       - application/json
   /api/v1/auth/me:
     get:
+      operationId: getCurrentUser
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Datos del usuario actual
       tags:
@@ -1605,8 +2576,25 @@ paths:
       - application/json
   /api/v1/auth/sessions:
     get:
+      operationId: listSessions
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Lista de sesiones activas del usuario
       tags:
@@ -1615,6 +2603,7 @@ paths:
       - application/json
   /api/v1/auth/sessions/{id}:
     delete:
+      operationId: revokeSession
       parameters:
       - explode: false
         in: path
@@ -1626,7 +2615,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Revocar una sesión activa por ID
       tags:
@@ -1638,6 +2643,7 @@ paths:
       description: Verificación pública de un comprobante emitido. Retorna datos mínimos
         no sensibles. El parámetro `total` es opcional pero recomendado como anti-scraping
         (debe coincidir con el monto total).
+      operationId: consultarComprobante
       parameters:
       - explode: true
         in: query
@@ -1701,6 +2707,7 @@ paths:
       responses:
         "200":
           description: Default Response
+      security: []
       summary: "Consultar un comprobante (público, sin auth)"
       tags:
       - public
@@ -1708,7 +2715,29 @@ paths:
       - application/json
   /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}/pdf:
     get:
+      operationId: consultarComprobantePdf
       parameters:
+      - explode: true
+        in: query
+        name: total
+        required: false
+        schema:
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: fecha
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: receptor
+        required: false
+        schema:
+          type: string
+        style: form
       - explode: false
         in: path
         name: ruc
@@ -1748,6 +2777,7 @@ paths:
       responses:
         "200":
           description: Default Response
+      security: []
       summary: Descargar PDF del comprobante (público)
       tags:
       - public
@@ -1755,7 +2785,29 @@ paths:
       - application/json
   /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}/xml:
     get:
+      operationId: consultarComprobanteXml
       parameters:
+      - explode: true
+        in: query
+        name: total
+        required: false
+        schema:
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: fecha
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: receptor
+        required: false
+        schema:
+          type: string
+        style: form
       - explode: false
         in: path
         name: ruc
@@ -1795,6 +2847,7 @@ paths:
       responses:
         "200":
           description: Default Response
+      security: []
       summary: Descargar XML firmado (público)
       tags:
       - public
@@ -1805,12 +2858,31 @@ paths:
       description: "Devuelve los catálogos SUNAT más usados y los específicos de guí\
         as de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado,\
         \ 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.)."
+      operationId: listCatalogs
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/_api_v1_catalogs_get_200_response"
+                $ref: "#/components/schemas/listCatalogs_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Listar catálogos SUNAT (código → descripción)
       tags:
@@ -1819,6 +2891,7 @@ paths:
       - application/json
   /api/v1/catalogs/{key}:
     get:
+      operationId: getCatalog
       parameters:
       - explode: false
         in: path
@@ -1829,7 +2902,23 @@ paths:
           type: string
         style: simple
       responses:
-        "200":
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Obtener un catálogo por clave
       tags:
@@ -1838,7 +2927,121 @@ paths:
       - application/json
 components:
   schemas:
-    _api_v1_invoice_send_post_request_detalle_inner:
+    _internal_certificates_expiring_get_401_response_errors_inner:
+      additionalProperties: {}
+      example:
+        path: path
+        message: message
+      properties:
+        path:
+          nullable: true
+          type: string
+        message:
+          nullable: true
+          type: string
+      required:
+      - message
+      - path
+    _internal_certificates_expiring_get_401_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        code: code
+        errors:
+        - path: path
+          message: message
+        - path: path
+          message: message
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        code:
+          nullable: true
+          type: string
+        errors:
+          items:
+            $ref: "#/components/schemas/_internal_certificates_expiring_get_401_response_errors_inner"
+          type: array
+          default: null
+      required:
+      - message
+      - success
+    _internal_certificates_expiring_get_403_response_errors_inner:
+      additionalProperties: false
+      example:
+        path: path
+        message: message
+      properties:
+        path:
+          type: string
+        message:
+          type: string
+      required:
+      - message
+      - path
+    _internal_certificates_expiring_get_403_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        code: code
+        errors:
+        - path: path
+          message: message
+        - path: path
+          message: message
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        code:
+          nullable: true
+          type: string
+        errors:
+          items:
+            $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response_errors_inner"
+          type: array
+          default: null
+      required:
+      - message
+      - success
+    _internal_certificates_expiring_get_429_response:
+      additionalProperties: {}
+      example:
+        success: true
+        message: message
+        code: code
+        errors:
+        - path: path
+          message: message
+        - path: path
+          message: message
+        retryAfterSeconds: 0.8008281904610115
+      properties:
+        success:
+          type: boolean
+        message:
+          nullable: true
+          type: string
+        code:
+          nullable: true
+          type: string
+        errors:
+          items:
+            $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response_errors_inner"
+          type: array
+          default: null
+        retryAfterSeconds:
+          type: number
+      required:
+      - message
+      - success
+    sendInvoice_request_detalle_inner:
       properties:
         unidad:
           maxLength: 20
@@ -1897,7 +3100,7 @@ components:
           minimum: 0
           type: number
         codProdSunat:
-          nullable: true
+          maxLength: 20
           type: string
       required:
       - cantidad
@@ -1910,7 +3113,7 @@ components:
       - montoValorVenta
       - totalImpuestos
       - unidad
-    _api_v1_invoice_send_post_request_formaPago_inner:
+    sendInvoice_request_formaPago_inner:
       properties:
         tipo:
           enum:
@@ -1933,7 +3136,7 @@ components:
       - fechaPago
       - monto
       - tipo
-    _api_v1_invoice_send_post_request_leyendas_inner:
+    sendInvoice_request_leyendas_inner:
       properties:
         legendCode:
           maxLength: 4
@@ -1946,7 +3149,7 @@ components:
       required:
       - legendCode
       - legendValue
-    _api_v1_invoice_send_post_request_pagos_inner:
+    sendInvoice_request_pagos_inner:
       properties:
         metodoPago:
           maxLength: 40
@@ -1956,7 +3159,7 @@ components:
       required:
       - metodoPago
       - monto
-    _api_v1_invoice_send_post_request_detraccion:
+    sendInvoice_request_detraccion:
       properties:
         codBienServicio:
           pattern: "^\\d{3}$"
@@ -1981,7 +3184,7 @@ components:
       - cuentaBanco
       - monto
       - porcentaje
-    _api_v1_invoice_send_post_request_guiaRemision_inner:
+    sendInvoice_request_guiaRemision_inner:
       properties:
         tipoDoc:
           default: "09"
@@ -1994,7 +3197,7 @@ components:
           type: string
       required:
       - nroDoc
-    _api_v1_invoice_send_post_request:
+    sendInvoice_request:
       properties:
         tipoOperacion:
           default: "0101"
@@ -2018,6 +3221,7 @@ components:
           minLength: 3
           type: string
         fechaEmision:
+          nullable: true
           type: string
         empresaRuc:
           maxLength: 11
@@ -2090,21 +3294,21 @@ components:
           type: number
         detalle:
           items:
-            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_detalle_inner"
+            $ref: "#/components/schemas/sendInvoice_request_detalle_inner"
           maxItems: 1000
           minItems: 1
           type: array
           default: null
         formaPago:
           items:
-            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_formaPago_inner"
+            $ref: "#/components/schemas/sendInvoice_request_formaPago_inner"
           maxItems: 100
           minItems: 1
           type: array
           default: null
         leyendas:
           items:
-            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_leyendas_inner"
+            $ref: "#/components/schemas/sendInvoice_request_leyendas_inner"
           maxItems: 50
           minItems: 1
           type: array
@@ -2117,15 +3321,15 @@ components:
           type: string
         pagos:
           items:
-            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_pagos_inner"
+            $ref: "#/components/schemas/sendInvoice_request_pagos_inner"
           maxItems: 20
           type: array
           default: null
         detraccion:
-          $ref: "#/components/schemas/_api_v1_invoice_send_post_request_detraccion"
+          $ref: "#/components/schemas/sendInvoice_request_detraccion"
         guiaRemision:
           items:
-            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_guiaRemision_inner"
+            $ref: "#/components/schemas/sendInvoice_request_guiaRemision_inner"
           maxItems: 20
           type: array
           default: null
@@ -2146,7 +3350,7 @@ components:
       - tipoDoc
       - totalImpuestos
       - valorVenta
-    _api_v1_invoice_send_post_202_response_data:
+    sendInvoice_202_response_data:
       additionalProperties: {}
       example:
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -2176,7 +3380,7 @@ components:
       - hash
       - id
       - signatureValue
-    _api_v1_invoice_send_post_202_response:
+    sendInvoice_202_response:
       additionalProperties: {}
       example:
         success: true
@@ -2194,54 +3398,11 @@ components:
           nullable: true
           type: string
         data:
-          $ref: "#/components/schemas/_api_v1_invoice_send_post_202_response_data"
+          $ref: "#/components/schemas/sendInvoice_202_response_data"
       required:
       - message
       - success
-    _api_v1_invoice_send_post_400_response_errors_inner:
-      additionalProperties: {}
-      example:
-        path: path
-        message: message
-      properties:
-        path:
-          nullable: true
-          type: string
-        message:
-          nullable: true
-          type: string
-      required:
-      - message
-      - path
-    _api_v1_invoice_send_post_400_response:
-      additionalProperties: {}
-      example:
-        success: true
-        message: message
-        code: code
-        errors:
-        - path: path
-          message: message
-        - path: path
-          message: message
-      properties:
-        success:
-          type: boolean
-        message:
-          nullable: true
-          type: string
-        code:
-          nullable: true
-          type: string
-        errors:
-          items:
-            $ref: "#/components/schemas/_api_v1_invoice_send_post_400_response_errors_inner"
-          type: array
-          default: null
-      required:
-      - message
-      - success
-    _api_v1_invoice_compute_post_request_items_inner_descuento:
+    computeInvoice_request_items_inner_descuento:
       properties:
         porcentaje:
           maximum: 100
@@ -2250,7 +3411,7 @@ components:
         monto:
           minimum: 0
           type: number
-    _api_v1_invoice_compute_post_request_items_inner:
+    computeInvoice_request_items_inner:
       properties:
         descripcion:
           maxLength: 500
@@ -2281,7 +3442,7 @@ components:
           minimum: 0
           type: number
         descuento:
-          $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner_descuento"
+          $ref: "#/components/schemas/computeInvoice_request_items_inner_descuento"
         factorIcbper:
           default: 0
           minimum: 0
@@ -2290,13 +3451,13 @@ components:
           maxLength: 100
           type: string
         codProdSunat:
-          nullable: true
+          maxLength: 20
           type: string
       required:
       - cantidad
       - descripcion
       - valorUnitario
-    _api_v1_invoice_compute_post_request:
+    computeInvoice_request:
       properties:
         tipoMoneda:
           default: PEN
@@ -2305,19 +3466,19 @@ components:
           type: string
         items:
           items:
-            $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner"
+            $ref: "#/components/schemas/computeInvoice_request_items_inner"
           maxItems: 1000
           minItems: 1
           type: array
           default: null
         descuentoGlobal:
-          $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner_descuento"
+          $ref: "#/components/schemas/computeInvoice_request_items_inner_descuento"
         preciosIncluyenIgv:
           default: false
           type: boolean
       required:
       - items
-    _api_v1_invoice_compute_post_200_response_data_items_inner:
+    computeInvoice_200_response_data_items_inner:
       additionalProperties: {}
       example:
         unidad: unidad
@@ -2402,7 +3563,7 @@ components:
       - tipAfeIgv
       - totalImpuestos
       - unidad
-    _api_v1_invoice_compute_post_200_response_data:
+    computeInvoice_200_response_data:
       additionalProperties: {}
       example:
         tipoMoneda: tipoMoneda
@@ -2466,7 +3627,7 @@ components:
           type: string
         items:
           items:
-            $ref: "#/components/schemas/_api_v1_invoice_compute_post_200_response_data_items_inner"
+            $ref: "#/components/schemas/computeInvoice_200_response_data_items_inner"
           type: array
           default: null
         montoOperGravadas:
@@ -2518,7 +3679,7 @@ components:
       - totalDescuentos
       - totalImpuestos
       - valorVenta
-    _api_v1_invoice_compute_post_200_response:
+    computeInvoice_200_response:
       additionalProperties: {}
       example:
         success: true
@@ -2586,83 +3747,12 @@ components:
           nullable: true
           type: string
         data:
-          $ref: "#/components/schemas/_api_v1_invoice_compute_post_200_response_data"
+          $ref: "#/components/schemas/computeInvoice_200_response_data"
       required:
       - data
       - message
       - success
-    _api_v1_note_send_post_request_detalle_inner:
-      properties:
-        unidad:
-          maxLength: 20
-          minLength: 1
-          type: string
-        cantidad:
-          exclusiveMinimum: true
-          minimum: 0
-          type: number
-        codProducto:
-          maxLength: 50
-          minLength: 1
-          type: string
-        descripcion:
-          maxLength: 500
-          minLength: 1
-          type: string
-        marca:
-          maxLength: 100
-          type: string
-        montoValorUnitario:
-          minimum: 0
-          type: number
-        montoBaseIgv:
-          minimum: 0
-          type: number
-        porcentajeIgv:
-          default: 18
-          minimum: 0
-          type: number
-        igv:
-          minimum: 0
-          type: number
-        tipAfeIgv:
-          default: "10"
-          maxLength: 2
-          minLength: 1
-          type: string
-        totalImpuestos:
-          minimum: 0
-          type: number
-        montoPrecioUnitario:
-          minimum: 0
-          type: number
-        montoValorVenta:
-          minimum: 0
-          type: number
-        descuento:
-          minimum: 0
-          type: number
-        descuentoItem:
-          minimum: 0
-          type: number
-        factorIcbper:
-          default: 0
-          minimum: 0
-          type: number
-        codProdSunat:
-          type: string
-      required:
-      - cantidad
-      - codProducto
-      - descripcion
-      - igv
-      - montoBaseIgv
-      - montoPrecioUnitario
-      - montoValorUnitario
-      - montoValorVenta
-      - totalImpuestos
-      - unidad
-    _api_v1_note_send_post_request:
+    sendNote_request:
       properties:
         tipoOperacion:
           default: "0101"
@@ -2771,14 +3861,14 @@ components:
           type: number
         detalle:
           items:
-            $ref: "#/components/schemas/_api_v1_note_send_post_request_detalle_inner"
+            $ref: "#/components/schemas/sendInvoice_request_detalle_inner"
           maxItems: 1000
           minItems: 1
           type: array
           default: null
         leyendas:
           items:
-            $ref: "#/components/schemas/_api_v1_invoice_send_post_request_leyendas_inner"
+            $ref: "#/components/schemas/sendInvoice_request_leyendas_inner"
           maxItems: 50
           minItems: 1
           type: array
@@ -2806,123 +3896,7 @@ components:
       - tipoDoc
       - totalImpuestos
       - valorVenta
-    _api_v1_note_send_post_202_response_data:
-      additionalProperties: false
-      example:
-        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        estado: estado
-        hash: hash
-        signatureValue: signatureValue
-        jobId: jobId
-      properties:
-        id:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        estado:
-          type: string
-        hash:
-          nullable: true
-          type: string
-        signatureValue:
-          nullable: true
-          type: string
-        jobId:
-          type: string
-      required:
-      - estado
-      - hash
-      - id
-      - signatureValue
-    _api_v1_note_send_post_202_response:
-      additionalProperties: {}
-      example:
-        success: true
-        message: message
-        data:
-          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          estado: estado
-          hash: hash
-          signatureValue: signatureValue
-          jobId: jobId
-      properties:
-        success:
-          type: boolean
-        message:
-          nullable: true
-          type: string
-        data:
-          $ref: "#/components/schemas/_api_v1_note_send_post_202_response_data"
-      required:
-      - message
-      - success
-    _api_v1_note_compute_post_request_items_inner:
-      properties:
-        descripcion:
-          maxLength: 500
-          minLength: 1
-          type: string
-        cantidad:
-          exclusiveMinimum: true
-          minimum: 0
-          type: number
-        valorUnitario:
-          minimum: 0
-          type: number
-        unidad:
-          maxLength: 20
-          minLength: 1
-          type: string
-        codProducto:
-          maxLength: 50
-          type: string
-        afectacion:
-          default: "10"
-          maxLength: 2
-          minLength: 1
-          type: string
-        igvPorcentaje:
-          default: 18
-          maximum: 100
-          minimum: 0
-          type: number
-        descuento:
-          $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner_descuento"
-        factorIcbper:
-          default: 0
-          minimum: 0
-          type: number
-        marca:
-          maxLength: 100
-          type: string
-        codProdSunat:
-          type: string
-      required:
-      - cantidad
-      - descripcion
-      - valorUnitario
-    _api_v1_note_compute_post_request:
-      properties:
-        tipoMoneda:
-          default: PEN
-          maxLength: 3
-          minLength: 3
-          type: string
-        items:
-          items:
-            $ref: "#/components/schemas/_api_v1_note_compute_post_request_items_inner"
-          maxItems: 1000
-          minItems: 1
-          type: array
-          default: null
-        descuentoGlobal:
-          $ref: "#/components/schemas/_api_v1_invoice_compute_post_request_items_inner_descuento"
-        preciosIncluyenIgv:
-          default: false
-          type: boolean
-      required:
-      - items
-    _api_v1_despatch_send_post_request_chofer_inner:
+    sendDespatch_request_chofer_inner:
       properties:
         tipo:
           enum:
@@ -2956,7 +3930,7 @@ components:
       - nroDoc
       - tipo
       - tipoDoc
-    _api_v1_despatch_send_post_request_indicadores:
+    sendDespatch_request_indicadores:
       properties:
         transbordoProgramado:
           type: boolean
@@ -2972,7 +3946,7 @@ components:
           type: boolean
         trasladoContenedorManifiesto:
           type: boolean
-    _api_v1_despatch_send_post_request_contenedores_inner:
+    sendDespatch_request_contenedores_inner:
       properties:
         numero:
           maxLength: 20
@@ -2983,7 +3957,7 @@ components:
           type: string
       required:
       - numero
-    _api_v1_despatch_send_post_request_vehiculosSecundarios_inner:
+    sendDespatch_request_vehiculosSecundarios_inner:
       properties:
         placa:
           maxLength: 8
@@ -3000,7 +3974,7 @@ components:
           type: string
       required:
       - placa
-    _api_v1_despatch_send_post_request_guiaPartidaGeo:
+    sendDespatch_request_guiaPartidaGeo:
       properties:
         lat:
           nullable: true
@@ -3011,7 +3985,7 @@ components:
       required:
       - lat
       - lon
-    _api_v1_despatch_send_post_request_guiaLlegadaGeo:
+    sendDespatch_request_guiaLlegadaGeo:
       properties:
         lat:
           type: string
@@ -3020,7 +3994,7 @@ components:
       required:
       - lat
       - lon
-    _api_v1_despatch_send_post_request_documentosRelacionados_inner:
+    sendDespatch_request_documentosRelacionados_inner:
       properties:
         codTipo:
           maxLength: 2
@@ -3040,7 +4014,7 @@ components:
       required:
       - codTipo
       - numero
-    _api_v1_despatch_send_post_request_detalle_inner:
+    sendDespatch_request_detalle_inner:
       properties:
         unidad:
           maxLength: 20
@@ -3063,7 +4037,7 @@ components:
       - codProducto
       - descripcion
       - unidad
-    _api_v1_despatch_send_post_request:
+    sendDespatch_request:
       properties:
         tipoDoc:
           enum:
@@ -3195,7 +4169,7 @@ components:
           type: string
         chofer:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_chofer_inner"
+            $ref: "#/components/schemas/sendDespatch_request_chofer_inner"
           maxItems: 10
           type: array
           default: null
@@ -3216,10 +4190,10 @@ components:
           minimum: 0
           type: integer
         indicadores:
-          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_indicadores"
+          $ref: "#/components/schemas/sendDespatch_request_indicadores"
         contenedores:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_contenedores_inner"
+            $ref: "#/components/schemas/sendDespatch_request_contenedores_inner"
           maxItems: 2
           type: array
           default: null
@@ -3234,7 +4208,7 @@ components:
           type: string
         vehiculosSecundarios:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_vehiculosSecundarios_inner"
+            $ref: "#/components/schemas/sendDespatch_request_vehiculosSecundarios_inner"
           maxItems: 2
           type: array
           default: null
@@ -3252,7 +4226,7 @@ components:
           maxLength: 4
           type: string
         guiaPartidaGeo:
-          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_guiaPartidaGeo"
+          $ref: "#/components/schemas/sendDespatch_request_guiaPartidaGeo"
         guiaLlegadaRuc:
           maxLength: 11
           minLength: 11
@@ -3261,10 +4235,10 @@ components:
           maxLength: 4
           type: string
         guiaLlegadaGeo:
-          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_guiaLlegadaGeo"
+          $ref: "#/components/schemas/sendDespatch_request_guiaLlegadaGeo"
         documentosRelacionados:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_documentosRelacionados_inner"
+            $ref: "#/components/schemas/sendDespatch_request_documentosRelacionados_inner"
           maxItems: 20
           type: array
           default: null
@@ -3303,7 +4277,7 @@ components:
           type: string
         detalle:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_detalle_inner"
+            $ref: "#/components/schemas/sendDespatch_request_detalle_inner"
           maxItems: 1000
           minItems: 1
           type: array
@@ -3326,7 +4300,7 @@ components:
       - guiaPesoTotal
       - serie
       - tipoDoc
-    _api_v1_despatch_send_multi_post_request_destinos_inner:
+    sendDespatchMulti_request_destinos_inner:
       properties:
         clienteTipoDoc:
           maxLength: 1
@@ -3393,7 +4367,7 @@ components:
           type: string
         detalle:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_detalle_inner"
+            $ref: "#/components/schemas/sendDespatch_request_detalle_inner"
           maxItems: 1000
           minItems: 1
           type: array
@@ -3406,7 +4380,7 @@ components:
       - guiaLlegadaDireccion
       - guiaLlegadaUbigeo
       - guiaPesoTotal
-    _api_v1_despatch_send_multi_post_request:
+    sendDespatchMulti_request:
       properties:
         tipoDoc:
           enum:
@@ -3466,7 +4440,7 @@ components:
           type: string
         chofer:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_chofer_inner"
+            $ref: "#/components/schemas/sendDespatch_request_chofer_inner"
           maxItems: 10
           type: array
           default: null
@@ -3487,10 +4461,10 @@ components:
           minimum: 0
           type: integer
         indicadores:
-          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_indicadores"
+          $ref: "#/components/schemas/sendDespatch_request_indicadores"
         contenedores:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_contenedores_inner"
+            $ref: "#/components/schemas/sendDespatch_request_contenedores_inner"
           maxItems: 2
           type: array
           default: null
@@ -3505,7 +4479,7 @@ components:
           type: string
         vehiculosSecundarios:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_vehiculosSecundarios_inner"
+            $ref: "#/components/schemas/sendDespatch_request_vehiculosSecundarios_inner"
           maxItems: 2
           type: array
           default: null
@@ -3523,7 +4497,7 @@ components:
           maxLength: 4
           type: string
         guiaPartidaGeo:
-          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_guiaLlegadaGeo"
+          $ref: "#/components/schemas/sendDespatch_request_guiaLlegadaGeo"
         guiaLlegadaRuc:
           maxLength: 11
           minLength: 11
@@ -3532,10 +4506,10 @@ components:
           maxLength: 4
           type: string
         guiaLlegadaGeo:
-          $ref: "#/components/schemas/_api_v1_despatch_send_post_request_guiaLlegadaGeo"
+          $ref: "#/components/schemas/sendDespatch_request_guiaLlegadaGeo"
         documentosRelacionados:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_documentosRelacionados_inner"
+            $ref: "#/components/schemas/sendDespatch_request_documentosRelacionados_inner"
           maxItems: 20
           type: array
           default: null
@@ -3574,7 +4548,7 @@ components:
           type: string
         destinos:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_request_destinos_inner"
+            $ref: "#/components/schemas/sendDespatchMulti_request_destinos_inner"
           maxItems: 50
           minItems: 1
           type: array
@@ -3590,7 +4564,7 @@ components:
       - guiaPartidaUbigeo
       - serie
       - tipoDoc
-    _api_v1_despatch_send_multi_post_202_response_data_guias_inner:
+    sendDespatchMulti_202_response_data_guias_inner:
       additionalProperties: {}
       example:
         success: true
@@ -3615,12 +4589,12 @@ components:
         destino:
           type: number
         data:
-          $ref: "#/components/schemas/_api_v1_note_send_post_202_response_data"
+          $ref: "#/components/schemas/sendInvoice_202_response_data"
       required:
       - destino
       - message
       - success
-    _api_v1_despatch_send_multi_post_202_response_data:
+    sendDespatchMulti_202_response_data:
       additionalProperties: {}
       example:
         total: 0.8008281904610115
@@ -3656,7 +4630,7 @@ components:
           type: number
         guias:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_202_response_data_guias_inner"
+            $ref: "#/components/schemas/sendDespatchMulti_202_response_data_guias_inner"
           type: array
           default: null
       required:
@@ -3664,7 +4638,7 @@ components:
       - fallidas
       - guias
       - total
-    _api_v1_despatch_send_multi_post_202_response:
+    sendDespatchMulti_202_response:
       additionalProperties: {}
       example:
         success: true
@@ -3701,11 +4675,11 @@ components:
           nullable: true
           type: string
         data:
-          $ref: "#/components/schemas/_api_v1_despatch_send_multi_post_202_response_data"
+          $ref: "#/components/schemas/sendDespatchMulti_202_response_data"
       required:
       - message
       - success
-    _api_v1_despatch_transportista_send_post_request_vehiculosSecundarios_inner:
+    sendDespatchTransportista_request_vehiculosSecundarios_inner:
       properties:
         placa:
           maxLength: 8
@@ -3716,7 +4690,7 @@ components:
           type: string
       required:
       - placa
-    _api_v1_despatch_transportista_send_post_request:
+    sendDespatchTransportista_request:
       properties:
         tipoDoc:
           enum:
@@ -3828,7 +4802,7 @@ components:
           type: string
         chofer:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_chofer_inner"
+            $ref: "#/components/schemas/sendDespatch_request_chofer_inner"
           maxItems: 10
           minItems: 1
           type: array
@@ -3842,7 +4816,7 @@ components:
           type: string
         vehiculosSecundarios:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_transportista_send_post_request_vehiculosSecundarios_inner"
+            $ref: "#/components/schemas/sendDespatchTransportista_request_vehiculosSecundarios_inner"
           maxItems: 2
           type: array
           default: null
@@ -3864,13 +4838,13 @@ components:
           type: string
         documentosRelacionados:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_documentosRelacionados_inner"
+            $ref: "#/components/schemas/sendDespatch_request_documentosRelacionados_inner"
           maxItems: 10
           type: array
           default: null
         detalle:
           items:
-            $ref: "#/components/schemas/_api_v1_despatch_send_post_request_detalle_inner"
+            $ref: "#/components/schemas/sendDespatch_request_detalle_inner"
           maxItems: 1000
           minItems: 1
           type: array
@@ -3897,7 +4871,7 @@ components:
       - remitenteTipoDoc
       - serie
       - tipoDoc
-    _api_v1_summary_send_post_request_items_inner:
+    sendSummary_request_items_inner:
       properties:
         tipoDoc:
           nullable: true
@@ -3954,7 +4928,7 @@ components:
       - montoTotal
       - serie
       - tipoDoc
-    _api_v1_summary_send_post_request:
+    sendSummary_request:
       properties:
         empresaRuc:
           maxLength: 11
@@ -3971,7 +4945,7 @@ components:
           type: string
         items:
           items:
-            $ref: "#/components/schemas/_api_v1_summary_send_post_request_items_inner"
+            $ref: "#/components/schemas/sendSummary_request_items_inner"
           maxItems: 5000
           minItems: 1
           type: array
@@ -3982,7 +4956,7 @@ components:
       - fechaEmision
       - fechaReferencia
       - items
-    _api_v1_summary_send_post_202_response_data:
+    sendSummary_202_response_data:
       additionalProperties: {}
       example:
         id: id
@@ -4002,7 +4976,7 @@ components:
         hash:
           nullable: true
           type: string
-    _api_v1_summary_send_post_202_response:
+    sendSummary_202_response:
       additionalProperties: {}
       example:
         success: true
@@ -4019,11 +4993,11 @@ components:
           nullable: true
           type: string
         data:
-          $ref: "#/components/schemas/_api_v1_summary_send_post_202_response_data"
+          $ref: "#/components/schemas/sendSummary_202_response_data"
       required:
       - message
       - success
-    _api_v1_voided_send_post_request_items_inner:
+    sendVoided_request_items_inner:
       properties:
         tipoDoc:
           nullable: true
@@ -4042,7 +5016,7 @@ components:
       - motivoBaja
       - serie
       - tipoDoc
-    _api_v1_voided_send_post_request:
+    sendVoided_request:
       properties:
         empresaRuc:
           maxLength: 11
@@ -4059,7 +5033,7 @@ components:
           type: string
         items:
           items:
-            $ref: "#/components/schemas/_api_v1_voided_send_post_request_items_inner"
+            $ref: "#/components/schemas/sendVoided_request_items_inner"
           maxItems: 5000
           minItems: 1
           type: array
@@ -4070,7 +5044,7 @@ components:
       - fechaEmision
       - fechaReferencia
       - items
-    _api_v1_ticket__ticket__status_get_200_response_cdrResponse:
+    getTicketStatus_200_response_cdrResponse:
       additionalProperties: {}
       example:
         id: id
@@ -4100,7 +5074,7 @@ components:
       - description
       - id
       - notes
-    _api_v1_ticket__ticket__status_get_200_response:
+    getTicketStatus_200_response:
       additionalProperties: {}
       example:
         success: true
@@ -4123,12 +5097,12 @@ components:
           nullable: true
           type: string
         cdrResponse:
-          $ref: "#/components/schemas/_api_v1_ticket__ticket__status_get_200_response_cdrResponse"
+          $ref: "#/components/schemas/getTicketStatus_200_response_cdrResponse"
       required:
       - message
       - statusCode
       - success
-    _api_v1_ticket__ticket__status_get_202_response_cdrResponse:
+    getTicketStatus_202_response_cdrResponse:
       additionalProperties: {}
       example:
         id: id
@@ -4157,7 +5131,7 @@ components:
       - description
       - id
       - notes
-    _api_v1_ticket__ticket__status_get_202_response:
+    getTicketStatus_202_response:
       additionalProperties: {}
       example:
         success: true
@@ -4180,12 +5154,12 @@ components:
           nullable: true
           type: string
         cdrResponse:
-          $ref: "#/components/schemas/_api_v1_ticket__ticket__status_get_202_response_cdrResponse"
+          $ref: "#/components/schemas/getTicketStatus_202_response_cdrResponse"
       required:
       - message
       - statusCode
       - success
-    _api_v1_invoice_cancel_post_request:
+    cancelInvoice_request:
       properties:
         empresaRuc:
           maxLength: 11
@@ -4216,7 +5190,7 @@ components:
       - motivoBaja
       - serie
       - tipoDoc
-    _api_v1_boleta_cancel_post_request:
+    cancelBoleta_request:
       properties:
         empresaRuc:
           maxLength: 11
@@ -4240,7 +5214,7 @@ components:
       - empresaRuc
       - motivoBaja
       - serie
-    _api_v1_documents_get_200_response_data_inner_company:
+    listDocuments_200_response_data_inner_company:
       additionalProperties: {}
       example:
         ruc: ruc
@@ -4255,7 +5229,7 @@ components:
       required:
       - razonSocial
       - ruc
-    _api_v1_documents_get_200_response_data_inner:
+    listDocuments_200_response_data_inner:
       additionalProperties: {}
       example:
         id: id
@@ -4329,7 +5303,7 @@ components:
           nullable: true
           type: string
         company:
-          $ref: "#/components/schemas/_api_v1_documents_get_200_response_data_inner_company"
+          $ref: "#/components/schemas/listDocuments_200_response_data_inner_company"
       required:
       - clienteNumDoc
       - clienteRazonSocial
@@ -4346,7 +5320,7 @@ components:
       - serie
       - tipoDoc
       - tipoMoneda
-    _api_v1_documents_get_200_response_pagination:
+    listDocuments_200_response_pagination:
       additionalProperties: {}
       example:
         page: 0.8008281904610115
@@ -4367,7 +5341,7 @@ components:
       - page
       - total
       - totalPages
-    _api_v1_documents_get_200_response:
+    listDocuments_200_response:
       additionalProperties: {}
       example:
         success: true
@@ -4420,16 +5394,16 @@ components:
           type: boolean
         data:
           items:
-            $ref: "#/components/schemas/_api_v1_documents_get_200_response_data_inner"
+            $ref: "#/components/schemas/listDocuments_200_response_data_inner"
           type: array
           default: null
         pagination:
-          $ref: "#/components/schemas/_api_v1_documents_get_200_response_pagination"
+          $ref: "#/components/schemas/listDocuments_200_response_pagination"
       required:
       - data
       - pagination
       - success
-    _api_v1_documents__id__retry_post_202_response:
+    retryDocument_202_response:
       additionalProperties: {}
       example:
         success: true
@@ -4447,7 +5421,7 @@ components:
       required:
       - message
       - success
-    _api_v1_documents__id__recover_post_200_response:
+    reconcileDocument_200_response:
       additionalProperties: {}
       example:
         success: true
@@ -4469,7 +5443,7 @@ components:
       required:
       - message
       - success
-    _api_v1_cdr_consultar_post_request:
+    consultarCdr_request:
       properties:
         ruc:
           maxLength: 11
@@ -4495,7 +5469,7 @@ components:
       - ruc
       - serie
       - tipoDoc
-    _api_v1_cdr_consultar_post_200_response:
+    consultarCdr_200_response:
       additionalProperties: {}
       example:
         success: true
@@ -4529,7 +5503,7 @@ components:
       - available
       - message
       - success
-    _api_v1_queues_stats_get_200_response_data:
+    getQueueStats_200_response_data:
       additionalProperties: {}
       example:
         sunat-send:
@@ -4569,7 +5543,7 @@ components:
       - sunat-send
       - sunat-summary
       - sunat-ticket-poll
-    _api_v1_queues_stats_get_200_response:
+    getQueueStats_200_response:
       additionalProperties: {}
       example:
         success: true
@@ -4588,11 +5562,11 @@ components:
         success:
           type: boolean
         data:
-          $ref: "#/components/schemas/_api_v1_queues_stats_get_200_response_data"
+          $ref: "#/components/schemas/getQueueStats_200_response_data"
       required:
       - data
       - success
-    _api_v1_documents_next_correlativo_get_200_response_data:
+    getNextCorrelativo_200_response_data:
       additionalProperties: {}
       example:
         next: next
@@ -4602,7 +5576,7 @@ components:
           type: string
       required:
       - next
-    _api_v1_documents_next_correlativo_get_200_response:
+    getNextCorrelativo_200_response:
       additionalProperties: {}
       example:
         success: true
@@ -4612,11 +5586,11 @@ components:
         success:
           type: boolean
         data:
-          $ref: "#/components/schemas/_api_v1_documents_next_correlativo_get_200_response_data"
+          $ref: "#/components/schemas/getNextCorrelativo_200_response_data"
       required:
       - data
       - success
-    _api_v1_companies_post_request_cuentasBancarias_inner:
+    createCompany_request_cuentasBancarias_inner:
       properties:
         nombre:
           maxLength: 40
@@ -4652,7 +5626,7 @@ components:
       - nombre
       - numero
       - tipoLabel
-    _api_v1_companies_post_request:
+    createCompany_request:
       properties:
         ruc:
           maxLength: 11
@@ -4717,7 +5691,7 @@ components:
           type: boolean
         cuentasBancarias:
           items:
-            $ref: "#/components/schemas/_api_v1_companies_post_request_cuentasBancarias_inner"
+            $ref: "#/components/schemas/createCompany_request_cuentasBancarias_inner"
           maxItems: 6
           type: array
           default: null
@@ -4743,7 +5717,7 @@ components:
       required:
       - razonSocial
       - ruc
-    _api_v1_companies__id__put_request:
+    updateCompany_request:
       properties:
         ruc:
           maxLength: 11
@@ -4808,7 +5782,7 @@ components:
           type: boolean
         cuentasBancarias:
           items:
-            $ref: "#/components/schemas/_api_v1_companies_post_request_cuentasBancarias_inner"
+            $ref: "#/components/schemas/createCompany_request_cuentasBancarias_inner"
           maxItems: 6
           type: array
           default: null
@@ -4831,7 +5805,7 @@ components:
           maxLength: 300
           nullable: true
           type: string
-    _api_v1_companies_claim_post_request:
+    claimCompany_request:
       properties:
         ruc:
           maxLength: 11
@@ -4862,7 +5836,7 @@ components:
       - content
       - password
       - ruc
-    _api_v1_webhooks_post_request:
+    createWebhook_request:
       properties:
         empresaRuc:
           maxLength: 11
@@ -4899,7 +5873,7 @@ components:
       required:
       - events
       - url
-    _api_v1_webhooks__id__put_request:
+    updateWebhook_request:
       properties:
         url:
           format: uri
@@ -4923,7 +5897,7 @@ components:
           type: string
         isActive:
           type: boolean
-    _api_v1_companies__id__branches_post_request:
+    createBranch_request:
       properties:
         codigo:
           pattern: "^\\d{4}$"
@@ -4955,7 +5929,7 @@ components:
           type: boolean
       required:
       - codigo
-    _api_v1_companies__id__branches__branchId__put_request:
+    updateBranch_request:
       properties:
         nombre:
           maxLength: 255
@@ -4982,7 +5956,7 @@ components:
         isActive:
           default: true
           type: boolean
-    _api_v1_plans_post_request:
+    createPlan_request:
       properties:
         code:
           maxLength: 30
@@ -5031,7 +6005,7 @@ components:
       required:
       - code
       - name
-    _api_v1_plans__id__put_request:
+    updatePlan_request:
       properties:
         name:
           maxLength: 100
@@ -5064,7 +6038,7 @@ components:
           type: integer
         isActive:
           type: boolean
-    _api_v1_auth_signup_post_request:
+    signup_request:
       properties:
         email:
           format: email
@@ -5088,7 +6062,7 @@ components:
       - email
       - password
       - tenantName
-    _api_v1_auth_login_post_request:
+    login_request:
       properties:
         email:
           format: email
@@ -5103,7 +6077,7 @@ components:
       required:
       - email
       - password
-    _api_v1_catalogs_get_200_response_data_inner_items_inner:
+    listCatalogs_200_response_data_inner_items_inner:
       additionalProperties: {}
       example:
         code: code
@@ -5118,7 +6092,7 @@ components:
       required:
       - code
       - label
-    _api_v1_catalogs_get_200_response_data_inner:
+    listCatalogs_200_response_data_inner:
       additionalProperties: {}
       example:
         key: key
@@ -5137,14 +6111,14 @@ components:
           type: string
         items:
           items:
-            $ref: "#/components/schemas/_api_v1_catalogs_get_200_response_data_inner_items_inner"
+            $ref: "#/components/schemas/listCatalogs_200_response_data_inner_items_inner"
           type: array
           default: null
       required:
       - items
       - key
       - name
-    _api_v1_catalogs_get_200_response:
+    listCatalogs_200_response:
       additionalProperties: {}
       example:
         success: true
@@ -5168,10 +6142,16 @@ components:
           type: boolean
         data:
           items:
-            $ref: "#/components/schemas/_api_v1_catalogs_get_200_response_data_inner"
+            $ref: "#/components/schemas/listCatalogs_200_response_data_inner"
           type: array
           default: null
       required:
       - data
       - success
+  securitySchemes:
+    apiKey:
+      description: "API key emitida por POST /api-keys (fact_live_... o fact_test_...).\
+        \ Enviar como header Authorization: Bearer <api_key>."
+      scheme: bearer
+      type: http
 

@@ -27,11 +27,12 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1InvoiceComputePost200Response;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1NoteComputePostRequest;
-import com.intifact.sdk.model.ApiV1NoteSendPost202Response;
-import com.intifact.sdk.model.ApiV1NoteSendPostRequest;
+import com.intifact.sdk.model.ComputeInvoice200Response;
+import com.intifact.sdk.model.ComputeInvoiceRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.SendInvoice202Response;
+import com.intifact.sdk.model.SendNoteRequest;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -78,8 +79,8 @@ public class NoteApi {
     }
 
     /**
-     * Build call for apiV1NoteComputePost
-     * @param apiV1NoteComputePostRequest  (required)
+     * Build call for computeNote
+     * @param computeInvoiceRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -88,9 +89,12 @@ public class NoteApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteComputePostCall(@javax.annotation.Nonnull ApiV1NoteComputePostRequest apiV1NoteComputePostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call computeNoteCall(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -104,7 +108,7 @@ public class NoteApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1NoteComputePostRequest;
+        Object localVarPostBody = computeInvoiceRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/note/compute";
@@ -131,62 +135,68 @@ public class NoteApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1NoteComputePostValidateBeforeCall(@javax.annotation.Nonnull ApiV1NoteComputePostRequest apiV1NoteComputePostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1NoteComputePostRequest' is set
-        if (apiV1NoteComputePostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1NoteComputePostRequest' when calling apiV1NoteComputePost(Async)");
+    private okhttp3.Call computeNoteValidateBeforeCall(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'computeInvoiceRequest' is set
+        if (computeInvoiceRequest == null) {
+            throw new ApiException("Missing the required parameter 'computeInvoiceRequest' when calling computeNote(Async)");
         }
 
-        return apiV1NoteComputePostCall(apiV1NoteComputePostRequest, _callback);
+        return computeNoteCall(computeInvoiceRequest, _callback);
 
     }
 
     /**
      * Calcular importes (IGV, descuentos, totales) sin emitir
      * Motor de cálculo para notas: recibe ítems crudos (cantidad, valorUnitario sin IGV, afectación, descuento) y un descuento global opcional, y devuelve TODOS los importes fiscales calculados. No emite ni persiste nada — úsalo para previsualizar o para alimentar POST /note/send (agrega tú el documento afectado y el motivo).
-     * @param apiV1NoteComputePostRequest  (required)
-     * @return ApiV1InvoiceComputePost200Response
+     * @param computeInvoiceRequest  (required)
+     * @return ComputeInvoice200Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1InvoiceComputePost200Response apiV1NoteComputePost(@javax.annotation.Nonnull ApiV1NoteComputePostRequest apiV1NoteComputePostRequest) throws ApiException {
-        ApiResponse<ApiV1InvoiceComputePost200Response> localVarResp = apiV1NoteComputePostWithHttpInfo(apiV1NoteComputePostRequest);
+    public ComputeInvoice200Response computeNote(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest) throws ApiException {
+        ApiResponse<ComputeInvoice200Response> localVarResp = computeNoteWithHttpInfo(computeInvoiceRequest);
         return localVarResp.getData();
     }
 
     /**
      * Calcular importes (IGV, descuentos, totales) sin emitir
      * Motor de cálculo para notas: recibe ítems crudos (cantidad, valorUnitario sin IGV, afectación, descuento) y un descuento global opcional, y devuelve TODOS los importes fiscales calculados. No emite ni persiste nada — úsalo para previsualizar o para alimentar POST /note/send (agrega tú el documento afectado y el motivo).
-     * @param apiV1NoteComputePostRequest  (required)
-     * @return ApiResponse&lt;ApiV1InvoiceComputePost200Response&gt;
+     * @param computeInvoiceRequest  (required)
+     * @return ApiResponse&lt;ComputeInvoice200Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1InvoiceComputePost200Response> apiV1NoteComputePostWithHttpInfo(@javax.annotation.Nonnull ApiV1NoteComputePostRequest apiV1NoteComputePostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1NoteComputePostValidateBeforeCall(apiV1NoteComputePostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1InvoiceComputePost200Response>(){}.getType();
+    public ApiResponse<ComputeInvoice200Response> computeNoteWithHttpInfo(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest) throws ApiException {
+        okhttp3.Call localVarCall = computeNoteValidateBeforeCall(computeInvoiceRequest, null);
+        Type localVarReturnType = new TypeToken<ComputeInvoice200Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Calcular importes (IGV, descuentos, totales) sin emitir (asynchronously)
      * Motor de cálculo para notas: recibe ítems crudos (cantidad, valorUnitario sin IGV, afectación, descuento) y un descuento global opcional, y devuelve TODOS los importes fiscales calculados. No emite ni persiste nada — úsalo para previsualizar o para alimentar POST /note/send (agrega tú el documento afectado y el motivo).
-     * @param apiV1NoteComputePostRequest  (required)
+     * @param computeInvoiceRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -195,17 +205,20 @@ public class NoteApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteComputePostAsync(@javax.annotation.Nonnull ApiV1NoteComputePostRequest apiV1NoteComputePostRequest, final ApiCallback<ApiV1InvoiceComputePost200Response> _callback) throws ApiException {
+    public okhttp3.Call computeNoteAsync(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest, final ApiCallback<ComputeInvoice200Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1NoteComputePostValidateBeforeCall(apiV1NoteComputePostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1InvoiceComputePost200Response>(){}.getType();
+        okhttp3.Call localVarCall = computeNoteValidateBeforeCall(computeInvoiceRequest, _callback);
+        Type localVarReturnType = new TypeToken<ComputeInvoice200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1NoteIdCdrGet
+     * Build call for getNoteCdr
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -214,10 +227,12 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteIdCdrGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getNoteCdrCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -244,6 +259,7 @@ public class NoteApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -257,18 +273,18 @@ public class NoteApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1NoteIdCdrGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getNoteCdrValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1NoteIdCdrGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getNoteCdr(Async)");
         }
 
-        return apiV1NoteIdCdrGetCall(id, _callback);
+        return getNoteCdrCall(id, _callback);
 
     }
 
@@ -281,11 +297,13 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1NoteIdCdrGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1NoteIdCdrGetWithHttpInfo(id);
+    public void getNoteCdr(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getNoteCdrWithHttpInfo(id);
     }
 
     /**
@@ -298,11 +316,13 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1NoteIdCdrGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1NoteIdCdrGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getNoteCdrWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getNoteCdrValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -317,17 +337,19 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteIdCdrGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getNoteCdrAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1NoteIdCdrGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getNoteCdrValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1NoteIdPdfGet
+     * Build call for getNotePdf
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -336,10 +358,12 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteIdPdfGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getNotePdfCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -366,6 +390,7 @@ public class NoteApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -379,18 +404,18 @@ public class NoteApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1NoteIdPdfGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getNotePdfValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1NoteIdPdfGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getNotePdf(Async)");
         }
 
-        return apiV1NoteIdPdfGetCall(id, _callback);
+        return getNotePdfCall(id, _callback);
 
     }
 
@@ -403,11 +428,13 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1NoteIdPdfGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1NoteIdPdfGetWithHttpInfo(id);
+    public void getNotePdf(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getNotePdfWithHttpInfo(id);
     }
 
     /**
@@ -420,11 +447,13 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1NoteIdPdfGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1NoteIdPdfGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getNotePdfWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getNotePdfValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -439,17 +468,19 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteIdPdfGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getNotePdfAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1NoteIdPdfGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getNotePdfValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1NoteIdXmlGet
+     * Build call for getNoteXml
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -458,10 +489,12 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteIdXmlGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getNoteXmlCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -488,6 +521,7 @@ public class NoteApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -501,18 +535,18 @@ public class NoteApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1NoteIdXmlGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getNoteXmlValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1NoteIdXmlGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getNoteXml(Async)");
         }
 
-        return apiV1NoteIdXmlGetCall(id, _callback);
+        return getNoteXmlCall(id, _callback);
 
     }
 
@@ -525,11 +559,13 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1NoteIdXmlGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1NoteIdXmlGetWithHttpInfo(id);
+    public void getNoteXml(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getNoteXmlWithHttpInfo(id);
     }
 
     /**
@@ -542,11 +578,13 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1NoteIdXmlGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1NoteIdXmlGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getNoteXmlWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getNoteXmlValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -561,18 +599,20 @@ public class NoteApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteIdXmlGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getNoteXmlAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1NoteIdXmlGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getNoteXmlValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1NoteSendPost
-     * @param apiV1NoteSendPostRequest  (required)
+     * Build call for sendNote
+     * @param sendNoteRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -582,10 +622,13 @@ public class NoteApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteSendPostCall(@javax.annotation.Nonnull ApiV1NoteSendPostRequest apiV1NoteSendPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call sendNoteCall(@javax.annotation.Nonnull SendNoteRequest sendNoteRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -599,7 +642,7 @@ public class NoteApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1NoteSendPostRequest;
+        Object localVarPostBody = sendNoteRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/note/send";
@@ -626,26 +669,26 @@ public class NoteApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1NoteSendPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1NoteSendPostRequest apiV1NoteSendPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1NoteSendPostRequest' is set
-        if (apiV1NoteSendPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1NoteSendPostRequest' when calling apiV1NoteSendPost(Async)");
+    private okhttp3.Call sendNoteValidateBeforeCall(@javax.annotation.Nonnull SendNoteRequest sendNoteRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'sendNoteRequest' is set
+        if (sendNoteRequest == null) {
+            throw new ApiException("Missing the required parameter 'sendNoteRequest' when calling sendNote(Async)");
         }
 
-        return apiV1NoteSendPostCall(apiV1NoteSendPostRequest, _callback);
+        return sendNoteCall(sendNoteRequest, _callback);
 
     }
 
     /**
      * Enviar nota de crédito (07) o débito (08) a SUNAT
      * Genera XML UBL 2.1, firma y encola. Responde 202. Consultar GET /documents/{id} para el resultado final. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1NoteSendPostRequest  (required)
-     * @return ApiV1NoteSendPost202Response
+     * @param sendNoteRequest  (required)
+     * @return SendInvoice202Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -653,19 +696,22 @@ public class NoteApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1NoteSendPost202Response apiV1NoteSendPost(@javax.annotation.Nonnull ApiV1NoteSendPostRequest apiV1NoteSendPostRequest) throws ApiException {
-        ApiResponse<ApiV1NoteSendPost202Response> localVarResp = apiV1NoteSendPostWithHttpInfo(apiV1NoteSendPostRequest);
+    public SendInvoice202Response sendNote(@javax.annotation.Nonnull SendNoteRequest sendNoteRequest) throws ApiException {
+        ApiResponse<SendInvoice202Response> localVarResp = sendNoteWithHttpInfo(sendNoteRequest);
         return localVarResp.getData();
     }
 
     /**
      * Enviar nota de crédito (07) o débito (08) a SUNAT
      * Genera XML UBL 2.1, firma y encola. Responde 202. Consultar GET /documents/{id} para el resultado final. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1NoteSendPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1NoteSendPost202Response&gt;
+     * @param sendNoteRequest  (required)
+     * @return ApiResponse&lt;SendInvoice202Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -673,19 +719,22 @@ public class NoteApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1NoteSendPost202Response> apiV1NoteSendPostWithHttpInfo(@javax.annotation.Nonnull ApiV1NoteSendPostRequest apiV1NoteSendPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1NoteSendPostValidateBeforeCall(apiV1NoteSendPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1NoteSendPost202Response>(){}.getType();
+    public ApiResponse<SendInvoice202Response> sendNoteWithHttpInfo(@javax.annotation.Nonnull SendNoteRequest sendNoteRequest) throws ApiException {
+        okhttp3.Call localVarCall = sendNoteValidateBeforeCall(sendNoteRequest, null);
+        Type localVarReturnType = new TypeToken<SendInvoice202Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Enviar nota de crédito (07) o débito (08) a SUNAT (asynchronously)
      * Genera XML UBL 2.1, firma y encola. Responde 202. Consultar GET /documents/{id} para el resultado final. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1NoteSendPostRequest  (required)
+     * @param sendNoteRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -695,13 +744,16 @@ public class NoteApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1NoteSendPostAsync(@javax.annotation.Nonnull ApiV1NoteSendPostRequest apiV1NoteSendPostRequest, final ApiCallback<ApiV1NoteSendPost202Response> _callback) throws ApiException {
+    public okhttp3.Call sendNoteAsync(@javax.annotation.Nonnull SendNoteRequest sendNoteRequest, final ApiCallback<SendInvoice202Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1NoteSendPostValidateBeforeCall(apiV1NoteSendPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1NoteSendPost202Response>(){}.getType();
+        okhttp3.Call localVarCall = sendNoteValidateBeforeCall(sendNoteRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendInvoice202Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

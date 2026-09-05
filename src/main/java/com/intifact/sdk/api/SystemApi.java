@@ -27,7 +27,10 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1CatalogsGet200Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet401Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.ListCatalogs200Response;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -73,124 +76,7 @@ public class SystemApi {
     }
 
     /**
-     * Build call for apiV1CatalogsGet
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1CatalogsGetCall(final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/catalogs";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CatalogsGetValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1CatalogsGetCall(_callback);
-
-    }
-
-    /**
-     * Listar catálogos SUNAT (código → descripción)
-     * Devuelve los catálogos SUNAT más usados y los específicos de guías de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado, 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.).
-     * @return ApiV1CatalogsGet200Response
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiV1CatalogsGet200Response apiV1CatalogsGet() throws ApiException {
-        ApiResponse<ApiV1CatalogsGet200Response> localVarResp = apiV1CatalogsGetWithHttpInfo();
-        return localVarResp.getData();
-    }
-
-    /**
-     * Listar catálogos SUNAT (código → descripción)
-     * Devuelve los catálogos SUNAT más usados y los específicos de guías de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado, 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.).
-     * @return ApiResponse&lt;ApiV1CatalogsGet200Response&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApiV1CatalogsGet200Response> apiV1CatalogsGetWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1CatalogsGetValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<ApiV1CatalogsGet200Response>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Listar catálogos SUNAT (código → descripción) (asynchronously)
-     * Devuelve los catálogos SUNAT más usados y los específicos de guías de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado, 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.).
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1CatalogsGetAsync(final ApiCallback<ApiV1CatalogsGet200Response> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1CatalogsGetValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<ApiV1CatalogsGet200Response>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1CatalogsKeyGet
+     * Build call for getCatalog
      * @param key  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -199,10 +85,12 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CatalogsKeyGetCall(@javax.annotation.Nullable String key, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getCatalogCall(@javax.annotation.Nullable String key, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -229,6 +117,7 @@ public class SystemApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -242,18 +131,18 @@ public class SystemApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CatalogsKeyGetValidateBeforeCall(@javax.annotation.Nullable String key, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getCatalogValidateBeforeCall(@javax.annotation.Nullable String key, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'key' is set
         if (key == null) {
-            throw new ApiException("Missing the required parameter 'key' when calling apiV1CatalogsKeyGet(Async)");
+            throw new ApiException("Missing the required parameter 'key' when calling getCatalog(Async)");
         }
 
-        return apiV1CatalogsKeyGetCall(key, _callback);
+        return getCatalogCall(key, _callback);
 
     }
 
@@ -266,11 +155,13 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CatalogsKeyGet(@javax.annotation.Nullable String key) throws ApiException {
-        apiV1CatalogsKeyGetWithHttpInfo(key);
+    public void getCatalog(@javax.annotation.Nullable String key) throws ApiException {
+        getCatalogWithHttpInfo(key);
     }
 
     /**
@@ -283,11 +174,13 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CatalogsKeyGetWithHttpInfo(@javax.annotation.Nullable String key) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CatalogsKeyGetValidateBeforeCall(key, null);
+    public ApiResponse<Void> getCatalogWithHttpInfo(@javax.annotation.Nullable String key) throws ApiException {
+        okhttp3.Call localVarCall = getCatalogValidateBeforeCall(key, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -302,12 +195,14 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CatalogsKeyGetAsync(@javax.annotation.Nullable String key, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getCatalogAsync(@javax.annotation.Nullable String key, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CatalogsKeyGetValidateBeforeCall(key, _callback);
+        okhttp3.Call localVarCall = getCatalogValidateBeforeCall(key, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
@@ -433,7 +328,9 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call internalCertificatesExpiringGetCall(@javax.annotation.Nullable Integer days, final ApiCallback _callback) throws ApiException {
@@ -466,6 +363,7 @@ public class SystemApi {
         }
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -479,7 +377,7 @@ public class SystemApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -498,7 +396,9 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
     public void internalCertificatesExpiringGet(@javax.annotation.Nullable Integer days) throws ApiException {
@@ -515,7 +415,9 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Void> internalCertificatesExpiringGetWithHttpInfo(@javax.annotation.Nullable Integer days) throws ApiException {
@@ -534,7 +436,9 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call internalCertificatesExpiringGetAsync(@javax.annotation.Nullable Integer days, final ApiCallback<Void> _callback) throws ApiException {
@@ -553,7 +457,9 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call internalWebhooksStatsGetCall(@javax.annotation.Nullable Integer days, final ApiCallback _callback) throws ApiException {
@@ -586,6 +492,7 @@ public class SystemApi {
         }
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -599,7 +506,7 @@ public class SystemApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -618,7 +525,9 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
     public void internalWebhooksStatsGet(@javax.annotation.Nullable Integer days) throws ApiException {
@@ -635,7 +544,9 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Void> internalWebhooksStatsGetWithHttpInfo(@javax.annotation.Nullable Integer days) throws ApiException {
@@ -654,13 +565,144 @@ public class SystemApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call internalWebhooksStatsGetAsync(@javax.annotation.Nullable Integer days, final ApiCallback<Void> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = internalWebhooksStatsGetValidateBeforeCall(days, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for listCatalogs
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call listCatalogsCall(final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/catalogs";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call listCatalogsValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return listCatalogsCall(_callback);
+
+    }
+
+    /**
+     * Listar catálogos SUNAT (código → descripción)
+     * Devuelve los catálogos SUNAT más usados y los específicos de guías de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado, 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.).
+     * @return ListCatalogs200Response
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ListCatalogs200Response listCatalogs() throws ApiException {
+        ApiResponse<ListCatalogs200Response> localVarResp = listCatalogsWithHttpInfo();
+        return localVarResp.getData();
+    }
+
+    /**
+     * Listar catálogos SUNAT (código → descripción)
+     * Devuelve los catálogos SUNAT más usados y los específicos de guías de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado, 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.).
+     * @return ApiResponse&lt;ListCatalogs200Response&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<ListCatalogs200Response> listCatalogsWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = listCatalogsValidateBeforeCall(null);
+        Type localVarReturnType = new TypeToken<ListCatalogs200Response>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Listar catálogos SUNAT (código → descripción) (asynchronously)
+     * Devuelve los catálogos SUNAT más usados y los específicos de guías de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado, 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.).
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call listCatalogsAsync(final ApiCallback<ListCatalogs200Response> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = listCatalogsValidateBeforeCall(_callback);
+        Type localVarReturnType = new TypeToken<ListCatalogs200Response>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
 }

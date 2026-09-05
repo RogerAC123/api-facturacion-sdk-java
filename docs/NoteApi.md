@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1NoteComputePost**](NoteApi.md#apiV1NoteComputePost) | **POST** /api/v1/note/compute | Calcular importes (IGV, descuentos, totales) sin emitir |
-| [**apiV1NoteIdCdrGet**](NoteApi.md#apiV1NoteIdCdrGet) | **GET** /api/v1/note/{id}/cdr | Descargar CDR (constancia de SUNAT) |
-| [**apiV1NoteIdPdfGet**](NoteApi.md#apiV1NoteIdPdfGet) | **GET** /api/v1/note/{id}/pdf | Obtener PDF de la nota |
-| [**apiV1NoteIdXmlGet**](NoteApi.md#apiV1NoteIdXmlGet) | **GET** /api/v1/note/{id}/xml | Descargar XML firmado |
-| [**apiV1NoteSendPost**](NoteApi.md#apiV1NoteSendPost) | **POST** /api/v1/note/send | Enviar nota de crédito (07) o débito (08) a SUNAT |
+| [**computeNote**](NoteApi.md#computeNote) | **POST** /api/v1/note/compute | Calcular importes (IGV, descuentos, totales) sin emitir |
+| [**getNoteCdr**](NoteApi.md#getNoteCdr) | **GET** /api/v1/note/{id}/cdr | Descargar CDR (constancia de SUNAT) |
+| [**getNotePdf**](NoteApi.md#getNotePdf) | **GET** /api/v1/note/{id}/pdf | Obtener PDF de la nota |
+| [**getNoteXml**](NoteApi.md#getNoteXml) | **GET** /api/v1/note/{id}/xml | Descargar XML firmado |
+| [**sendNote**](NoteApi.md#sendNote) | **POST** /api/v1/note/send | Enviar nota de crédito (07) o débito (08) a SUNAT |
 
 
-<a id="apiV1NoteComputePost"></a>
-# **apiV1NoteComputePost**
-> ApiV1InvoiceComputePost200Response apiV1NoteComputePost(apiV1NoteComputePostRequest)
+<a id="computeNote"></a>
+# **computeNote**
+> ComputeInvoice200Response computeNote(computeInvoiceRequest)
 
 Calcular importes (IGV, descuentos, totales) sin emitir
 
@@ -25,6 +25,7 @@ Motor de cálculo para notas: recibe ítems crudos (cantidad, valorUnitario sin 
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.NoteApi;
 
@@ -32,14 +33,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     NoteApi apiInstance = new NoteApi(defaultClient);
-    ApiV1NoteComputePostRequest apiV1NoteComputePostRequest = new ApiV1NoteComputePostRequest(); // ApiV1NoteComputePostRequest | 
+    ComputeInvoiceRequest computeInvoiceRequest = new ComputeInvoiceRequest(); // ComputeInvoiceRequest | 
     try {
-      ApiV1InvoiceComputePost200Response result = apiInstance.apiV1NoteComputePost(apiV1NoteComputePostRequest);
+      ComputeInvoice200Response result = apiInstance.computeNote(computeInvoiceRequest);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling NoteApi#apiV1NoteComputePost");
+      System.err.println("Exception when calling NoteApi#computeNote");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -53,15 +58,15 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1NoteComputePostRequest** | [**ApiV1NoteComputePostRequest**](ApiV1NoteComputePostRequest.md)|  | |
+| **computeInvoiceRequest** | [**ComputeInvoiceRequest**](ComputeInvoiceRequest.md)|  | |
 
 ### Return type
 
-[**ApiV1InvoiceComputePost200Response**](ApiV1InvoiceComputePost200Response.md)
+[**ComputeInvoice200Response**](ComputeInvoice200Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -72,10 +77,13 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1NoteIdCdrGet"></a>
-# **apiV1NoteIdCdrGet**
-> apiV1NoteIdCdrGet(id)
+<a id="getNoteCdr"></a>
+# **getNoteCdr**
+> getNoteCdr(id)
 
 Descargar CDR (constancia de SUNAT)
 
@@ -85,6 +93,7 @@ Descargar CDR (constancia de SUNAT)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.NoteApi;
 
@@ -92,13 +101,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     NoteApi apiInstance = new NoteApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1NoteIdCdrGet(id);
+      apiInstance.getNoteCdr(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling NoteApi#apiV1NoteIdCdrGet");
+      System.err.println("Exception when calling NoteApi#getNoteCdr");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -120,21 +133,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1NoteIdPdfGet"></a>
-# **apiV1NoteIdPdfGet**
-> apiV1NoteIdPdfGet(id)
+<a id="getNotePdf"></a>
+# **getNotePdf**
+> getNotePdf(id)
 
 Obtener PDF de la nota
 
@@ -144,6 +159,7 @@ Obtener PDF de la nota
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.NoteApi;
 
@@ -151,13 +167,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     NoteApi apiInstance = new NoteApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1NoteIdPdfGet(id);
+      apiInstance.getNotePdf(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling NoteApi#apiV1NoteIdPdfGet");
+      System.err.println("Exception when calling NoteApi#getNotePdf");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -179,21 +199,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1NoteIdXmlGet"></a>
-# **apiV1NoteIdXmlGet**
-> apiV1NoteIdXmlGet(id)
+<a id="getNoteXml"></a>
+# **getNoteXml**
+> getNoteXml(id)
 
 Descargar XML firmado
 
@@ -203,6 +225,7 @@ Descargar XML firmado
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.NoteApi;
 
@@ -210,13 +233,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     NoteApi apiInstance = new NoteApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1NoteIdXmlGet(id);
+      apiInstance.getNoteXml(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling NoteApi#apiV1NoteIdXmlGet");
+      System.err.println("Exception when calling NoteApi#getNoteXml");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -238,21 +265,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1NoteSendPost"></a>
-# **apiV1NoteSendPost**
-> ApiV1NoteSendPost202Response apiV1NoteSendPost(apiV1NoteSendPostRequest)
+<a id="sendNote"></a>
+# **sendNote**
+> SendInvoice202Response sendNote(sendNoteRequest)
 
 Enviar nota de crédito (07) o débito (08) a SUNAT
 
@@ -264,6 +293,7 @@ Genera XML UBL 2.1, firma y encola. Responde 202. Consultar GET /documents/{id} 
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.NoteApi;
 
@@ -271,14 +301,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     NoteApi apiInstance = new NoteApi(defaultClient);
-    ApiV1NoteSendPostRequest apiV1NoteSendPostRequest = new ApiV1NoteSendPostRequest(); // ApiV1NoteSendPostRequest | 
+    SendNoteRequest sendNoteRequest = new SendNoteRequest(); // SendNoteRequest | 
     try {
-      ApiV1NoteSendPost202Response result = apiInstance.apiV1NoteSendPost(apiV1NoteSendPostRequest);
+      SendInvoice202Response result = apiInstance.sendNote(sendNoteRequest);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling NoteApi#apiV1NoteSendPost");
+      System.err.println("Exception when calling NoteApi#sendNote");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -292,15 +326,15 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1NoteSendPostRequest** | [**ApiV1NoteSendPostRequest**](ApiV1NoteSendPostRequest.md)|  | |
+| **sendNoteRequest** | [**SendNoteRequest**](SendNoteRequest.md)|  | |
 
 ### Return type
 
-[**ApiV1NoteSendPost202Response**](ApiV1NoteSendPost202Response.md)
+[**SendInvoice202Response**](SendInvoice202Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -312,5 +346,8 @@ No authorization required
 |-------------|-------------|------------------|
 | **202** | Default Response |  -  |
 | **400** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
 | **409** | Default Response |  -  |
+| **429** | Default Response |  -  |
 

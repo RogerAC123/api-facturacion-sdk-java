@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1PublicConsultarRucTipoDocSerieNumeroGet**](PublicApi.md#apiV1PublicConsultarRucTipoDocSerieNumeroGet) | **GET** /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero} | Consultar un comprobante (público, sin auth) |
-| [**apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet**](PublicApi.md#apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet) | **GET** /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}/pdf | Descargar PDF del comprobante (público) |
-| [**apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet**](PublicApi.md#apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet) | **GET** /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}/xml | Descargar XML firmado (público) |
+| [**consultarComprobante**](PublicApi.md#consultarComprobante) | **GET** /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero} | Consultar un comprobante (público, sin auth) |
+| [**consultarComprobantePdf**](PublicApi.md#consultarComprobantePdf) | **GET** /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}/pdf | Descargar PDF del comprobante (público) |
+| [**consultarComprobanteXml**](PublicApi.md#consultarComprobanteXml) | **GET** /api/v1/public/consultar/{ruc}/{tipoDoc}/{serie}/{numero}/xml | Descargar XML firmado (público) |
 
 
-<a id="apiV1PublicConsultarRucTipoDocSerieNumeroGet"></a>
-# **apiV1PublicConsultarRucTipoDocSerieNumeroGet**
-> apiV1PublicConsultarRucTipoDocSerieNumeroGet(ruc, tipoDoc, serie, numero, total, fecha, receptor)
+<a id="consultarComprobante"></a>
+# **consultarComprobante**
+> consultarComprobante(ruc, tipoDoc, serie, numero, total, fecha, receptor)
 
 Consultar un comprobante (público, sin auth)
 
@@ -40,9 +40,9 @@ public class Example {
     String fecha = "fecha_example"; // String | 
     String receptor = "receptor_example"; // String | 
     try {
-      apiInstance.apiV1PublicConsultarRucTipoDocSerieNumeroGet(ruc, tipoDoc, serie, numero, total, fecha, receptor);
+      apiInstance.consultarComprobante(ruc, tipoDoc, serie, numero, total, fecha, receptor);
     } catch (ApiException e) {
-      System.err.println("Exception when calling PublicApi#apiV1PublicConsultarRucTipoDocSerieNumeroGet");
+      System.err.println("Exception when calling PublicApi#consultarComprobante");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -82,9 +82,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
 
-<a id="apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet"></a>
-# **apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet**
-> apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet(ruc, tipoDoc, serie, numero)
+<a id="consultarComprobantePdf"></a>
+# **consultarComprobantePdf**
+> consultarComprobantePdf(ruc, tipoDoc, serie, numero, total, fecha, receptor)
 
 Descargar PDF del comprobante (público)
 
@@ -107,10 +107,13 @@ public class Example {
     String tipoDoc = "tipoDoc_example"; // String | 
     String serie = "serie_example"; // String | 
     String numero = "numero_example"; // String | 
+    BigDecimal total = new BigDecimal(78); // BigDecimal | 
+    String fecha = "fecha_example"; // String | 
+    String receptor = "receptor_example"; // String | 
     try {
-      apiInstance.apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet(ruc, tipoDoc, serie, numero);
+      apiInstance.consultarComprobantePdf(ruc, tipoDoc, serie, numero, total, fecha, receptor);
     } catch (ApiException e) {
-      System.err.println("Exception when calling PublicApi#apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet");
+      System.err.println("Exception when calling PublicApi#consultarComprobantePdf");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -128,6 +131,9 @@ public class Example {
 | **tipoDoc** | **String**|  | |
 | **serie** | **String**|  | |
 | **numero** | **String**|  | |
+| **total** | **BigDecimal**|  | [optional] |
+| **fecha** | **String**|  | [optional] |
+| **receptor** | **String**|  | [optional] |
 
 ### Return type
 
@@ -147,9 +153,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
 
-<a id="apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet"></a>
-# **apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet**
-> apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet(ruc, tipoDoc, serie, numero)
+<a id="consultarComprobanteXml"></a>
+# **consultarComprobanteXml**
+> consultarComprobanteXml(ruc, tipoDoc, serie, numero, total, fecha, receptor)
 
 Descargar XML firmado (público)
 
@@ -172,10 +178,13 @@ public class Example {
     String tipoDoc = "tipoDoc_example"; // String | 
     String serie = "serie_example"; // String | 
     String numero = "numero_example"; // String | 
+    BigDecimal total = new BigDecimal(78); // BigDecimal | 
+    String fecha = "fecha_example"; // String | 
+    String receptor = "receptor_example"; // String | 
     try {
-      apiInstance.apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet(ruc, tipoDoc, serie, numero);
+      apiInstance.consultarComprobanteXml(ruc, tipoDoc, serie, numero, total, fecha, receptor);
     } catch (ApiException e) {
-      System.err.println("Exception when calling PublicApi#apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet");
+      System.err.println("Exception when calling PublicApi#consultarComprobanteXml");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -193,6 +202,9 @@ public class Example {
 | **tipoDoc** | **String**|  | |
 | **serie** | **String**|  | |
 | **numero** | **String**|  | |
+| **total** | **BigDecimal**|  | [optional] |
+| **fecha** | **String**|  | [optional] |
+| **receptor** | **String**|  | [optional] |
 
 ### Return type
 

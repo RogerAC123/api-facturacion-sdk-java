@@ -27,9 +27,11 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1WebhooksIdPutRequest;
-import com.intifact.sdk.model.ApiV1WebhooksPostRequest;
+import com.intifact.sdk.model.CreateWebhookRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
+import com.intifact.sdk.model.UpdateWebhookRequest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -75,8 +77,8 @@ public class WebhooksApi {
     }
 
     /**
-     * Build call for apiV1WebhooksGet
-     * @param ruc  (optional)
+     * Build call for createWebhook
+     * @param createWebhookRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -84,10 +86,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksGetCall(@javax.annotation.Nullable String ruc, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call createWebhookCall(@javax.annotation.Nonnull CreateWebhookRequest createWebhookRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -101,7 +105,7 @@ public class WebhooksApi {
             basePath = null;
         }
 
-        Object localVarPostBody = null;
+        Object localVarPostBody = createWebhookRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/webhooks";
@@ -112,11 +116,8 @@ public class WebhooksApi {
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
-        if (ruc != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("ruc", ruc));
-        }
-
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -124,60 +125,70 @@ public class WebhooksApi {
         }
 
         final String[] localVarContentTypes = {
+            "application/json"
         };
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         if (localVarContentType != null) {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksGetValidateBeforeCall(@javax.annotation.Nullable String ruc, final ApiCallback _callback) throws ApiException {
-        return apiV1WebhooksGetCall(ruc, _callback);
+    private okhttp3.Call createWebhookValidateBeforeCall(@javax.annotation.Nonnull CreateWebhookRequest createWebhookRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'createWebhookRequest' is set
+        if (createWebhookRequest == null) {
+            throw new ApiException("Missing the required parameter 'createWebhookRequest' when calling createWebhook(Async)");
+        }
+
+        return createWebhookCall(createWebhookRequest, _callback);
 
     }
 
     /**
-     * Listar webhooks (filtra por RUC opcional)
-     * 
-     * @param ruc  (optional)
+     * Crear endpoint webhook
+     * Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
+     * @param createWebhookRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksGet(@javax.annotation.Nullable String ruc) throws ApiException {
-        apiV1WebhooksGetWithHttpInfo(ruc);
+    public void createWebhook(@javax.annotation.Nonnull CreateWebhookRequest createWebhookRequest) throws ApiException {
+        createWebhookWithHttpInfo(createWebhookRequest);
     }
 
     /**
-     * Listar webhooks (filtra por RUC opcional)
-     * 
-     * @param ruc  (optional)
+     * Crear endpoint webhook
+     * Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
+     * @param createWebhookRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksGetWithHttpInfo(@javax.annotation.Nullable String ruc) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksGetValidateBeforeCall(ruc, null);
+    public ApiResponse<Void> createWebhookWithHttpInfo(@javax.annotation.Nonnull CreateWebhookRequest createWebhookRequest) throws ApiException {
+        okhttp3.Call localVarCall = createWebhookValidateBeforeCall(createWebhookRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Listar webhooks (filtra por RUC opcional) (asynchronously)
-     * 
-     * @param ruc  (optional)
+     * Crear endpoint webhook (asynchronously)
+     * Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
+     * @param createWebhookRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -185,17 +196,19 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksGetAsync(@javax.annotation.Nullable String ruc, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call createWebhookAsync(@javax.annotation.Nonnull CreateWebhookRequest createWebhookRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksGetValidateBeforeCall(ruc, _callback);
+        okhttp3.Call localVarCall = createWebhookValidateBeforeCall(createWebhookRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1WebhooksIdDelete
+     * Build call for deleteWebhook
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -204,10 +217,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdDeleteCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call deleteWebhookCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -234,6 +249,7 @@ public class WebhooksApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -247,18 +263,18 @@ public class WebhooksApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksIdDeleteValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call deleteWebhookValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1WebhooksIdDelete(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling deleteWebhook(Async)");
         }
 
-        return apiV1WebhooksIdDeleteCall(id, _callback);
+        return deleteWebhookCall(id, _callback);
 
     }
 
@@ -271,11 +287,13 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksIdDelete(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1WebhooksIdDeleteWithHttpInfo(id);
+    public void deleteWebhook(@javax.annotation.Nonnull UUID id) throws ApiException {
+        deleteWebhookWithHttpInfo(id);
     }
 
     /**
@@ -288,11 +306,13 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksIdDeleteWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksIdDeleteValidateBeforeCall(id, null);
+    public ApiResponse<Void> deleteWebhookWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = deleteWebhookValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -307,19 +327,20 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdDeleteAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call deleteWebhookAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksIdDeleteValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = deleteWebhookValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost
+     * Build call for getWebhook
      * @param id  (required)
-     * @param deliveryId  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -327,10 +348,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getWebhookCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -347,9 +370,8 @@ public class WebhooksApi {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver"
-            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()))
-            .replace("{" + "deliveryId" + "}", localVarApiClient.escapeString(deliveryId.toString()));
+        String localVarPath = "/api/v1/webhooks/{id}"
+            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -358,6 +380,7 @@ public class WebhooksApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -371,67 +394,63 @@ public class WebhooksApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getWebhookValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getWebhook(Async)");
         }
 
-        // verify the required parameter 'deliveryId' is set
-        if (deliveryId == null) {
-            throw new ApiException("Missing the required parameter 'deliveryId' when calling apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost(Async)");
-        }
-
-        return apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostCall(id, deliveryId, _callback);
+        return getWebhookCall(id, _callback);
 
     }
 
     /**
-     * Reintentar manualmente una entrega
+     * Detalle de webhook (sin secret)
      * 
      * @param id  (required)
-     * @param deliveryId  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId) throws ApiException {
-        apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostWithHttpInfo(id, deliveryId);
+    public void getWebhook(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getWebhookWithHttpInfo(id);
     }
 
     /**
-     * Reintentar manualmente una entrega
+     * Detalle de webhook (sin secret)
      * 
      * @param id  (required)
-     * @param deliveryId  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostValidateBeforeCall(id, deliveryId, null);
+    public ApiResponse<Void> getWebhookWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getWebhookValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Reintentar manualmente una entrega (asynchronously)
+     * Detalle de webhook (sin secret) (asynchronously)
      * 
      * @param id  (required)
-     * @param deliveryId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -439,17 +458,19 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getWebhookAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostValidateBeforeCall(id, deliveryId, _callback);
+        okhttp3.Call localVarCall = getWebhookValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1WebhooksIdDeliveriesGet
+     * Build call for listWebhookDeliveries
      * @param id  (required)
      * @param limit  (optional, default to 50)
      * @param success  (optional)
@@ -460,10 +481,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdDeliveriesGetCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call listWebhookDeliveriesCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -498,6 +521,7 @@ public class WebhooksApi {
         }
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -511,18 +535,18 @@ public class WebhooksApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksIdDeliveriesGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call listWebhookDeliveriesValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1WebhooksIdDeliveriesGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling listWebhookDeliveries(Async)");
         }
 
-        return apiV1WebhooksIdDeliveriesGetCall(id, limit, success, _callback);
+        return listWebhookDeliveriesCall(id, limit, success, _callback);
 
     }
 
@@ -537,11 +561,13 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksIdDeliveriesGet(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success) throws ApiException {
-        apiV1WebhooksIdDeliveriesGetWithHttpInfo(id, limit, success);
+    public void listWebhookDeliveries(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success) throws ApiException {
+        listWebhookDeliveriesWithHttpInfo(id, limit, success);
     }
 
     /**
@@ -556,11 +582,13 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksIdDeliveriesGetWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksIdDeliveriesGetValidateBeforeCall(id, limit, success, null);
+    public ApiResponse<Void> listWebhookDeliveriesWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success) throws ApiException {
+        okhttp3.Call localVarCall = listWebhookDeliveriesValidateBeforeCall(id, limit, success, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -577,18 +605,20 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdDeliveriesGetAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call listWebhookDeliveriesAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable Integer limit, @javax.annotation.Nullable String success, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksIdDeliveriesGetValidateBeforeCall(id, limit, success, _callback);
+        okhttp3.Call localVarCall = listWebhookDeliveriesValidateBeforeCall(id, limit, success, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1WebhooksIdGet
-     * @param id  (required)
+     * Build call for listWebhooks
+     * @param ruc  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -596,10 +626,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call listWebhooksCall(@javax.annotation.Nullable String ruc, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -616,8 +648,7 @@ public class WebhooksApi {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/api/v1/webhooks/{id}"
-            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()));
+        String localVarPath = "/api/v1/webhooks";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -625,7 +656,12 @@ public class WebhooksApi {
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
+        if (ruc != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("ruc", ruc));
+        }
+
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -639,59 +675,58 @@ public class WebhooksApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksIdGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1WebhooksIdGet(Async)");
-        }
-
-        return apiV1WebhooksIdGetCall(id, _callback);
+    private okhttp3.Call listWebhooksValidateBeforeCall(@javax.annotation.Nullable String ruc, final ApiCallback _callback) throws ApiException {
+        return listWebhooksCall(ruc, _callback);
 
     }
 
     /**
-     * Detalle de webhook (sin secret)
+     * Listar webhooks (filtra por RUC opcional)
      * 
-     * @param id  (required)
+     * @param ruc  (optional)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksIdGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1WebhooksIdGetWithHttpInfo(id);
+    public void listWebhooks(@javax.annotation.Nullable String ruc) throws ApiException {
+        listWebhooksWithHttpInfo(ruc);
     }
 
     /**
-     * Detalle de webhook (sin secret)
+     * Listar webhooks (filtra por RUC opcional)
      * 
-     * @param id  (required)
+     * @param ruc  (optional)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksIdGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksIdGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> listWebhooksWithHttpInfo(@javax.annotation.Nullable String ruc) throws ApiException {
+        okhttp3.Call localVarCall = listWebhooksValidateBeforeCall(ruc, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Detalle de webhook (sin secret) (asynchronously)
+     * Listar webhooks (filtra por RUC opcional) (asynchronously)
      * 
-     * @param id  (required)
+     * @param ruc  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -699,19 +734,21 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call listWebhooksAsync(@javax.annotation.Nullable String ruc, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksIdGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = listWebhooksValidateBeforeCall(ruc, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1WebhooksIdPut
+     * Build call for redeliverWebhookDelivery
      * @param id  (required)
-     * @param apiV1WebhooksIdPutRequest  (required)
+     * @param deliveryId  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -719,10 +756,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdPutCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1WebhooksIdPutRequest apiV1WebhooksIdPutRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call redeliverWebhookDeliveryCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -736,11 +775,12 @@ public class WebhooksApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1WebhooksIdPutRequest;
+        Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/api/v1/webhooks/{id}"
-            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()));
+        String localVarPath = "/api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver"
+            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()))
+            .replace("{" + "deliveryId" + "}", localVarApiClient.escapeString(deliveryId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -749,6 +789,7 @@ public class WebhooksApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -756,74 +797,77 @@ public class WebhooksApi {
         }
 
         final String[] localVarContentTypes = {
-            "application/json"
         };
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         if (localVarContentType != null) {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksIdPutValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1WebhooksIdPutRequest apiV1WebhooksIdPutRequest, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call redeliverWebhookDeliveryValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1WebhooksIdPut(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling redeliverWebhookDelivery(Async)");
         }
 
-        // verify the required parameter 'apiV1WebhooksIdPutRequest' is set
-        if (apiV1WebhooksIdPutRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1WebhooksIdPutRequest' when calling apiV1WebhooksIdPut(Async)");
+        // verify the required parameter 'deliveryId' is set
+        if (deliveryId == null) {
+            throw new ApiException("Missing the required parameter 'deliveryId' when calling redeliverWebhookDelivery(Async)");
         }
 
-        return apiV1WebhooksIdPutCall(id, apiV1WebhooksIdPutRequest, _callback);
+        return redeliverWebhookDeliveryCall(id, deliveryId, _callback);
 
     }
 
     /**
-     * Actualizar webhook (url, eventos, activación)
+     * Reintentar manualmente una entrega
      * 
      * @param id  (required)
-     * @param apiV1WebhooksIdPutRequest  (required)
+     * @param deliveryId  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksIdPut(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1WebhooksIdPutRequest apiV1WebhooksIdPutRequest) throws ApiException {
-        apiV1WebhooksIdPutWithHttpInfo(id, apiV1WebhooksIdPutRequest);
+    public void redeliverWebhookDelivery(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId) throws ApiException {
+        redeliverWebhookDeliveryWithHttpInfo(id, deliveryId);
     }
 
     /**
-     * Actualizar webhook (url, eventos, activación)
+     * Reintentar manualmente una entrega
      * 
      * @param id  (required)
-     * @param apiV1WebhooksIdPutRequest  (required)
+     * @param deliveryId  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksIdPutWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1WebhooksIdPutRequest apiV1WebhooksIdPutRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksIdPutValidateBeforeCall(id, apiV1WebhooksIdPutRequest, null);
+    public ApiResponse<Void> redeliverWebhookDeliveryWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId) throws ApiException {
+        okhttp3.Call localVarCall = redeliverWebhookDeliveryValidateBeforeCall(id, deliveryId, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Actualizar webhook (url, eventos, activación) (asynchronously)
+     * Reintentar manualmente una entrega (asynchronously)
      * 
      * @param id  (required)
-     * @param apiV1WebhooksIdPutRequest  (required)
+     * @param deliveryId  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -831,17 +875,19 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdPutAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1WebhooksIdPutRequest apiV1WebhooksIdPutRequest, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call redeliverWebhookDeliveryAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID deliveryId, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksIdPutValidateBeforeCall(id, apiV1WebhooksIdPutRequest, _callback);
+        okhttp3.Call localVarCall = redeliverWebhookDeliveryValidateBeforeCall(id, deliveryId, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1WebhooksIdRotateSecretPost
+     * Build call for rotateWebhookSecret
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -850,10 +896,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdRotateSecretPostCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call rotateWebhookSecretCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -880,6 +928,7 @@ public class WebhooksApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -893,18 +942,18 @@ public class WebhooksApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksIdRotateSecretPostValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call rotateWebhookSecretValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1WebhooksIdRotateSecretPost(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling rotateWebhookSecret(Async)");
         }
 
-        return apiV1WebhooksIdRotateSecretPostCall(id, _callback);
+        return rotateWebhookSecretCall(id, _callback);
 
     }
 
@@ -917,11 +966,13 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksIdRotateSecretPost(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1WebhooksIdRotateSecretPostWithHttpInfo(id);
+    public void rotateWebhookSecret(@javax.annotation.Nonnull UUID id) throws ApiException {
+        rotateWebhookSecretWithHttpInfo(id);
     }
 
     /**
@@ -934,11 +985,13 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksIdRotateSecretPostWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksIdRotateSecretPostValidateBeforeCall(id, null);
+    public ApiResponse<Void> rotateWebhookSecretWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = rotateWebhookSecretValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -953,17 +1006,19 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdRotateSecretPostAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call rotateWebhookSecretAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksIdRotateSecretPostValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = rotateWebhookSecretValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1WebhooksIdTestPost
+     * Build call for testWebhook
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -972,10 +1027,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdTestPostCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call testWebhookCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -1002,6 +1059,7 @@ public class WebhooksApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -1015,18 +1073,18 @@ public class WebhooksApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksIdTestPostValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call testWebhookValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1WebhooksIdTestPost(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling testWebhook(Async)");
         }
 
-        return apiV1WebhooksIdTestPostCall(id, _callback);
+        return testWebhookCall(id, _callback);
 
     }
 
@@ -1039,11 +1097,13 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksIdTestPost(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1WebhooksIdTestPostWithHttpInfo(id);
+    public void testWebhook(@javax.annotation.Nonnull UUID id) throws ApiException {
+        testWebhookWithHttpInfo(id);
     }
 
     /**
@@ -1056,11 +1116,13 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksIdTestPostWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksIdTestPostValidateBeforeCall(id, null);
+    public ApiResponse<Void> testWebhookWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = testWebhookValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -1075,18 +1137,21 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksIdTestPostAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call testWebhookAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksIdTestPostValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = testWebhookValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1WebhooksPost
-     * @param apiV1WebhooksPostRequest  (required)
+     * Build call for updateWebhook
+     * @param id  (required)
+     * @param updateWebhookRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -1094,10 +1159,12 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksPostCall(@javax.annotation.Nonnull ApiV1WebhooksPostRequest apiV1WebhooksPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call updateWebhookCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateWebhookRequest updateWebhookRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -1111,10 +1178,11 @@ public class WebhooksApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1WebhooksPostRequest;
+        Object localVarPostBody = updateWebhookRequest;
 
         // create path and map variables
-        String localVarPath = "/api/v1/webhooks";
+        String localVarPath = "/api/v1/webhooks/{id}"
+            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -1123,6 +1191,7 @@ public class WebhooksApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -1137,59 +1206,71 @@ public class WebhooksApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1WebhooksPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1WebhooksPostRequest apiV1WebhooksPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1WebhooksPostRequest' is set
-        if (apiV1WebhooksPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1WebhooksPostRequest' when calling apiV1WebhooksPost(Async)");
+    private okhttp3.Call updateWebhookValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateWebhookRequest updateWebhookRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'id' is set
+        if (id == null) {
+            throw new ApiException("Missing the required parameter 'id' when calling updateWebhook(Async)");
         }
 
-        return apiV1WebhooksPostCall(apiV1WebhooksPostRequest, _callback);
+        // verify the required parameter 'updateWebhookRequest' is set
+        if (updateWebhookRequest == null) {
+            throw new ApiException("Missing the required parameter 'updateWebhookRequest' when calling updateWebhook(Async)");
+        }
+
+        return updateWebhookCall(id, updateWebhookRequest, _callback);
 
     }
 
     /**
-     * Crear endpoint webhook
-     * Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
-     * @param apiV1WebhooksPostRequest  (required)
+     * Actualizar webhook (url, eventos, activación)
+     * 
+     * @param id  (required)
+     * @param updateWebhookRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1WebhooksPost(@javax.annotation.Nonnull ApiV1WebhooksPostRequest apiV1WebhooksPostRequest) throws ApiException {
-        apiV1WebhooksPostWithHttpInfo(apiV1WebhooksPostRequest);
+    public void updateWebhook(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateWebhookRequest updateWebhookRequest) throws ApiException {
+        updateWebhookWithHttpInfo(id, updateWebhookRequest);
     }
 
     /**
-     * Crear endpoint webhook
-     * Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
-     * @param apiV1WebhooksPostRequest  (required)
+     * Actualizar webhook (url, eventos, activación)
+     * 
+     * @param id  (required)
+     * @param updateWebhookRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1WebhooksPostWithHttpInfo(@javax.annotation.Nonnull ApiV1WebhooksPostRequest apiV1WebhooksPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1WebhooksPostValidateBeforeCall(apiV1WebhooksPostRequest, null);
+    public ApiResponse<Void> updateWebhookWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateWebhookRequest updateWebhookRequest) throws ApiException {
+        okhttp3.Call localVarCall = updateWebhookValidateBeforeCall(id, updateWebhookRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Crear endpoint webhook (asynchronously)
-     * Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
-     * @param apiV1WebhooksPostRequest  (required)
+     * Actualizar webhook (url, eventos, activación) (asynchronously)
+     * 
+     * @param id  (required)
+     * @param updateWebhookRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -1197,12 +1278,14 @@ public class WebhooksApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1WebhooksPostAsync(@javax.annotation.Nonnull ApiV1WebhooksPostRequest apiV1WebhooksPostRequest, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call updateWebhookAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateWebhookRequest updateWebhookRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1WebhooksPostValidateBeforeCall(apiV1WebhooksPostRequest, _callback);
+        okhttp3.Call localVarCall = updateWebhookValidateBeforeCall(id, updateWebhookRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }

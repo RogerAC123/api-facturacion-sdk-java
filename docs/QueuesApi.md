@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1QueuesStatsGet**](QueuesApi.md#apiV1QueuesStatsGet) | **GET** /api/v1/queues/stats | Estado de las colas BullMQ |
+| [**getQueueStats**](QueuesApi.md#getQueueStats) | **GET** /api/v1/queues/stats | Estado de las colas BullMQ |
 
 
-<a id="apiV1QueuesStatsGet"></a>
-# **apiV1QueuesStatsGet**
-> ApiV1QueuesStatsGet200Response apiV1QueuesStatsGet()
+<a id="getQueueStats"></a>
+# **getQueueStats**
+> GetQueueStats200Response getQueueStats()
 
 Estado de las colas BullMQ
 
@@ -19,6 +19,7 @@ Estado de las colas BullMQ
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.QueuesApi;
 
@@ -26,13 +27,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     QueuesApi apiInstance = new QueuesApi(defaultClient);
     try {
-      ApiV1QueuesStatsGet200Response result = apiInstance.apiV1QueuesStatsGet();
+      GetQueueStats200Response result = apiInstance.getQueueStats();
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling QueuesApi#apiV1QueuesStatsGet");
+      System.err.println("Exception when calling QueuesApi#getQueueStats");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -47,11 +52,11 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**ApiV1QueuesStatsGet200Response**](ApiV1QueuesStatsGet200Response.md)
+[**GetQueueStats200Response**](GetQueueStats200Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -62,5 +67,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
 | **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 

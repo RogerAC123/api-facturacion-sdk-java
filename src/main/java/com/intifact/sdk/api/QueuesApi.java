@@ -27,8 +27,9 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1QueuesStatsGet200Response;
+import com.intifact.sdk.model.GetQueueStats200Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class QueuesApi {
     }
 
     /**
-     * Build call for apiV1QueuesStatsGet
+     * Build call for getQueueStats
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -83,10 +84,12 @@ public class QueuesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1QueuesStatsGetCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getQueueStatsCall(final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -126,50 +129,54 @@ public class QueuesApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1QueuesStatsGetValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1QueuesStatsGetCall(_callback);
+    private okhttp3.Call getQueueStatsValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return getQueueStatsCall(_callback);
 
     }
 
     /**
      * Estado de las colas BullMQ
      * 
-     * @return ApiV1QueuesStatsGet200Response
+     * @return GetQueueStats200Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1QueuesStatsGet200Response apiV1QueuesStatsGet() throws ApiException {
-        ApiResponse<ApiV1QueuesStatsGet200Response> localVarResp = apiV1QueuesStatsGetWithHttpInfo();
+    public GetQueueStats200Response getQueueStats() throws ApiException {
+        ApiResponse<GetQueueStats200Response> localVarResp = getQueueStatsWithHttpInfo();
         return localVarResp.getData();
     }
 
     /**
      * Estado de las colas BullMQ
      * 
-     * @return ApiResponse&lt;ApiV1QueuesStatsGet200Response&gt;
+     * @return ApiResponse&lt;GetQueueStats200Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1QueuesStatsGet200Response> apiV1QueuesStatsGetWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1QueuesStatsGetValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<ApiV1QueuesStatsGet200Response>(){}.getType();
+    public ApiResponse<GetQueueStats200Response> getQueueStatsWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = getQueueStatsValidateBeforeCall(null);
+        Type localVarReturnType = new TypeToken<GetQueueStats200Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -184,13 +191,15 @@ public class QueuesApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1QueuesStatsGetAsync(final ApiCallback<ApiV1QueuesStatsGet200Response> _callback) throws ApiException {
+    public okhttp3.Call getQueueStatsAsync(final ApiCallback<GetQueueStats200Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1QueuesStatsGetValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<ApiV1QueuesStatsGet200Response>(){}.getType();
+        okhttp3.Call localVarCall = getQueueStatsValidateBeforeCall(_callback);
+        Type localVarReturnType = new TypeToken<GetQueueStats200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

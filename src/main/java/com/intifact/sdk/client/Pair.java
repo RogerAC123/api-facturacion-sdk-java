@@ -13,7 +13,7 @@
 
 package com.intifact.sdk.client;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-05T12:50:13.755448400-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class Pair {
   private final String name;
   private final String value;

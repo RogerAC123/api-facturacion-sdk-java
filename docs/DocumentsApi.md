@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1CdrConsultarPost**](DocumentsApi.md#apiV1CdrConsultarPost) | **POST** /api/v1/cdr/consultar | Consultar el CDR de un comprobante en SUNAT por referencia |
-| [**apiV1DocumentsGet**](DocumentsApi.md#apiV1DocumentsGet) | **GET** /api/v1/documents | Listar documentos con filtros y paginación |
-| [**apiV1DocumentsIdGet**](DocumentsApi.md#apiV1DocumentsIdGet) | **GET** /api/v1/documents/{id} | Detalle completo de un documento |
-| [**apiV1DocumentsIdRecoverPost**](DocumentsApi.md#apiV1DocumentsIdRecoverPost) | **POST** /api/v1/documents/{id}/recover | Reconciliar un documento con SUNAT (consulta de CDR, solo master) |
-| [**apiV1DocumentsIdRetryPost**](DocumentsApi.md#apiV1DocumentsIdRetryPost) | **POST** /api/v1/documents/{id}/retry | Re-encolar un documento fallido |
-| [**apiV1DocumentsNextCorrelativoGet**](DocumentsApi.md#apiV1DocumentsNextCorrelativoGet) | **GET** /api/v1/documents/next-correlativo | Obtener el siguiente correlativo disponible para una serie |
+| [**consultarCdr**](DocumentsApi.md#consultarCdr) | **POST** /api/v1/cdr/consultar | Consultar el CDR de un comprobante en SUNAT por referencia |
+| [**getDocument**](DocumentsApi.md#getDocument) | **GET** /api/v1/documents/{id} | Detalle completo de un documento |
+| [**getNextCorrelativo**](DocumentsApi.md#getNextCorrelativo) | **GET** /api/v1/documents/next-correlativo | Obtener el siguiente correlativo disponible para una serie |
+| [**listDocuments**](DocumentsApi.md#listDocuments) | **GET** /api/v1/documents | Listar documentos con filtros y paginación |
+| [**reconcileDocument**](DocumentsApi.md#reconcileDocument) | **POST** /api/v1/documents/{id}/recover | Reconciliar un documento con SUNAT (consulta de CDR, solo master) |
+| [**retryDocument**](DocumentsApi.md#retryDocument) | **POST** /api/v1/documents/{id}/retry | Re-encolar un documento fallido |
 
 
-<a id="apiV1CdrConsultarPost"></a>
-# **apiV1CdrConsultarPost**
-> ApiV1CdrConsultarPost200Response apiV1CdrConsultarPost(apiV1CdrConsultarPostRequest)
+<a id="consultarCdr"></a>
+# **consultarCdr**
+> ConsultarCdr200Response consultarCdr(consultarCdrRequest)
 
 Consultar el CDR de un comprobante en SUNAT por referencia
 
@@ -26,6 +26,7 @@ Recupera el CDR oficial (billConsultService / getStatusCdr) de un comprobante 01
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DocumentsApi;
 
@@ -33,14 +34,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DocumentsApi apiInstance = new DocumentsApi(defaultClient);
-    ApiV1CdrConsultarPostRequest apiV1CdrConsultarPostRequest = new ApiV1CdrConsultarPostRequest(); // ApiV1CdrConsultarPostRequest | 
+    ConsultarCdrRequest consultarCdrRequest = new ConsultarCdrRequest(); // ConsultarCdrRequest | 
     try {
-      ApiV1CdrConsultarPost200Response result = apiInstance.apiV1CdrConsultarPost(apiV1CdrConsultarPostRequest);
+      ConsultarCdr200Response result = apiInstance.consultarCdr(consultarCdrRequest);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DocumentsApi#apiV1CdrConsultarPost");
+      System.err.println("Exception when calling DocumentsApi#consultarCdr");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -54,15 +59,15 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1CdrConsultarPostRequest** | [**ApiV1CdrConsultarPostRequest**](ApiV1CdrConsultarPostRequest.md)|  | |
+| **consultarCdrRequest** | [**ConsultarCdrRequest**](ConsultarCdrRequest.md)|  | |
 
 ### Return type
 
-[**ApiV1CdrConsultarPost200Response**](ApiV1CdrConsultarPost200Response.md)
+[**ConsultarCdr200Response**](ConsultarCdr200Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -74,11 +79,155 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
 | **400** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
 | **404** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1DocumentsGet"></a>
-# **apiV1DocumentsGet**
-> ApiV1DocumentsGet200Response apiV1DocumentsGet(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit)
+<a id="getDocument"></a>
+# **getDocument**
+> getDocument(id)
+
+Detalle completo de un documento
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.DocumentsApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    DocumentsApi apiInstance = new DocumentsApi(defaultClient);
+    UUID id = UUID.randomUUID(); // UUID | 
+    try {
+      apiInstance.getDocument(id);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling DocumentsApi#getDocument");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | **UUID**|  | |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="getNextCorrelativo"></a>
+# **getNextCorrelativo**
+> GetNextCorrelativo200Response getNextCorrelativo(companyRuc, tipoDoc, serie)
+
+Obtener el siguiente correlativo disponible para una serie
+
+Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie y retorna el siguiente. Útil para auto-numeración.
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.DocumentsApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    DocumentsApi apiInstance = new DocumentsApi(defaultClient);
+    String companyRuc = "companyRuc_example"; // String | 
+    String tipoDoc = "tipoDoc_example"; // String | 
+    String serie = "serie_example"; // String | 
+    try {
+      GetNextCorrelativo200Response result = apiInstance.getNextCorrelativo(companyRuc, tipoDoc, serie);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling DocumentsApi#getNextCorrelativo");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **companyRuc** | **String**|  | |
+| **tipoDoc** | **String**|  | |
+| **serie** | **String**|  | |
+
+### Return type
+
+[**GetNextCorrelativo200Response**](GetNextCorrelativo200Response.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **404** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="listDocuments"></a>
+# **listDocuments**
+> ListDocuments200Response listDocuments(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit)
 
 Listar documentos con filtros y paginación
 
@@ -88,6 +237,7 @@ Listar documentos con filtros y paginación
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DocumentsApi;
 
@@ -95,6 +245,10 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DocumentsApi apiInstance = new DocumentsApi(defaultClient);
     String ruc = "ruc_example"; // String | 
@@ -108,10 +262,10 @@ public class Example {
     Integer page = 1; // Integer | 
     Integer limit = 20; // Integer | 
     try {
-      ApiV1DocumentsGet200Response result = apiInstance.apiV1DocumentsGet(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
+      ListDocuments200Response result = apiInstance.listDocuments(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DocumentsApi#apiV1DocumentsGet");
+      System.err.println("Exception when calling DocumentsApi#listDocuments");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -138,11 +292,11 @@ public class Example {
 
 ### Return type
 
-[**ApiV1DocumentsGet200Response**](ApiV1DocumentsGet200Response.md)
+[**ListDocuments200Response**](ListDocuments200Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -153,69 +307,13 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1DocumentsIdGet"></a>
-# **apiV1DocumentsIdGet**
-> apiV1DocumentsIdGet(id)
-
-Detalle completo de un documento
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.DocumentsApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    DocumentsApi apiInstance = new DocumentsApi(defaultClient);
-    UUID id = UUID.randomUUID(); // UUID | 
-    try {
-      apiInstance.apiV1DocumentsIdGet(id);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling DocumentsApi#apiV1DocumentsIdGet");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | **UUID**|  | |
-
-### Return type
-
-null (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-
-<a id="apiV1DocumentsIdRecoverPost"></a>
-# **apiV1DocumentsIdRecoverPost**
-> ApiV1DocumentsIdRecoverPost200Response apiV1DocumentsIdRecoverPost(id)
+<a id="reconcileDocument"></a>
+# **reconcileDocument**
+> ReconcileDocument200Response reconcileDocument(id)
 
 Reconciliar un documento con SUNAT (consulta de CDR, solo master)
 
@@ -227,6 +325,7 @@ Consulta el estado REAL en SUNAT (getStatusCdr / billConsultService) SIN reenvia
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DocumentsApi;
 
@@ -234,14 +333,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DocumentsApi apiInstance = new DocumentsApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      ApiV1DocumentsIdRecoverPost200Response result = apiInstance.apiV1DocumentsIdRecoverPost(id);
+      ReconcileDocument200Response result = apiInstance.reconcileDocument(id);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DocumentsApi#apiV1DocumentsIdRecoverPost");
+      System.err.println("Exception when calling DocumentsApi#reconcileDocument");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -259,11 +362,11 @@ public class Example {
 
 ### Return type
 
-[**ApiV1DocumentsIdRecoverPost200Response**](ApiV1DocumentsIdRecoverPost200Response.md)
+[**ReconcileDocument200Response**](ReconcileDocument200Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -275,12 +378,14 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
 | **400** | Default Response |  -  |
+| **401** | Default Response |  -  |
 | **403** | Default Response |  -  |
 | **404** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1DocumentsIdRetryPost"></a>
-# **apiV1DocumentsIdRetryPost**
-> ApiV1DocumentsIdRetryPost202Response apiV1DocumentsIdRetryPost(id)
+<a id="retryDocument"></a>
+# **retryDocument**
+> RetryDocument202Response retryDocument(id)
 
 Re-encolar un documento fallido
 
@@ -292,6 +397,7 @@ Re-encolar un documento fallido
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DocumentsApi;
 
@@ -299,14 +405,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DocumentsApi apiInstance = new DocumentsApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      ApiV1DocumentsIdRetryPost202Response result = apiInstance.apiV1DocumentsIdRetryPost(id);
+      RetryDocument202Response result = apiInstance.retryDocument(id);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DocumentsApi#apiV1DocumentsIdRetryPost");
+      System.err.println("Exception when calling DocumentsApi#retryDocument");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -324,11 +434,11 @@ public class Example {
 
 ### Return type
 
-[**ApiV1DocumentsIdRetryPost202Response**](ApiV1DocumentsIdRetryPost202Response.md)
+[**RetryDocument202Response**](RetryDocument202Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -340,71 +450,7 @@ No authorization required
 |-------------|-------------|------------------|
 | **202** | Default Response |  -  |
 | **400** | Default Response |  -  |
-
-<a id="apiV1DocumentsNextCorrelativoGet"></a>
-# **apiV1DocumentsNextCorrelativoGet**
-> ApiV1DocumentsNextCorrelativoGet200Response apiV1DocumentsNextCorrelativoGet(companyRuc, tipoDoc, serie)
-
-Obtener el siguiente correlativo disponible para una serie
-
-Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie y retorna el siguiente. Útil para auto-numeración.
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.DocumentsApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    DocumentsApi apiInstance = new DocumentsApi(defaultClient);
-    String companyRuc = "companyRuc_example"; // String | 
-    String tipoDoc = "tipoDoc_example"; // String | 
-    String serie = "serie_example"; // String | 
-    try {
-      ApiV1DocumentsNextCorrelativoGet200Response result = apiInstance.apiV1DocumentsNextCorrelativoGet(companyRuc, tipoDoc, serie);
-      System.out.println(result);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling DocumentsApi#apiV1DocumentsNextCorrelativoGet");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **companyRuc** | **String**|  | |
-| **tipoDoc** | **String**|  | |
-| **serie** | **String**|  | |
-
-### Return type
-
-[**ApiV1DocumentsNextCorrelativoGet200Response**](ApiV1DocumentsNextCorrelativoGet200Response.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-| **404** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 

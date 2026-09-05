@@ -27,9 +27,11 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1CompaniesIdBranchesBranchIdPutRequest;
-import com.intifact.sdk.model.ApiV1CompaniesIdBranchesPostRequest;
+import com.intifact.sdk.model.CreateBranchRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
+import com.intifact.sdk.model.UpdateBranchRequest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -75,7 +77,148 @@ public class BranchesApi {
     }
 
     /**
-     * Build call for apiV1CompaniesIdBranchesBranchIdDelete
+     * Build call for createBranch
+     * @param id  (required)
+     * @param createBranchRequest  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call createBranchCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull CreateBranchRequest createBranchRequest, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = createBranchRequest;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/companies/{id}/branches"
+            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call createBranchValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull CreateBranchRequest createBranchRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'id' is set
+        if (id == null) {
+            throw new ApiException("Missing the required parameter 'id' when calling createBranch(Async)");
+        }
+
+        // verify the required parameter 'createBranchRequest' is set
+        if (createBranchRequest == null) {
+            throw new ApiException("Missing the required parameter 'createBranchRequest' when calling createBranch(Async)");
+        }
+
+        return createBranchCall(id, createBranchRequest, _callback);
+
+    }
+
+    /**
+     * Crear establecimiento (sucursal)
+     * El código debe coincidir con el que SUNAT asignó a la sucursal al registrarla en el portal SOL (Mis Trámites &gt; Establecimientos Anexos).
+     * @param id  (required)
+     * @param createBranchRequest  (required)
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public void createBranch(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull CreateBranchRequest createBranchRequest) throws ApiException {
+        createBranchWithHttpInfo(id, createBranchRequest);
+    }
+
+    /**
+     * Crear establecimiento (sucursal)
+     * El código debe coincidir con el que SUNAT asignó a la sucursal al registrarla en el portal SOL (Mis Trámites &gt; Establecimientos Anexos).
+     * @param id  (required)
+     * @param createBranchRequest  (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Void> createBranchWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull CreateBranchRequest createBranchRequest) throws ApiException {
+        okhttp3.Call localVarCall = createBranchValidateBeforeCall(id, createBranchRequest, null);
+        return localVarApiClient.execute(localVarCall);
+    }
+
+    /**
+     * Crear establecimiento (sucursal) (asynchronously)
+     * El código debe coincidir con el que SUNAT asignó a la sucursal al registrarla en el portal SOL (Mis Trámites &gt; Establecimientos Anexos).
+     * @param id  (required)
+     * @param createBranchRequest  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call createBranchAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull CreateBranchRequest createBranchRequest, final ApiCallback<Void> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = createBranchValidateBeforeCall(id, createBranchRequest, _callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for deactivateBranch
      * @param id  (required)
      * @param branchId  (required)
      * @param _callback Callback for upload/download progress
@@ -85,10 +228,12 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdBranchesBranchIdDeleteCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call deactivateBranchCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -116,6 +261,7 @@ public class BranchesApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -129,23 +275,23 @@ public class BranchesApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesIdBranchesBranchIdDeleteValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call deactivateBranchValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1CompaniesIdBranchesBranchIdDelete(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling deactivateBranch(Async)");
         }
 
         // verify the required parameter 'branchId' is set
         if (branchId == null) {
-            throw new ApiException("Missing the required parameter 'branchId' when calling apiV1CompaniesIdBranchesBranchIdDelete(Async)");
+            throw new ApiException("Missing the required parameter 'branchId' when calling deactivateBranch(Async)");
         }
 
-        return apiV1CompaniesIdBranchesBranchIdDeleteCall(id, branchId, _callback);
+        return deactivateBranchCall(id, branchId, _callback);
 
     }
 
@@ -159,11 +305,13 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CompaniesIdBranchesBranchIdDelete(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId) throws ApiException {
-        apiV1CompaniesIdBranchesBranchIdDeleteWithHttpInfo(id, branchId);
+    public void deactivateBranch(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId) throws ApiException {
+        deactivateBranchWithHttpInfo(id, branchId);
     }
 
     /**
@@ -177,11 +325,13 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CompaniesIdBranchesBranchIdDeleteWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesIdBranchesBranchIdDeleteValidateBeforeCall(id, branchId, null);
+    public ApiResponse<Void> deactivateBranchWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId) throws ApiException {
+        okhttp3.Call localVarCall = deactivateBranchValidateBeforeCall(id, branchId, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -197,159 +347,19 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdBranchesBranchIdDeleteAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call deactivateBranchAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CompaniesIdBranchesBranchIdDeleteValidateBeforeCall(id, branchId, _callback);
+        okhttp3.Call localVarCall = deactivateBranchValidateBeforeCall(id, branchId, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1CompaniesIdBranchesBranchIdPut
-     * @param id  (required)
-     * @param branchId  (required)
-     * @param apiV1CompaniesIdBranchesBranchIdPutRequest  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1CompaniesIdBranchesBranchIdPutCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesBranchIdPutRequest apiV1CompaniesIdBranchesBranchIdPutRequest, final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = apiV1CompaniesIdBranchesBranchIdPutRequest;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/companies/{id}/branches/{branchId}"
-            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()))
-            .replace("{" + "branchId" + "}", localVarApiClient.escapeString(branchId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesIdBranchesBranchIdPutValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesBranchIdPutRequest apiV1CompaniesIdBranchesBranchIdPutRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1CompaniesIdBranchesBranchIdPut(Async)");
-        }
-
-        // verify the required parameter 'branchId' is set
-        if (branchId == null) {
-            throw new ApiException("Missing the required parameter 'branchId' when calling apiV1CompaniesIdBranchesBranchIdPut(Async)");
-        }
-
-        // verify the required parameter 'apiV1CompaniesIdBranchesBranchIdPutRequest' is set
-        if (apiV1CompaniesIdBranchesBranchIdPutRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1CompaniesIdBranchesBranchIdPutRequest' when calling apiV1CompaniesIdBranchesBranchIdPut(Async)");
-        }
-
-        return apiV1CompaniesIdBranchesBranchIdPutCall(id, branchId, apiV1CompaniesIdBranchesBranchIdPutRequest, _callback);
-
-    }
-
-    /**
-     * Actualizar establecimiento
-     * 
-     * @param id  (required)
-     * @param branchId  (required)
-     * @param apiV1CompaniesIdBranchesBranchIdPutRequest  (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public void apiV1CompaniesIdBranchesBranchIdPut(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesBranchIdPutRequest apiV1CompaniesIdBranchesBranchIdPutRequest) throws ApiException {
-        apiV1CompaniesIdBranchesBranchIdPutWithHttpInfo(id, branchId, apiV1CompaniesIdBranchesBranchIdPutRequest);
-    }
-
-    /**
-     * Actualizar establecimiento
-     * 
-     * @param id  (required)
-     * @param branchId  (required)
-     * @param apiV1CompaniesIdBranchesBranchIdPutRequest  (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> apiV1CompaniesIdBranchesBranchIdPutWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesBranchIdPutRequest apiV1CompaniesIdBranchesBranchIdPutRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesIdBranchesBranchIdPutValidateBeforeCall(id, branchId, apiV1CompaniesIdBranchesBranchIdPutRequest, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Actualizar establecimiento (asynchronously)
-     * 
-     * @param id  (required)
-     * @param branchId  (required)
-     * @param apiV1CompaniesIdBranchesBranchIdPutRequest  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1CompaniesIdBranchesBranchIdPutAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesBranchIdPutRequest apiV1CompaniesIdBranchesBranchIdPutRequest, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1CompaniesIdBranchesBranchIdPutValidateBeforeCall(id, branchId, apiV1CompaniesIdBranchesBranchIdPutRequest, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1CompaniesIdBranchesGet
+     * Build call for listBranches
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -358,10 +368,12 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdBranchesGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call listBranchesCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -388,6 +400,7 @@ public class BranchesApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -401,18 +414,18 @@ public class BranchesApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesIdBranchesGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call listBranchesValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1CompaniesIdBranchesGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling listBranches(Async)");
         }
 
-        return apiV1CompaniesIdBranchesGetCall(id, _callback);
+        return listBranchesCall(id, _callback);
 
     }
 
@@ -425,11 +438,13 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CompaniesIdBranchesGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1CompaniesIdBranchesGetWithHttpInfo(id);
+    public void listBranches(@javax.annotation.Nonnull UUID id) throws ApiException {
+        listBranchesWithHttpInfo(id);
     }
 
     /**
@@ -442,11 +457,13 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CompaniesIdBranchesGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesIdBranchesGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> listBranchesWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = listBranchesValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -461,19 +478,22 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdBranchesGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call listBranchesAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CompaniesIdBranchesGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = listBranchesValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1CompaniesIdBranchesPost
+     * Build call for updateBranch
      * @param id  (required)
-     * @param apiV1CompaniesIdBranchesPostRequest  (required)
+     * @param branchId  (required)
+     * @param updateBranchRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -481,10 +501,12 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdBranchesPostCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesPostRequest apiV1CompaniesIdBranchesPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call updateBranchCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull UpdateBranchRequest updateBranchRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -498,11 +520,12 @@ public class BranchesApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1CompaniesIdBranchesPostRequest;
+        Object localVarPostBody = updateBranchRequest;
 
         // create path and map variables
-        String localVarPath = "/api/v1/companies/{id}/branches"
-            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()));
+        String localVarPath = "/api/v1/companies/{id}/branches/{branchId}"
+            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()))
+            .replace("{" + "branchId" + "}", localVarApiClient.escapeString(branchId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -511,6 +534,7 @@ public class BranchesApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -525,67 +549,79 @@ public class BranchesApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesIdBranchesPostValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesPostRequest apiV1CompaniesIdBranchesPostRequest, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call updateBranchValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull UpdateBranchRequest updateBranchRequest, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1CompaniesIdBranchesPost(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling updateBranch(Async)");
         }
 
-        // verify the required parameter 'apiV1CompaniesIdBranchesPostRequest' is set
-        if (apiV1CompaniesIdBranchesPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1CompaniesIdBranchesPostRequest' when calling apiV1CompaniesIdBranchesPost(Async)");
+        // verify the required parameter 'branchId' is set
+        if (branchId == null) {
+            throw new ApiException("Missing the required parameter 'branchId' when calling updateBranch(Async)");
         }
 
-        return apiV1CompaniesIdBranchesPostCall(id, apiV1CompaniesIdBranchesPostRequest, _callback);
+        // verify the required parameter 'updateBranchRequest' is set
+        if (updateBranchRequest == null) {
+            throw new ApiException("Missing the required parameter 'updateBranchRequest' when calling updateBranch(Async)");
+        }
+
+        return updateBranchCall(id, branchId, updateBranchRequest, _callback);
 
     }
 
     /**
-     * Crear establecimiento (sucursal)
-     * El código debe coincidir con el que SUNAT asignó a la sucursal al registrarla en el portal SOL (Mis Trámites &gt; Establecimientos Anexos).
+     * Actualizar establecimiento
+     * 
      * @param id  (required)
-     * @param apiV1CompaniesIdBranchesPostRequest  (required)
+     * @param branchId  (required)
+     * @param updateBranchRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CompaniesIdBranchesPost(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesPostRequest apiV1CompaniesIdBranchesPostRequest) throws ApiException {
-        apiV1CompaniesIdBranchesPostWithHttpInfo(id, apiV1CompaniesIdBranchesPostRequest);
+    public void updateBranch(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull UpdateBranchRequest updateBranchRequest) throws ApiException {
+        updateBranchWithHttpInfo(id, branchId, updateBranchRequest);
     }
 
     /**
-     * Crear establecimiento (sucursal)
-     * El código debe coincidir con el que SUNAT asignó a la sucursal al registrarla en el portal SOL (Mis Trámites &gt; Establecimientos Anexos).
+     * Actualizar establecimiento
+     * 
      * @param id  (required)
-     * @param apiV1CompaniesIdBranchesPostRequest  (required)
+     * @param branchId  (required)
+     * @param updateBranchRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CompaniesIdBranchesPostWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesPostRequest apiV1CompaniesIdBranchesPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesIdBranchesPostValidateBeforeCall(id, apiV1CompaniesIdBranchesPostRequest, null);
+    public ApiResponse<Void> updateBranchWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull UpdateBranchRequest updateBranchRequest) throws ApiException {
+        okhttp3.Call localVarCall = updateBranchValidateBeforeCall(id, branchId, updateBranchRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Crear establecimiento (sucursal) (asynchronously)
-     * El código debe coincidir con el que SUNAT asignó a la sucursal al registrarla en el portal SOL (Mis Trámites &gt; Establecimientos Anexos).
+     * Actualizar establecimiento (asynchronously)
+     * 
      * @param id  (required)
-     * @param apiV1CompaniesIdBranchesPostRequest  (required)
+     * @param branchId  (required)
+     * @param updateBranchRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -593,12 +629,14 @@ public class BranchesApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdBranchesPostAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdBranchesPostRequest apiV1CompaniesIdBranchesPostRequest, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call updateBranchAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UUID branchId, @javax.annotation.Nonnull UpdateBranchRequest updateBranchRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CompaniesIdBranchesPostValidateBeforeCall(id, apiV1CompaniesIdBranchesPostRequest, _callback);
+        okhttp3.Call localVarCall = updateBranchValidateBeforeCall(id, branchId, updateBranchRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }

@@ -27,10 +27,12 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1CompaniesClaimPostRequest;
-import com.intifact.sdk.model.ApiV1CompaniesIdPutRequest;
-import com.intifact.sdk.model.ApiV1CompaniesPostRequest;
+import com.intifact.sdk.model.ClaimCompanyRequest;
+import com.intifact.sdk.model.CreateCompanyRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
+import com.intifact.sdk.model.UpdateCompanyRequest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -76,8 +78,8 @@ public class CompanyApi {
     }
 
     /**
-     * Build call for apiV1CompaniesClaimPost
-     * @param apiV1CompaniesClaimPostRequest  (required)
+     * Build call for claimCompany
+     * @param claimCompanyRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -85,10 +87,12 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesClaimPostCall(@javax.annotation.Nonnull ApiV1CompaniesClaimPostRequest apiV1CompaniesClaimPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call claimCompanyCall(@javax.annotation.Nonnull ClaimCompanyRequest claimCompanyRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -102,7 +106,7 @@ public class CompanyApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1CompaniesClaimPostRequest;
+        Object localVarPostBody = claimCompanyRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/companies/claim";
@@ -114,6 +118,7 @@ public class CompanyApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -128,59 +133,63 @@ public class CompanyApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesClaimPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1CompaniesClaimPostRequest apiV1CompaniesClaimPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1CompaniesClaimPostRequest' is set
-        if (apiV1CompaniesClaimPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1CompaniesClaimPostRequest' when calling apiV1CompaniesClaimPost(Async)");
+    private okhttp3.Call claimCompanyValidateBeforeCall(@javax.annotation.Nonnull ClaimCompanyRequest claimCompanyRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'claimCompanyRequest' is set
+        if (claimCompanyRequest == null) {
+            throw new ApiException("Missing the required parameter 'claimCompanyRequest' when calling claimCompany(Async)");
         }
 
-        return apiV1CompaniesClaimPostCall(apiV1CompaniesClaimPostRequest, _callback);
+        return claimCompanyCall(claimCompanyRequest, _callback);
 
     }
 
     /**
      * Reclamar un RUC registrado por otra cuenta, con su certificado
      * Prueba de titularidad &#x3D; certificado digital del RUC. Si la cuenta que lo tiene no acreditó titularidad y no emitió documentos, el RUC pasa a tu cuenta.
-     * @param apiV1CompaniesClaimPostRequest  (required)
+     * @param claimCompanyRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CompaniesClaimPost(@javax.annotation.Nonnull ApiV1CompaniesClaimPostRequest apiV1CompaniesClaimPostRequest) throws ApiException {
-        apiV1CompaniesClaimPostWithHttpInfo(apiV1CompaniesClaimPostRequest);
+    public void claimCompany(@javax.annotation.Nonnull ClaimCompanyRequest claimCompanyRequest) throws ApiException {
+        claimCompanyWithHttpInfo(claimCompanyRequest);
     }
 
     /**
      * Reclamar un RUC registrado por otra cuenta, con su certificado
      * Prueba de titularidad &#x3D; certificado digital del RUC. Si la cuenta que lo tiene no acreditó titularidad y no emitió documentos, el RUC pasa a tu cuenta.
-     * @param apiV1CompaniesClaimPostRequest  (required)
+     * @param claimCompanyRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CompaniesClaimPostWithHttpInfo(@javax.annotation.Nonnull ApiV1CompaniesClaimPostRequest apiV1CompaniesClaimPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesClaimPostValidateBeforeCall(apiV1CompaniesClaimPostRequest, null);
+    public ApiResponse<Void> claimCompanyWithHttpInfo(@javax.annotation.Nonnull ClaimCompanyRequest claimCompanyRequest) throws ApiException {
+        okhttp3.Call localVarCall = claimCompanyValidateBeforeCall(claimCompanyRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
      * Reclamar un RUC registrado por otra cuenta, con su certificado (asynchronously)
      * Prueba de titularidad &#x3D; certificado digital del RUC. Si la cuenta que lo tiene no acreditó titularidad y no emitió documentos, el RUC pasa a tu cuenta.
-     * @param apiV1CompaniesClaimPostRequest  (required)
+     * @param claimCompanyRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -188,17 +197,20 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesClaimPostAsync(@javax.annotation.Nonnull ApiV1CompaniesClaimPostRequest apiV1CompaniesClaimPostRequest, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call claimCompanyAsync(@javax.annotation.Nonnull ClaimCompanyRequest claimCompanyRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CompaniesClaimPostValidateBeforeCall(apiV1CompaniesClaimPostRequest, _callback);
+        okhttp3.Call localVarCall = claimCompanyValidateBeforeCall(claimCompanyRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1CompaniesGet
+     * Build call for createCompany
+     * @param createCompanyRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -206,10 +218,12 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesGetCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call createCompanyCall(@javax.annotation.Nonnull CreateCompanyRequest createCompanyRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -223,7 +237,7 @@ public class CompanyApi {
             basePath = null;
         }
 
-        Object localVarPostBody = null;
+        Object localVarPostBody = createCompanyRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/companies";
@@ -235,6 +249,7 @@ public class CompanyApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -242,57 +257,70 @@ public class CompanyApi {
         }
 
         final String[] localVarContentTypes = {
+            "application/json"
         };
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         if (localVarContentType != null) {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesGetValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1CompaniesGetCall(_callback);
+    private okhttp3.Call createCompanyValidateBeforeCall(@javax.annotation.Nonnull CreateCompanyRequest createCompanyRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'createCompanyRequest' is set
+        if (createCompanyRequest == null) {
+            throw new ApiException("Missing the required parameter 'createCompanyRequest' when calling createCompany(Async)");
+        }
+
+        return createCompanyCall(createCompanyRequest, _callback);
 
     }
 
     /**
-     * Listar empresas emisoras
+     * Crear empresa emisora
      * 
+     * @param createCompanyRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CompaniesGet() throws ApiException {
-        apiV1CompaniesGetWithHttpInfo();
+    public void createCompany(@javax.annotation.Nonnull CreateCompanyRequest createCompanyRequest) throws ApiException {
+        createCompanyWithHttpInfo(createCompanyRequest);
     }
 
     /**
-     * Listar empresas emisoras
+     * Crear empresa emisora
      * 
+     * @param createCompanyRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CompaniesGetWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesGetValidateBeforeCall(null);
+    public ApiResponse<Void> createCompanyWithHttpInfo(@javax.annotation.Nonnull CreateCompanyRequest createCompanyRequest) throws ApiException {
+        okhttp3.Call localVarCall = createCompanyValidateBeforeCall(createCompanyRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Listar empresas emisoras (asynchronously)
+     * Crear empresa emisora (asynchronously)
      * 
+     * @param createCompanyRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -300,17 +328,19 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesGetAsync(final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call createCompanyAsync(@javax.annotation.Nonnull CreateCompanyRequest createCompanyRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CompaniesGetValidateBeforeCall(_callback);
+        okhttp3.Call localVarCall = createCompanyValidateBeforeCall(createCompanyRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1CompaniesIdGet
+     * Build call for getCompany
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -319,10 +349,12 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getCompanyCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -349,6 +381,7 @@ public class CompanyApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -362,18 +395,18 @@ public class CompanyApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesIdGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getCompanyValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1CompaniesIdGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getCompany(Async)");
         }
 
-        return apiV1CompaniesIdGetCall(id, _callback);
+        return getCompanyCall(id, _callback);
 
     }
 
@@ -386,11 +419,13 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CompaniesIdGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1CompaniesIdGetWithHttpInfo(id);
+    public void getCompany(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getCompanyWithHttpInfo(id);
     }
 
     /**
@@ -403,11 +438,13 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CompaniesIdGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesIdGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getCompanyWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getCompanyValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -422,17 +459,19 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getCompanyAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CompaniesIdGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getCompanyValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1CompaniesIdLogoGet
+     * Build call for getCompanyLogo
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -441,10 +480,12 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdLogoGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getCompanyLogoCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -471,6 +512,7 @@ public class CompanyApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -484,18 +526,18 @@ public class CompanyApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesIdLogoGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getCompanyLogoValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1CompaniesIdLogoGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getCompanyLogo(Async)");
         }
 
-        return apiV1CompaniesIdLogoGetCall(id, _callback);
+        return getCompanyLogoCall(id, _callback);
 
     }
 
@@ -508,11 +550,13 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CompaniesIdLogoGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1CompaniesIdLogoGetWithHttpInfo(id);
+    public void getCompanyLogo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getCompanyLogoWithHttpInfo(id);
     }
 
     /**
@@ -525,11 +569,13 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CompaniesIdLogoGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesIdLogoGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getCompanyLogoWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getCompanyLogoValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -544,19 +590,19 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdLogoGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getCompanyLogoAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CompaniesIdLogoGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getCompanyLogoValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1CompaniesIdPut
-     * @param id  (required)
-     * @param apiV1CompaniesIdPutRequest  (required)
+     * Build call for listCompanies
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -564,10 +610,12 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdPutCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdPutRequest apiV1CompaniesIdPutRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call listCompaniesCall(final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -581,7 +629,130 @@ public class CompanyApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1CompaniesIdPutRequest;
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/companies";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call listCompaniesValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return listCompaniesCall(_callback);
+
+    }
+
+    /**
+     * Listar empresas emisoras
+     * 
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public void listCompanies() throws ApiException {
+        listCompaniesWithHttpInfo();
+    }
+
+    /**
+     * Listar empresas emisoras
+     * 
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Void> listCompaniesWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = listCompaniesValidateBeforeCall(null);
+        return localVarApiClient.execute(localVarCall);
+    }
+
+    /**
+     * Listar empresas emisoras (asynchronously)
+     * 
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call listCompaniesAsync(final ApiCallback<Void> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = listCompaniesValidateBeforeCall(_callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for updateCompany
+     * @param id  (required)
+     * @param updateCompanyRequest  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call updateCompanyCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateCompanyRequest updateCompanyRequest, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = updateCompanyRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/companies/{id}"
@@ -594,6 +765,7 @@ public class CompanyApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -608,23 +780,23 @@ public class CompanyApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesIdPutValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdPutRequest apiV1CompaniesIdPutRequest, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call updateCompanyValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateCompanyRequest updateCompanyRequest, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1CompaniesIdPut(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling updateCompany(Async)");
         }
 
-        // verify the required parameter 'apiV1CompaniesIdPutRequest' is set
-        if (apiV1CompaniesIdPutRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1CompaniesIdPutRequest' when calling apiV1CompaniesIdPut(Async)");
+        // verify the required parameter 'updateCompanyRequest' is set
+        if (updateCompanyRequest == null) {
+            throw new ApiException("Missing the required parameter 'updateCompanyRequest' when calling updateCompany(Async)");
         }
 
-        return apiV1CompaniesIdPutCall(id, apiV1CompaniesIdPutRequest, _callback);
+        return updateCompanyCall(id, updateCompanyRequest, _callback);
 
     }
 
@@ -632,35 +804,39 @@ public class CompanyApi {
      * Actualizar empresa
      * 
      * @param id  (required)
-     * @param apiV1CompaniesIdPutRequest  (required)
+     * @param updateCompanyRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1CompaniesIdPut(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdPutRequest apiV1CompaniesIdPutRequest) throws ApiException {
-        apiV1CompaniesIdPutWithHttpInfo(id, apiV1CompaniesIdPutRequest);
+    public void updateCompany(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateCompanyRequest updateCompanyRequest) throws ApiException {
+        updateCompanyWithHttpInfo(id, updateCompanyRequest);
     }
 
     /**
      * Actualizar empresa
      * 
      * @param id  (required)
-     * @param apiV1CompaniesIdPutRequest  (required)
+     * @param updateCompanyRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1CompaniesIdPutWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdPutRequest apiV1CompaniesIdPutRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesIdPutValidateBeforeCall(id, apiV1CompaniesIdPutRequest, null);
+    public ApiResponse<Void> updateCompanyWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateCompanyRequest updateCompanyRequest) throws ApiException {
+        okhttp3.Call localVarCall = updateCompanyValidateBeforeCall(id, updateCompanyRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -668,7 +844,7 @@ public class CompanyApi {
      * Actualizar empresa (asynchronously)
      * 
      * @param id  (required)
-     * @param apiV1CompaniesIdPutRequest  (required)
+     * @param updateCompanyRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -676,134 +852,14 @@ public class CompanyApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CompaniesIdPutAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1CompaniesIdPutRequest apiV1CompaniesIdPutRequest, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call updateCompanyAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdateCompanyRequest updateCompanyRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CompaniesIdPutValidateBeforeCall(id, apiV1CompaniesIdPutRequest, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1CompaniesPost
-     * @param apiV1CompaniesPostRequest  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1CompaniesPostCall(@javax.annotation.Nonnull ApiV1CompaniesPostRequest apiV1CompaniesPostRequest, final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = apiV1CompaniesPostRequest;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/companies";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CompaniesPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1CompaniesPostRequest apiV1CompaniesPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1CompaniesPostRequest' is set
-        if (apiV1CompaniesPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1CompaniesPostRequest' when calling apiV1CompaniesPost(Async)");
-        }
-
-        return apiV1CompaniesPostCall(apiV1CompaniesPostRequest, _callback);
-
-    }
-
-    /**
-     * Crear empresa emisora
-     * 
-     * @param apiV1CompaniesPostRequest  (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public void apiV1CompaniesPost(@javax.annotation.Nonnull ApiV1CompaniesPostRequest apiV1CompaniesPostRequest) throws ApiException {
-        apiV1CompaniesPostWithHttpInfo(apiV1CompaniesPostRequest);
-    }
-
-    /**
-     * Crear empresa emisora
-     * 
-     * @param apiV1CompaniesPostRequest  (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> apiV1CompaniesPostWithHttpInfo(@javax.annotation.Nonnull ApiV1CompaniesPostRequest apiV1CompaniesPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CompaniesPostValidateBeforeCall(apiV1CompaniesPostRequest, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Crear empresa emisora (asynchronously)
-     * 
-     * @param apiV1CompaniesPostRequest  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1CompaniesPostAsync(@javax.annotation.Nonnull ApiV1CompaniesPostRequest apiV1CompaniesPostRequest, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1CompaniesPostValidateBeforeCall(apiV1CompaniesPostRequest, _callback);
+        okhttp3.Call localVarCall = updateCompanyValidateBeforeCall(id, updateCompanyRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }

@@ -4,22 +4,24 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1WebhooksGet**](WebhooksApi.md#apiV1WebhooksGet) | **GET** /api/v1/webhooks | Listar webhooks (filtra por RUC opcional) |
-| [**apiV1WebhooksIdDelete**](WebhooksApi.md#apiV1WebhooksIdDelete) | **DELETE** /api/v1/webhooks/{id} | Eliminar webhook (también elimina su historial de deliveries) |
-| [**apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost**](WebhooksApi.md#apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost) | **POST** /api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver | Reintentar manualmente una entrega |
-| [**apiV1WebhooksIdDeliveriesGet**](WebhooksApi.md#apiV1WebhooksIdDeliveriesGet) | **GET** /api/v1/webhooks/{id}/deliveries | Log de entregas del webhook |
-| [**apiV1WebhooksIdGet**](WebhooksApi.md#apiV1WebhooksIdGet) | **GET** /api/v1/webhooks/{id} | Detalle de webhook (sin secret) |
-| [**apiV1WebhooksIdPut**](WebhooksApi.md#apiV1WebhooksIdPut) | **PUT** /api/v1/webhooks/{id} | Actualizar webhook (url, eventos, activación) |
-| [**apiV1WebhooksIdRotateSecretPost**](WebhooksApi.md#apiV1WebhooksIdRotateSecretPost) | **POST** /api/v1/webhooks/{id}/rotate-secret | Rotar el secret de firma (devuelto UNA sola vez) |
-| [**apiV1WebhooksIdTestPost**](WebhooksApi.md#apiV1WebhooksIdTestPost) | **POST** /api/v1/webhooks/{id}/test | Enviar un evento de prueba (webhook.test) |
-| [**apiV1WebhooksPost**](WebhooksApi.md#apiV1WebhooksPost) | **POST** /api/v1/webhooks | Crear endpoint webhook |
+| [**createWebhook**](WebhooksApi.md#createWebhook) | **POST** /api/v1/webhooks | Crear endpoint webhook |
+| [**deleteWebhook**](WebhooksApi.md#deleteWebhook) | **DELETE** /api/v1/webhooks/{id} | Eliminar webhook (también elimina su historial de deliveries) |
+| [**getWebhook**](WebhooksApi.md#getWebhook) | **GET** /api/v1/webhooks/{id} | Detalle de webhook (sin secret) |
+| [**listWebhookDeliveries**](WebhooksApi.md#listWebhookDeliveries) | **GET** /api/v1/webhooks/{id}/deliveries | Log de entregas del webhook |
+| [**listWebhooks**](WebhooksApi.md#listWebhooks) | **GET** /api/v1/webhooks | Listar webhooks (filtra por RUC opcional) |
+| [**redeliverWebhookDelivery**](WebhooksApi.md#redeliverWebhookDelivery) | **POST** /api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver | Reintentar manualmente una entrega |
+| [**rotateWebhookSecret**](WebhooksApi.md#rotateWebhookSecret) | **POST** /api/v1/webhooks/{id}/rotate-secret | Rotar el secret de firma (devuelto UNA sola vez) |
+| [**testWebhook**](WebhooksApi.md#testWebhook) | **POST** /api/v1/webhooks/{id}/test | Enviar un evento de prueba (webhook.test) |
+| [**updateWebhook**](WebhooksApi.md#updateWebhook) | **PUT** /api/v1/webhooks/{id} | Actualizar webhook (url, eventos, activación) |
 
 
-<a id="apiV1WebhooksGet"></a>
-# **apiV1WebhooksGet**
-> apiV1WebhooksGet(ruc)
+<a id="createWebhook"></a>
+# **createWebhook**
+> createWebhook(createWebhookRequest)
 
-Listar webhooks (filtra por RUC opcional)
+Crear endpoint webhook
+
+Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
 
 ### Example
 ```java
@@ -27,6 +29,7 @@ Listar webhooks (filtra por RUC opcional)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.WebhooksApi;
 
@@ -34,13 +37,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     WebhooksApi apiInstance = new WebhooksApi(defaultClient);
-    String ruc = "ruc_example"; // String | 
+    CreateWebhookRequest createWebhookRequest = new CreateWebhookRequest(); // CreateWebhookRequest | 
     try {
-      apiInstance.apiV1WebhooksGet(ruc);
+      apiInstance.createWebhook(createWebhookRequest);
     } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksGet");
+      System.err.println("Exception when calling WebhooksApi#createWebhook");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -54,7 +61,7 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **ruc** | **String**|  | [optional] |
+| **createWebhookRequest** | [**CreateWebhookRequest**](CreateWebhookRequest.md)|  | |
 
 ### Return type
 
@@ -62,21 +69,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1WebhooksIdDelete"></a>
-# **apiV1WebhooksIdDelete**
-> apiV1WebhooksIdDelete(id)
+<a id="deleteWebhook"></a>
+# **deleteWebhook**
+> deleteWebhook(id)
 
 Eliminar webhook (también elimina su historial de deliveries)
 
@@ -86,6 +95,7 @@ Eliminar webhook (también elimina su historial de deliveries)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.WebhooksApi;
 
@@ -93,13 +103,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     WebhooksApi apiInstance = new WebhooksApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1WebhooksIdDelete(id);
+      apiInstance.deleteWebhook(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksIdDelete");
+      System.err.println("Exception when calling WebhooksApi#deleteWebhook");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -121,23 +135,25 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost"></a>
-# **apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost**
-> apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost(id, deliveryId)
+<a id="getWebhook"></a>
+# **getWebhook**
+> getWebhook(id)
 
-Reintentar manualmente una entrega
+Detalle de webhook (sin secret)
 
 ### Example
 ```java
@@ -145,6 +161,7 @@ Reintentar manualmente una entrega
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.WebhooksApi;
 
@@ -152,14 +169,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     WebhooksApi apiInstance = new WebhooksApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
-    UUID deliveryId = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost(id, deliveryId);
+      apiInstance.getWebhook(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost");
+      System.err.println("Exception when calling WebhooksApi#getWebhook");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -174,7 +194,6 @@ public class Example {
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | **UUID**|  | |
-| **deliveryId** | **UUID**|  | |
 
 ### Return type
 
@@ -182,21 +201,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1WebhooksIdDeliveriesGet"></a>
-# **apiV1WebhooksIdDeliveriesGet**
-> apiV1WebhooksIdDeliveriesGet(id, limit, success)
+<a id="listWebhookDeliveries"></a>
+# **listWebhookDeliveries**
+> listWebhookDeliveries(id, limit, success)
 
 Log de entregas del webhook
 
@@ -206,6 +227,7 @@ Log de entregas del webhook
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.WebhooksApi;
 
@@ -213,15 +235,19 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     WebhooksApi apiInstance = new WebhooksApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     Integer limit = 50; // Integer | 
     String success = "true"; // String | 
     try {
-      apiInstance.apiV1WebhooksIdDeliveriesGet(id, limit, success);
+      apiInstance.listWebhookDeliveries(id, limit, success);
     } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksIdDeliveriesGet");
+      System.err.println("Exception when calling WebhooksApi#listWebhookDeliveries");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -245,23 +271,25 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1WebhooksIdGet"></a>
-# **apiV1WebhooksIdGet**
-> apiV1WebhooksIdGet(id)
+<a id="listWebhooks"></a>
+# **listWebhooks**
+> listWebhooks(ruc)
 
-Detalle de webhook (sin secret)
+Listar webhooks (filtra por RUC opcional)
 
 ### Example
 ```java
@@ -269,6 +297,7 @@ Detalle de webhook (sin secret)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.WebhooksApi;
 
@@ -276,13 +305,84 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    WebhooksApi apiInstance = new WebhooksApi(defaultClient);
+    String ruc = "ruc_example"; // String | 
+    try {
+      apiInstance.listWebhooks(ruc);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling WebhooksApi#listWebhooks");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **ruc** | **String**|  | [optional] |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="redeliverWebhookDelivery"></a>
+# **redeliverWebhookDelivery**
+> redeliverWebhookDelivery(id, deliveryId)
+
+Reintentar manualmente una entrega
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.WebhooksApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     WebhooksApi apiInstance = new WebhooksApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
+    UUID deliveryId = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1WebhooksIdGet(id);
+      apiInstance.redeliverWebhookDelivery(id, deliveryId);
     } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksIdGet");
+      System.err.println("Exception when calling WebhooksApi#redeliverWebhookDelivery");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -297,6 +397,7 @@ public class Example {
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | **UUID**|  | |
+| **deliveryId** | **UUID**|  | |
 
 ### Return type
 
@@ -304,82 +405,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1WebhooksIdPut"></a>
-# **apiV1WebhooksIdPut**
-> apiV1WebhooksIdPut(id, apiV1WebhooksIdPutRequest)
-
-Actualizar webhook (url, eventos, activación)
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.WebhooksApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    WebhooksApi apiInstance = new WebhooksApi(defaultClient);
-    UUID id = UUID.randomUUID(); // UUID | 
-    ApiV1WebhooksIdPutRequest apiV1WebhooksIdPutRequest = new ApiV1WebhooksIdPutRequest(); // ApiV1WebhooksIdPutRequest | 
-    try {
-      apiInstance.apiV1WebhooksIdPut(id, apiV1WebhooksIdPutRequest);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksIdPut");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | **UUID**|  | |
-| **apiV1WebhooksIdPutRequest** | [**ApiV1WebhooksIdPutRequest**](ApiV1WebhooksIdPutRequest.md)|  | |
-
-### Return type
-
-null (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-
-<a id="apiV1WebhooksIdRotateSecretPost"></a>
-# **apiV1WebhooksIdRotateSecretPost**
-> apiV1WebhooksIdRotateSecretPost(id)
+<a id="rotateWebhookSecret"></a>
+# **rotateWebhookSecret**
+> rotateWebhookSecret(id)
 
 Rotar el secret de firma (devuelto UNA sola vez)
 
@@ -391,6 +433,7 @@ Genera un nuevo secret HMAC y lo devuelve una única vez. Las firmas de entregas
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.WebhooksApi;
 
@@ -398,13 +441,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     WebhooksApi apiInstance = new WebhooksApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1WebhooksIdRotateSecretPost(id);
+      apiInstance.rotateWebhookSecret(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksIdRotateSecretPost");
+      System.err.println("Exception when calling WebhooksApi#rotateWebhookSecret");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -426,21 +473,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1WebhooksIdTestPost"></a>
-# **apiV1WebhooksIdTestPost**
-> apiV1WebhooksIdTestPost(id)
+<a id="testWebhook"></a>
+# **testWebhook**
+> testWebhook(id)
 
 Enviar un evento de prueba (webhook.test)
 
@@ -450,6 +499,7 @@ Enviar un evento de prueba (webhook.test)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.WebhooksApi;
 
@@ -457,13 +507,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     WebhooksApi apiInstance = new WebhooksApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1WebhooksIdTestPost(id);
+      apiInstance.testWebhook(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksIdTestPost");
+      System.err.println("Exception when calling WebhooksApi#testWebhook");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -485,25 +539,25 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1WebhooksPost"></a>
-# **apiV1WebhooksPost**
-> apiV1WebhooksPost(apiV1WebhooksPostRequest)
+<a id="updateWebhook"></a>
+# **updateWebhook**
+> updateWebhook(id, updateWebhookRequest)
 
-Crear endpoint webhook
-
-Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
+Actualizar webhook (url, eventos, activación)
 
 ### Example
 ```java
@@ -511,6 +565,7 @@ Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.WebhooksApi;
 
@@ -518,13 +573,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     WebhooksApi apiInstance = new WebhooksApi(defaultClient);
-    ApiV1WebhooksPostRequest apiV1WebhooksPostRequest = new ApiV1WebhooksPostRequest(); // ApiV1WebhooksPostRequest | 
+    UUID id = UUID.randomUUID(); // UUID | 
+    UpdateWebhookRequest updateWebhookRequest = new UpdateWebhookRequest(); // UpdateWebhookRequest | 
     try {
-      apiInstance.apiV1WebhooksPost(apiV1WebhooksPostRequest);
+      apiInstance.updateWebhook(id, updateWebhookRequest);
     } catch (ApiException e) {
-      System.err.println("Exception when calling WebhooksApi#apiV1WebhooksPost");
+      System.err.println("Exception when calling WebhooksApi#updateWebhook");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -538,7 +598,8 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1WebhooksPostRequest** | [**ApiV1WebhooksPostRequest**](ApiV1WebhooksPostRequest.md)|  | |
+| **id** | **UUID**|  | |
+| **updateWebhookRequest** | [**UpdateWebhookRequest**](UpdateWebhookRequest.md)|  | |
 
 ### Return type
 
@@ -546,15 +607,17 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 

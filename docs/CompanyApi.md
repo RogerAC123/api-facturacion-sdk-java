@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1CompaniesClaimPost**](CompanyApi.md#apiV1CompaniesClaimPost) | **POST** /api/v1/companies/claim | Reclamar un RUC registrado por otra cuenta, con su certificado |
-| [**apiV1CompaniesGet**](CompanyApi.md#apiV1CompaniesGet) | **GET** /api/v1/companies | Listar empresas emisoras |
-| [**apiV1CompaniesIdGet**](CompanyApi.md#apiV1CompaniesIdGet) | **GET** /api/v1/companies/{id} | Detalle de empresa |
-| [**apiV1CompaniesIdLogoGet**](CompanyApi.md#apiV1CompaniesIdLogoGet) | **GET** /api/v1/companies/{id}/logo | Obtener logo de la empresa (PNG/JPG) |
-| [**apiV1CompaniesIdPut**](CompanyApi.md#apiV1CompaniesIdPut) | **PUT** /api/v1/companies/{id} | Actualizar empresa |
-| [**apiV1CompaniesPost**](CompanyApi.md#apiV1CompaniesPost) | **POST** /api/v1/companies | Crear empresa emisora |
+| [**claimCompany**](CompanyApi.md#claimCompany) | **POST** /api/v1/companies/claim | Reclamar un RUC registrado por otra cuenta, con su certificado |
+| [**createCompany**](CompanyApi.md#createCompany) | **POST** /api/v1/companies | Crear empresa emisora |
+| [**getCompany**](CompanyApi.md#getCompany) | **GET** /api/v1/companies/{id} | Detalle de empresa |
+| [**getCompanyLogo**](CompanyApi.md#getCompanyLogo) | **GET** /api/v1/companies/{id}/logo | Obtener logo de la empresa (PNG/JPG) |
+| [**listCompanies**](CompanyApi.md#listCompanies) | **GET** /api/v1/companies | Listar empresas emisoras |
+| [**updateCompany**](CompanyApi.md#updateCompany) | **PUT** /api/v1/companies/{id} | Actualizar empresa |
 
 
-<a id="apiV1CompaniesClaimPost"></a>
-# **apiV1CompaniesClaimPost**
-> apiV1CompaniesClaimPost(apiV1CompaniesClaimPostRequest)
+<a id="claimCompany"></a>
+# **claimCompany**
+> claimCompany(claimCompanyRequest)
 
 Reclamar un RUC registrado por otra cuenta, con su certificado
 
@@ -26,6 +26,7 @@ Prueba de titularidad &#x3D; certificado digital del RUC. Si la cuenta que lo ti
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.CompanyApi;
 
@@ -33,13 +34,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     CompanyApi apiInstance = new CompanyApi(defaultClient);
-    ApiV1CompaniesClaimPostRequest apiV1CompaniesClaimPostRequest = new ApiV1CompaniesClaimPostRequest(); // ApiV1CompaniesClaimPostRequest | 
+    ClaimCompanyRequest claimCompanyRequest = new ClaimCompanyRequest(); // ClaimCompanyRequest | 
     try {
-      apiInstance.apiV1CompaniesClaimPost(apiV1CompaniesClaimPostRequest);
+      apiInstance.claimCompany(claimCompanyRequest);
     } catch (ApiException e) {
-      System.err.println("Exception when calling CompanyApi#apiV1CompaniesClaimPost");
+      System.err.println("Exception when calling CompanyApi#claimCompany");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -53,7 +58,7 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1CompaniesClaimPostRequest** | [**ApiV1CompaniesClaimPostRequest**](ApiV1CompaniesClaimPostRequest.md)|  | |
+| **claimCompanyRequest** | [**ClaimCompanyRequest**](ClaimCompanyRequest.md)|  | |
 
 ### Return type
 
@@ -61,21 +66,221 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1CompaniesGet"></a>
-# **apiV1CompaniesGet**
-> apiV1CompaniesGet()
+<a id="createCompany"></a>
+# **createCompany**
+> createCompany(createCompanyRequest)
+
+Crear empresa emisora
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.CompanyApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    CompanyApi apiInstance = new CompanyApi(defaultClient);
+    CreateCompanyRequest createCompanyRequest = new CreateCompanyRequest(); // CreateCompanyRequest | 
+    try {
+      apiInstance.createCompany(createCompanyRequest);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling CompanyApi#createCompany");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **createCompanyRequest** | [**CreateCompanyRequest**](CreateCompanyRequest.md)|  | |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="getCompany"></a>
+# **getCompany**
+> getCompany(id)
+
+Detalle de empresa
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.CompanyApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    CompanyApi apiInstance = new CompanyApi(defaultClient);
+    UUID id = UUID.randomUUID(); // UUID | 
+    try {
+      apiInstance.getCompany(id);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling CompanyApi#getCompany");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | **UUID**|  | |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="getCompanyLogo"></a>
+# **getCompanyLogo**
+> getCompanyLogo(id)
+
+Obtener logo de la empresa (PNG/JPG)
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.CompanyApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    CompanyApi apiInstance = new CompanyApi(defaultClient);
+    UUID id = UUID.randomUUID(); // UUID | 
+    try {
+      apiInstance.getCompanyLogo(id);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling CompanyApi#getCompanyLogo");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | **UUID**|  | |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="listCompanies"></a>
+# **listCompanies**
+> listCompanies()
 
 Listar empresas emisoras
 
@@ -85,6 +290,7 @@ Listar empresas emisoras
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.CompanyApi;
 
@@ -92,12 +298,16 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     CompanyApi apiInstance = new CompanyApi(defaultClient);
     try {
-      apiInstance.apiV1CompaniesGet();
+      apiInstance.listCompanies();
     } catch (ApiException e) {
-      System.err.println("Exception when calling CompanyApi#apiV1CompaniesGet");
+      System.err.println("Exception when calling CompanyApi#listCompanies");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -116,139 +326,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1CompaniesIdGet"></a>
-# **apiV1CompaniesIdGet**
-> apiV1CompaniesIdGet(id)
-
-Detalle de empresa
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.CompanyApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    CompanyApi apiInstance = new CompanyApi(defaultClient);
-    UUID id = UUID.randomUUID(); // UUID | 
-    try {
-      apiInstance.apiV1CompaniesIdGet(id);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling CompanyApi#apiV1CompaniesIdGet");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | **UUID**|  | |
-
-### Return type
-
-null (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-
-<a id="apiV1CompaniesIdLogoGet"></a>
-# **apiV1CompaniesIdLogoGet**
-> apiV1CompaniesIdLogoGet(id)
-
-Obtener logo de la empresa (PNG/JPG)
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.CompanyApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    CompanyApi apiInstance = new CompanyApi(defaultClient);
-    UUID id = UUID.randomUUID(); // UUID | 
-    try {
-      apiInstance.apiV1CompaniesIdLogoGet(id);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling CompanyApi#apiV1CompaniesIdLogoGet");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | **UUID**|  | |
-
-### Return type
-
-null (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-
-<a id="apiV1CompaniesIdPut"></a>
-# **apiV1CompaniesIdPut**
-> apiV1CompaniesIdPut(id, apiV1CompaniesIdPutRequest)
+<a id="updateCompany"></a>
+# **updateCompany**
+> updateCompany(id, updateCompanyRequest)
 
 Actualizar empresa
 
@@ -258,6 +352,7 @@ Actualizar empresa
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.CompanyApi;
 
@@ -265,14 +360,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     CompanyApi apiInstance = new CompanyApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
-    ApiV1CompaniesIdPutRequest apiV1CompaniesIdPutRequest = new ApiV1CompaniesIdPutRequest(); // ApiV1CompaniesIdPutRequest | 
+    UpdateCompanyRequest updateCompanyRequest = new UpdateCompanyRequest(); // UpdateCompanyRequest | 
     try {
-      apiInstance.apiV1CompaniesIdPut(id, apiV1CompaniesIdPutRequest);
+      apiInstance.updateCompany(id, updateCompanyRequest);
     } catch (ApiException e) {
-      System.err.println("Exception when calling CompanyApi#apiV1CompaniesIdPut");
+      System.err.println("Exception when calling CompanyApi#updateCompany");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -287,7 +386,7 @@ public class Example {
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | **UUID**|  | |
-| **apiV1CompaniesIdPutRequest** | [**ApiV1CompaniesIdPutRequest**](ApiV1CompaniesIdPutRequest.md)|  | |
+| **updateCompanyRequest** | [**UpdateCompanyRequest**](UpdateCompanyRequest.md)|  | |
 
 ### Return type
 
@@ -295,74 +394,17 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-
-<a id="apiV1CompaniesPost"></a>
-# **apiV1CompaniesPost**
-> apiV1CompaniesPost(apiV1CompaniesPostRequest)
-
-Crear empresa emisora
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.CompanyApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    CompanyApi apiInstance = new CompanyApi(defaultClient);
-    ApiV1CompaniesPostRequest apiV1CompaniesPostRequest = new ApiV1CompaniesPostRequest(); // ApiV1CompaniesPostRequest | 
-    try {
-      apiInstance.apiV1CompaniesPost(apiV1CompaniesPostRequest);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling CompanyApi#apiV1CompaniesPost");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **apiV1CompaniesPostRequest** | [**ApiV1CompaniesPostRequest**](ApiV1CompaniesPostRequest.md)|  | |
-
-### Return type
-
-null (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 

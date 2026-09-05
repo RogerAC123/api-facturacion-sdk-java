@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1DespatchIdCdrGet**](DespatchApi.md#apiV1DespatchIdCdrGet) | **GET** /api/v1/despatch/{id}/cdr | Descargar CDR (constancia de SUNAT) |
-| [**apiV1DespatchIdPdfGet**](DespatchApi.md#apiV1DespatchIdPdfGet) | **GET** /api/v1/despatch/{id}/pdf | Obtener PDF de la guía (A4 oficina, ticket 80mm o 58mm POS) |
-| [**apiV1DespatchIdXmlGet**](DespatchApi.md#apiV1DespatchIdXmlGet) | **GET** /api/v1/despatch/{id}/xml | Descargar XML firmado de la guía |
-| [**apiV1DespatchSendMultiPost**](DespatchApi.md#apiV1DespatchSendMultiPost) | **POST** /api/v1/despatch/send-multi | Enviar múltiples guías de remisión por destino |
-| [**apiV1DespatchSendPost**](DespatchApi.md#apiV1DespatchSendPost) | **POST** /api/v1/despatch/send | Enviar guía de remisión (09) via API GRE REST |
-| [**apiV1DespatchTransportistaSendPost**](DespatchApi.md#apiV1DespatchTransportistaSendPost) | **POST** /api/v1/despatch-transportista/send | Enviar guía de remisión TRANSPORTISTA (31) via API GRE REST |
+| [**getDespatchCdr**](DespatchApi.md#getDespatchCdr) | **GET** /api/v1/despatch/{id}/cdr | Descargar CDR (constancia de SUNAT) |
+| [**getDespatchPdf**](DespatchApi.md#getDespatchPdf) | **GET** /api/v1/despatch/{id}/pdf | Obtener PDF de la guía (A4 oficina, ticket 80mm o 58mm POS) |
+| [**getDespatchXml**](DespatchApi.md#getDespatchXml) | **GET** /api/v1/despatch/{id}/xml | Descargar XML firmado de la guía |
+| [**sendDespatch**](DespatchApi.md#sendDespatch) | **POST** /api/v1/despatch/send | Enviar guía de remisión (09) via API GRE REST |
+| [**sendDespatchMulti**](DespatchApi.md#sendDespatchMulti) | **POST** /api/v1/despatch/send-multi | Enviar múltiples guías de remisión por destino |
+| [**sendDespatchTransportista**](DespatchApi.md#sendDespatchTransportista) | **POST** /api/v1/despatch-transportista/send | Enviar guía de remisión TRANSPORTISTA (31) via API GRE REST |
 
 
-<a id="apiV1DespatchIdCdrGet"></a>
-# **apiV1DespatchIdCdrGet**
-> apiV1DespatchIdCdrGet(id)
+<a id="getDespatchCdr"></a>
+# **getDespatchCdr**
+> getDespatchCdr(id)
 
 Descargar CDR (constancia de SUNAT)
 
@@ -24,6 +24,7 @@ Descargar CDR (constancia de SUNAT)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DespatchApi;
 
@@ -31,13 +32,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DespatchApi apiInstance = new DespatchApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1DespatchIdCdrGet(id);
+      apiInstance.getDespatchCdr(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DespatchApi#apiV1DespatchIdCdrGet");
+      System.err.println("Exception when calling DespatchApi#getDespatchCdr");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -59,21 +64,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1DespatchIdPdfGet"></a>
-# **apiV1DespatchIdPdfGet**
-> apiV1DespatchIdPdfGet(id, format)
+<a id="getDespatchPdf"></a>
+# **getDespatchPdf**
+> getDespatchPdf(id, format)
 
 Obtener PDF de la guía (A4 oficina, ticket 80mm o 58mm POS)
 
@@ -83,6 +90,7 @@ Obtener PDF de la guía (A4 oficina, ticket 80mm o 58mm POS)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DespatchApi;
 
@@ -90,14 +98,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DespatchApi apiInstance = new DespatchApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     String format = "a4"; // String | 
     try {
-      apiInstance.apiV1DespatchIdPdfGet(id, format);
+      apiInstance.getDespatchPdf(id, format);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DespatchApi#apiV1DespatchIdPdfGet");
+      System.err.println("Exception when calling DespatchApi#getDespatchPdf");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -120,21 +132,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1DespatchIdXmlGet"></a>
-# **apiV1DespatchIdXmlGet**
-> apiV1DespatchIdXmlGet(id)
+<a id="getDespatchXml"></a>
+# **getDespatchXml**
+> getDespatchXml(id)
 
 Descargar XML firmado de la guía
 
@@ -144,6 +158,7 @@ Descargar XML firmado de la guía
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DespatchApi;
 
@@ -151,13 +166,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DespatchApi apiInstance = new DespatchApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1DespatchIdXmlGet(id);
+      apiInstance.getDespatchXml(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DespatchApi#apiV1DespatchIdXmlGet");
+      System.err.println("Exception when calling DespatchApi#getDespatchXml");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -179,84 +198,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-
-<a id="apiV1DespatchSendMultiPost"></a>
-# **apiV1DespatchSendMultiPost**
-> ApiV1DespatchSendMultiPost202Response apiV1DespatchSendMultiPost(apiV1DespatchSendMultiPostRequest)
-
-Enviar múltiples guías de remisión por destino
-
-Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.DespatchApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    DespatchApi apiInstance = new DespatchApi(defaultClient);
-    ApiV1DespatchSendMultiPostRequest apiV1DespatchSendMultiPostRequest = new ApiV1DespatchSendMultiPostRequest(); // ApiV1DespatchSendMultiPostRequest | 
-    try {
-      ApiV1DespatchSendMultiPost202Response result = apiInstance.apiV1DespatchSendMultiPost(apiV1DespatchSendMultiPostRequest);
-      System.out.println(result);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling DespatchApi#apiV1DespatchSendMultiPost");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **apiV1DespatchSendMultiPostRequest** | [**ApiV1DespatchSendMultiPostRequest**](ApiV1DespatchSendMultiPostRequest.md)|  | |
-
-### Return type
-
-[**ApiV1DespatchSendMultiPost202Response**](ApiV1DespatchSendMultiPost202Response.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
  - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **202** | Default Response |  -  |
-| **400** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1DespatchSendPost"></a>
-# **apiV1DespatchSendPost**
-> ApiV1NoteSendPost202Response apiV1DespatchSendPost(apiV1DespatchSendPostRequest)
+<a id="sendDespatch"></a>
+# **sendDespatch**
+> SendInvoice202Response sendDespatch(sendDespatchRequest)
 
 Enviar guía de remisión (09) via API GRE REST
 
@@ -268,6 +226,7 @@ Genera XML UBL 2.1, firma y encola. El worker obtiene token OAuth2, envía a SUN
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DespatchApi;
 
@@ -275,14 +234,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DespatchApi apiInstance = new DespatchApi(defaultClient);
-    ApiV1DespatchSendPostRequest apiV1DespatchSendPostRequest = new ApiV1DespatchSendPostRequest(); // ApiV1DespatchSendPostRequest | 
+    SendDespatchRequest sendDespatchRequest = new SendDespatchRequest(); // SendDespatchRequest | 
     try {
-      ApiV1NoteSendPost202Response result = apiInstance.apiV1DespatchSendPost(apiV1DespatchSendPostRequest);
+      SendInvoice202Response result = apiInstance.sendDespatch(sendDespatchRequest);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DespatchApi#apiV1DespatchSendPost");
+      System.err.println("Exception when calling DespatchApi#sendDespatch");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -296,15 +259,15 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1DespatchSendPostRequest** | [**ApiV1DespatchSendPostRequest**](ApiV1DespatchSendPostRequest.md)|  | |
+| **sendDespatchRequest** | [**SendDespatchRequest**](SendDespatchRequest.md)|  | |
 
 ### Return type
 
-[**ApiV1NoteSendPost202Response**](ApiV1NoteSendPost202Response.md)
+[**SendInvoice202Response**](SendInvoice202Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -316,11 +279,85 @@ No authorization required
 |-------------|-------------|------------------|
 | **202** | Default Response |  -  |
 | **400** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
 | **409** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1DespatchTransportistaSendPost"></a>
-# **apiV1DespatchTransportistaSendPost**
-> ApiV1NoteSendPost202Response apiV1DespatchTransportistaSendPost(apiV1DespatchTransportistaSendPostRequest)
+<a id="sendDespatchMulti"></a>
+# **sendDespatchMulti**
+> SendDespatchMulti202Response sendDespatchMulti(sendDespatchMultiRequest)
+
+Enviar múltiples guías de remisión por destino
+
+Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.DespatchApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    DespatchApi apiInstance = new DespatchApi(defaultClient);
+    SendDespatchMultiRequest sendDespatchMultiRequest = new SendDespatchMultiRequest(); // SendDespatchMultiRequest | 
+    try {
+      SendDespatchMulti202Response result = apiInstance.sendDespatchMulti(sendDespatchMultiRequest);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling DespatchApi#sendDespatchMulti");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **sendDespatchMultiRequest** | [**SendDespatchMultiRequest**](SendDespatchMultiRequest.md)|  | |
+
+### Return type
+
+[**SendDespatchMulti202Response**](SendDespatchMulti202Response.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **202** | Default Response |  -  |
+| **400** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="sendDespatchTransportista"></a>
+# **sendDespatchTransportista**
+> SendInvoice202Response sendDespatchTransportista(sendDespatchTransportistaRequest)
 
 Enviar guía de remisión TRANSPORTISTA (31) via API GRE REST
 
@@ -332,6 +369,7 @@ Guía emitida por la empresa de transporte (emisor&#x3D;transportista). Incluye 
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.DespatchApi;
 
@@ -339,14 +377,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     DespatchApi apiInstance = new DespatchApi(defaultClient);
-    ApiV1DespatchTransportistaSendPostRequest apiV1DespatchTransportistaSendPostRequest = new ApiV1DespatchTransportistaSendPostRequest(); // ApiV1DespatchTransportistaSendPostRequest | 
+    SendDespatchTransportistaRequest sendDespatchTransportistaRequest = new SendDespatchTransportistaRequest(); // SendDespatchTransportistaRequest | 
     try {
-      ApiV1NoteSendPost202Response result = apiInstance.apiV1DespatchTransportistaSendPost(apiV1DespatchTransportistaSendPostRequest);
+      SendInvoice202Response result = apiInstance.sendDespatchTransportista(sendDespatchTransportistaRequest);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling DespatchApi#apiV1DespatchTransportistaSendPost");
+      System.err.println("Exception when calling DespatchApi#sendDespatchTransportista");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -360,15 +402,15 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1DespatchTransportistaSendPostRequest** | [**ApiV1DespatchTransportistaSendPostRequest**](ApiV1DespatchTransportistaSendPostRequest.md)|  | |
+| **sendDespatchTransportistaRequest** | [**SendDespatchTransportistaRequest**](SendDespatchTransportistaRequest.md)|  | |
 
 ### Return type
 
-[**ApiV1NoteSendPost202Response**](ApiV1NoteSendPost202Response.md)
+[**SendInvoice202Response**](SendInvoice202Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -380,5 +422,8 @@ No authorization required
 |-------------|-------------|------------------|
 | **202** | Default Response |  -  |
 | **400** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
 | **409** | Default Response |  -  |
+| **429** | Default Response |  -  |
 

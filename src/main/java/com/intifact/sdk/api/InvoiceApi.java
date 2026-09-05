@@ -27,11 +27,12 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1InvoiceComputePost200Response;
-import com.intifact.sdk.model.ApiV1InvoiceComputePostRequest;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost202Response;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1InvoiceSendPostRequest;
+import com.intifact.sdk.model.ComputeInvoice200Response;
+import com.intifact.sdk.model.ComputeInvoiceRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.SendInvoice202Response;
+import com.intifact.sdk.model.SendInvoiceRequest;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -78,8 +79,8 @@ public class InvoiceApi {
     }
 
     /**
-     * Build call for apiV1InvoiceComputePost
-     * @param apiV1InvoiceComputePostRequest  (required)
+     * Build call for computeInvoice
+     * @param computeInvoiceRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -88,9 +89,12 @@ public class InvoiceApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceComputePostCall(@javax.annotation.Nonnull ApiV1InvoiceComputePostRequest apiV1InvoiceComputePostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call computeInvoiceCall(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -104,7 +108,7 @@ public class InvoiceApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1InvoiceComputePostRequest;
+        Object localVarPostBody = computeInvoiceRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/invoice/compute";
@@ -131,62 +135,68 @@ public class InvoiceApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1InvoiceComputePostValidateBeforeCall(@javax.annotation.Nonnull ApiV1InvoiceComputePostRequest apiV1InvoiceComputePostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1InvoiceComputePostRequest' is set
-        if (apiV1InvoiceComputePostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1InvoiceComputePostRequest' when calling apiV1InvoiceComputePost(Async)");
+    private okhttp3.Call computeInvoiceValidateBeforeCall(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'computeInvoiceRequest' is set
+        if (computeInvoiceRequest == null) {
+            throw new ApiException("Missing the required parameter 'computeInvoiceRequest' when calling computeInvoice(Async)");
         }
 
-        return apiV1InvoiceComputePostCall(apiV1InvoiceComputePostRequest, _callback);
+        return computeInvoiceCall(computeInvoiceRequest, _callback);
 
     }
 
     /**
      * Calcular importes (IGV, descuentos, totales) sin emitir
      * Motor de cálculo: recibe ítems crudos (cantidad, valorUnitario sin IGV, afectación, descuento) y un descuento global opcional, y devuelve TODOS los importes fiscales calculados (bases, IGV, descuentos, totales, monto en letras). No emite ni persiste nada — úsalo para previsualizar o para alimentar POST /invoice/send.
-     * @param apiV1InvoiceComputePostRequest  (required)
-     * @return ApiV1InvoiceComputePost200Response
+     * @param computeInvoiceRequest  (required)
+     * @return ComputeInvoice200Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1InvoiceComputePost200Response apiV1InvoiceComputePost(@javax.annotation.Nonnull ApiV1InvoiceComputePostRequest apiV1InvoiceComputePostRequest) throws ApiException {
-        ApiResponse<ApiV1InvoiceComputePost200Response> localVarResp = apiV1InvoiceComputePostWithHttpInfo(apiV1InvoiceComputePostRequest);
+    public ComputeInvoice200Response computeInvoice(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest) throws ApiException {
+        ApiResponse<ComputeInvoice200Response> localVarResp = computeInvoiceWithHttpInfo(computeInvoiceRequest);
         return localVarResp.getData();
     }
 
     /**
      * Calcular importes (IGV, descuentos, totales) sin emitir
      * Motor de cálculo: recibe ítems crudos (cantidad, valorUnitario sin IGV, afectación, descuento) y un descuento global opcional, y devuelve TODOS los importes fiscales calculados (bases, IGV, descuentos, totales, monto en letras). No emite ni persiste nada — úsalo para previsualizar o para alimentar POST /invoice/send.
-     * @param apiV1InvoiceComputePostRequest  (required)
-     * @return ApiResponse&lt;ApiV1InvoiceComputePost200Response&gt;
+     * @param computeInvoiceRequest  (required)
+     * @return ApiResponse&lt;ComputeInvoice200Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1InvoiceComputePost200Response> apiV1InvoiceComputePostWithHttpInfo(@javax.annotation.Nonnull ApiV1InvoiceComputePostRequest apiV1InvoiceComputePostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1InvoiceComputePostValidateBeforeCall(apiV1InvoiceComputePostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1InvoiceComputePost200Response>(){}.getType();
+    public ApiResponse<ComputeInvoice200Response> computeInvoiceWithHttpInfo(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest) throws ApiException {
+        okhttp3.Call localVarCall = computeInvoiceValidateBeforeCall(computeInvoiceRequest, null);
+        Type localVarReturnType = new TypeToken<ComputeInvoice200Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Calcular importes (IGV, descuentos, totales) sin emitir (asynchronously)
      * Motor de cálculo: recibe ítems crudos (cantidad, valorUnitario sin IGV, afectación, descuento) y un descuento global opcional, y devuelve TODOS los importes fiscales calculados (bases, IGV, descuentos, totales, monto en letras). No emite ni persiste nada — úsalo para previsualizar o para alimentar POST /invoice/send.
-     * @param apiV1InvoiceComputePostRequest  (required)
+     * @param computeInvoiceRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -195,17 +205,20 @@ public class InvoiceApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceComputePostAsync(@javax.annotation.Nonnull ApiV1InvoiceComputePostRequest apiV1InvoiceComputePostRequest, final ApiCallback<ApiV1InvoiceComputePost200Response> _callback) throws ApiException {
+    public okhttp3.Call computeInvoiceAsync(@javax.annotation.Nonnull ComputeInvoiceRequest computeInvoiceRequest, final ApiCallback<ComputeInvoice200Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1InvoiceComputePostValidateBeforeCall(apiV1InvoiceComputePostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1InvoiceComputePost200Response>(){}.getType();
+        okhttp3.Call localVarCall = computeInvoiceValidateBeforeCall(computeInvoiceRequest, _callback);
+        Type localVarReturnType = new TypeToken<ComputeInvoice200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1InvoiceIdCdrGet
+     * Build call for getInvoiceCdr
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -214,10 +227,12 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceIdCdrGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getInvoiceCdrCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -244,6 +259,7 @@ public class InvoiceApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -257,18 +273,18 @@ public class InvoiceApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1InvoiceIdCdrGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getInvoiceCdrValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1InvoiceIdCdrGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getInvoiceCdr(Async)");
         }
 
-        return apiV1InvoiceIdCdrGetCall(id, _callback);
+        return getInvoiceCdrCall(id, _callback);
 
     }
 
@@ -281,11 +297,13 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1InvoiceIdCdrGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1InvoiceIdCdrGetWithHttpInfo(id);
+    public void getInvoiceCdr(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getInvoiceCdrWithHttpInfo(id);
     }
 
     /**
@@ -298,11 +316,13 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1InvoiceIdCdrGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1InvoiceIdCdrGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getInvoiceCdrWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getInvoiceCdrValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -317,17 +337,19 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceIdCdrGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getInvoiceCdrAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1InvoiceIdCdrGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getInvoiceCdrValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1InvoiceIdPdfGet
+     * Build call for getInvoicePdf
      * @param id  (required)
      * @param format  (optional, default to a4)
      * @param _callback Callback for upload/download progress
@@ -337,10 +359,12 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceIdPdfGetCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getInvoicePdfCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -371,6 +395,7 @@ public class InvoiceApi {
         }
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -384,18 +409,18 @@ public class InvoiceApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1InvoiceIdPdfGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getInvoicePdfValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1InvoiceIdPdfGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getInvoicePdf(Async)");
         }
 
-        return apiV1InvoiceIdPdfGetCall(id, format, _callback);
+        return getInvoicePdfCall(id, format, _callback);
 
     }
 
@@ -409,11 +434,13 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1InvoiceIdPdfGet(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format) throws ApiException {
-        apiV1InvoiceIdPdfGetWithHttpInfo(id, format);
+    public void getInvoicePdf(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format) throws ApiException {
+        getInvoicePdfWithHttpInfo(id, format);
     }
 
     /**
@@ -427,11 +454,13 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1InvoiceIdPdfGetWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format) throws ApiException {
-        okhttp3.Call localVarCall = apiV1InvoiceIdPdfGetValidateBeforeCall(id, format, null);
+    public ApiResponse<Void> getInvoicePdfWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format) throws ApiException {
+        okhttp3.Call localVarCall = getInvoicePdfValidateBeforeCall(id, format, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -447,17 +476,19 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceIdPdfGetAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getInvoicePdfAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nullable String format, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1InvoiceIdPdfGetValidateBeforeCall(id, format, _callback);
+        okhttp3.Call localVarCall = getInvoicePdfValidateBeforeCall(id, format, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1InvoiceIdXmlGet
+     * Build call for getInvoiceXml
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -466,10 +497,12 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceIdXmlGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getInvoiceXmlCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -496,6 +529,7 @@ public class InvoiceApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -509,18 +543,18 @@ public class InvoiceApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1InvoiceIdXmlGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getInvoiceXmlValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1InvoiceIdXmlGet(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling getInvoiceXml(Async)");
         }
 
-        return apiV1InvoiceIdXmlGetCall(id, _callback);
+        return getInvoiceXmlCall(id, _callback);
 
     }
 
@@ -533,11 +567,13 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1InvoiceIdXmlGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1InvoiceIdXmlGetWithHttpInfo(id);
+    public void getInvoiceXml(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getInvoiceXmlWithHttpInfo(id);
     }
 
     /**
@@ -550,11 +586,13 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1InvoiceIdXmlGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1InvoiceIdXmlGetValidateBeforeCall(id, null);
+    public ApiResponse<Void> getInvoiceXmlWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getInvoiceXmlValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -569,18 +607,20 @@ public class InvoiceApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceIdXmlGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call getInvoiceXmlAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1InvoiceIdXmlGetValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = getInvoiceXmlValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1InvoiceSendPost
-     * @param apiV1InvoiceSendPostRequest  (required)
+     * Build call for sendInvoice
+     * @param sendInvoiceRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -590,10 +630,13 @@ public class InvoiceApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceSendPostCall(@javax.annotation.Nonnull ApiV1InvoiceSendPostRequest apiV1InvoiceSendPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call sendInvoiceCall(@javax.annotation.Nonnull SendInvoiceRequest sendInvoiceRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -607,7 +650,7 @@ public class InvoiceApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1InvoiceSendPostRequest;
+        Object localVarPostBody = sendInvoiceRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/invoice/send";
@@ -634,26 +677,26 @@ public class InvoiceApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1InvoiceSendPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1InvoiceSendPostRequest apiV1InvoiceSendPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1InvoiceSendPostRequest' is set
-        if (apiV1InvoiceSendPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1InvoiceSendPostRequest' when calling apiV1InvoiceSendPost(Async)");
+    private okhttp3.Call sendInvoiceValidateBeforeCall(@javax.annotation.Nonnull SendInvoiceRequest sendInvoiceRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'sendInvoiceRequest' is set
+        if (sendInvoiceRequest == null) {
+            throw new ApiException("Missing the required parameter 'sendInvoiceRequest' when calling sendInvoice(Async)");
         }
 
-        return apiV1InvoiceSendPostCall(apiV1InvoiceSendPostRequest, _callback);
+        return sendInvoiceCall(sendInvoiceRequest, _callback);
 
     }
 
     /**
      * Enviar factura (01) o boleta (03) a SUNAT
      * Genera el XML UBL 2.1, lo firma digitalmente y lo encola para envío asíncrono a SUNAT. Responde 202 inmediatamente. Para conocer el resultado final consultar GET /documents/{id}. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1InvoiceSendPostRequest  (required)
-     * @return ApiV1InvoiceSendPost202Response
+     * @param sendInvoiceRequest  (required)
+     * @return SendInvoice202Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -661,19 +704,22 @@ public class InvoiceApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1InvoiceSendPost202Response apiV1InvoiceSendPost(@javax.annotation.Nonnull ApiV1InvoiceSendPostRequest apiV1InvoiceSendPostRequest) throws ApiException {
-        ApiResponse<ApiV1InvoiceSendPost202Response> localVarResp = apiV1InvoiceSendPostWithHttpInfo(apiV1InvoiceSendPostRequest);
+    public SendInvoice202Response sendInvoice(@javax.annotation.Nonnull SendInvoiceRequest sendInvoiceRequest) throws ApiException {
+        ApiResponse<SendInvoice202Response> localVarResp = sendInvoiceWithHttpInfo(sendInvoiceRequest);
         return localVarResp.getData();
     }
 
     /**
      * Enviar factura (01) o boleta (03) a SUNAT
      * Genera el XML UBL 2.1, lo firma digitalmente y lo encola para envío asíncrono a SUNAT. Responde 202 inmediatamente. Para conocer el resultado final consultar GET /documents/{id}. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1InvoiceSendPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1InvoiceSendPost202Response&gt;
+     * @param sendInvoiceRequest  (required)
+     * @return ApiResponse&lt;SendInvoice202Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -681,19 +727,22 @@ public class InvoiceApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1InvoiceSendPost202Response> apiV1InvoiceSendPostWithHttpInfo(@javax.annotation.Nonnull ApiV1InvoiceSendPostRequest apiV1InvoiceSendPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1InvoiceSendPostValidateBeforeCall(apiV1InvoiceSendPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1InvoiceSendPost202Response>(){}.getType();
+    public ApiResponse<SendInvoice202Response> sendInvoiceWithHttpInfo(@javax.annotation.Nonnull SendInvoiceRequest sendInvoiceRequest) throws ApiException {
+        okhttp3.Call localVarCall = sendInvoiceValidateBeforeCall(sendInvoiceRequest, null);
+        Type localVarReturnType = new TypeToken<SendInvoice202Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Enviar factura (01) o boleta (03) a SUNAT (asynchronously)
      * Genera el XML UBL 2.1, lo firma digitalmente y lo encola para envío asíncrono a SUNAT. Responde 202 inmediatamente. Para conocer el resultado final consultar GET /documents/{id}. Idempotente por (RUC emisor, tipoDoc, serie, correlativo): reenviar el mismo comprobante NO lo duplica. Si ya fue aceptado devuelve el mismo id y hash sin reenviar nada a SUNAT; si sigue en proceso responde 409 (esperá el resultado, no cambies el correlativo). Solo un RECHAZADO exige un correlativo nuevo.
-     * @param apiV1InvoiceSendPostRequest  (required)
+     * @param sendInvoiceRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -703,13 +752,16 @@ public class InvoiceApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 409 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceSendPostAsync(@javax.annotation.Nonnull ApiV1InvoiceSendPostRequest apiV1InvoiceSendPostRequest, final ApiCallback<ApiV1InvoiceSendPost202Response> _callback) throws ApiException {
+    public okhttp3.Call sendInvoiceAsync(@javax.annotation.Nonnull SendInvoiceRequest sendInvoiceRequest, final ApiCallback<SendInvoice202Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1InvoiceSendPostValidateBeforeCall(apiV1InvoiceSendPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1InvoiceSendPost202Response>(){}.getType();
+        okhttp3.Call localVarCall = sendInvoiceValidateBeforeCall(sendInvoiceRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendInvoice202Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

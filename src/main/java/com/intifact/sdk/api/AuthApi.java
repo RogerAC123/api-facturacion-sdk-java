@@ -27,8 +27,10 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1AuthLoginPostRequest;
-import com.intifact.sdk.model.ApiV1AuthSignupPostRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.LoginRequest;
+import com.intifact.sdk.model.SignupRequest;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -75,8 +77,7 @@ public class AuthApi {
     }
 
     /**
-     * Build call for apiV1AuthLoginPost
-     * @param apiV1AuthLoginPostRequest  (required)
+     * Build call for getCurrentUser
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -84,10 +85,12 @@ public class AuthApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthLoginPostCall(@javax.annotation.Nonnull ApiV1AuthLoginPostRequest apiV1AuthLoginPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getCurrentUserCall(final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -101,7 +104,248 @@ public class AuthApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1AuthLoginPostRequest;
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/auth/me";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getCurrentUserValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return getCurrentUserCall(_callback);
+
+    }
+
+    /**
+     * Datos del usuario actual
+     * 
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public void getCurrentUser() throws ApiException {
+        getCurrentUserWithHttpInfo();
+    }
+
+    /**
+     * Datos del usuario actual
+     * 
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Void> getCurrentUserWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = getCurrentUserValidateBeforeCall(null);
+        return localVarApiClient.execute(localVarCall);
+    }
+
+    /**
+     * Datos del usuario actual (asynchronously)
+     * 
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getCurrentUserAsync(final ApiCallback<Void> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getCurrentUserValidateBeforeCall(_callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for listSessions
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call listSessionsCall(final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/auth/sessions";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call listSessionsValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return listSessionsCall(_callback);
+
+    }
+
+    /**
+     * Lista de sesiones activas del usuario
+     * 
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public void listSessions() throws ApiException {
+        listSessionsWithHttpInfo();
+    }
+
+    /**
+     * Lista de sesiones activas del usuario
+     * 
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Void> listSessionsWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = listSessionsValidateBeforeCall(null);
+        return localVarApiClient.execute(localVarCall);
+    }
+
+    /**
+     * Lista de sesiones activas del usuario (asynchronously)
+     * 
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call listSessionsAsync(final ApiCallback<Void> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = listSessionsValidateBeforeCall(_callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for login
+     * @param loginRequest  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call loginCall(@javax.annotation.Nonnull LoginRequest loginRequest, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = loginRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/auth/login";
@@ -132,20 +376,20 @@ public class AuthApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthLoginPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1AuthLoginPostRequest apiV1AuthLoginPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1AuthLoginPostRequest' is set
-        if (apiV1AuthLoginPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1AuthLoginPostRequest' when calling apiV1AuthLoginPost(Async)");
+    private okhttp3.Call loginValidateBeforeCall(@javax.annotation.Nonnull LoginRequest loginRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'loginRequest' is set
+        if (loginRequest == null) {
+            throw new ApiException("Missing the required parameter 'loginRequest' when calling login(Async)");
         }
 
-        return apiV1AuthLoginPostCall(apiV1AuthLoginPostRequest, _callback);
+        return loginCall(loginRequest, _callback);
 
     }
 
     /**
      * Login email+password
      * 
-     * @param apiV1AuthLoginPostRequest  (required)
+     * @param loginRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -154,14 +398,14 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1AuthLoginPost(@javax.annotation.Nonnull ApiV1AuthLoginPostRequest apiV1AuthLoginPostRequest) throws ApiException {
-        apiV1AuthLoginPostWithHttpInfo(apiV1AuthLoginPostRequest);
+    public void login(@javax.annotation.Nonnull LoginRequest loginRequest) throws ApiException {
+        loginWithHttpInfo(loginRequest);
     }
 
     /**
      * Login email+password
      * 
-     * @param apiV1AuthLoginPostRequest  (required)
+     * @param loginRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -171,15 +415,15 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1AuthLoginPostWithHttpInfo(@javax.annotation.Nonnull ApiV1AuthLoginPostRequest apiV1AuthLoginPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthLoginPostValidateBeforeCall(apiV1AuthLoginPostRequest, null);
+    public ApiResponse<Void> loginWithHttpInfo(@javax.annotation.Nonnull LoginRequest loginRequest) throws ApiException {
+        okhttp3.Call localVarCall = loginValidateBeforeCall(loginRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
      * Login email+password (asynchronously)
      * 
-     * @param apiV1AuthLoginPostRequest  (required)
+     * @param loginRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -190,14 +434,14 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthLoginPostAsync(@javax.annotation.Nonnull ApiV1AuthLoginPostRequest apiV1AuthLoginPostRequest, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call loginAsync(@javax.annotation.Nonnull LoginRequest loginRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1AuthLoginPostValidateBeforeCall(apiV1AuthLoginPostRequest, _callback);
+        okhttp3.Call localVarCall = loginValidateBeforeCall(loginRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1AuthLogoutPost
+     * Build call for logout
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -208,7 +452,7 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthLogoutPostCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call logoutCall(final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -252,8 +496,8 @@ public class AuthApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthLogoutPostValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1AuthLogoutPostCall(_callback);
+    private okhttp3.Call logoutValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return logoutCall(_callback);
 
     }
 
@@ -268,8 +512,8 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1AuthLogoutPost() throws ApiException {
-        apiV1AuthLogoutPostWithHttpInfo();
+    public void logout() throws ApiException {
+        logoutWithHttpInfo();
     }
 
     /**
@@ -284,8 +528,8 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1AuthLogoutPostWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthLogoutPostValidateBeforeCall(null);
+    public ApiResponse<Void> logoutWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = logoutValidateBeforeCall(null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -302,14 +546,14 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthLogoutPostAsync(final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call logoutAsync(final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1AuthLogoutPostValidateBeforeCall(_callback);
+        okhttp3.Call localVarCall = logoutValidateBeforeCall(_callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1AuthMeGet
+     * Build call for refreshToken
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -320,119 +564,7 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthMeGetCall(final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/auth/me";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthMeGetValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1AuthMeGetCall(_callback);
-
-    }
-
-    /**
-     * Datos del usuario actual
-     * 
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public void apiV1AuthMeGet() throws ApiException {
-        apiV1AuthMeGetWithHttpInfo();
-    }
-
-    /**
-     * Datos del usuario actual
-     * 
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> apiV1AuthMeGetWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthMeGetValidateBeforeCall(null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Datos del usuario actual (asynchronously)
-     * 
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1AuthMeGetAsync(final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1AuthMeGetValidateBeforeCall(_callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1AuthRefreshPost
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1AuthRefreshPostCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call refreshTokenCall(final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -476,8 +608,8 @@ public class AuthApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthRefreshPostValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1AuthRefreshPostCall(_callback);
+    private okhttp3.Call refreshTokenValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return refreshTokenCall(_callback);
 
     }
 
@@ -492,8 +624,8 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1AuthRefreshPost() throws ApiException {
-        apiV1AuthRefreshPostWithHttpInfo();
+    public void refreshToken() throws ApiException {
+        refreshTokenWithHttpInfo();
     }
 
     /**
@@ -508,8 +640,8 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1AuthRefreshPostWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthRefreshPostValidateBeforeCall(null);
+    public ApiResponse<Void> refreshTokenWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = refreshTokenValidateBeforeCall(null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -526,14 +658,14 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthRefreshPostAsync(final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call refreshTokenAsync(final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1AuthRefreshPostValidateBeforeCall(_callback);
+        okhttp3.Call localVarCall = refreshTokenValidateBeforeCall(_callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1AuthSessionsGet
+     * Build call for resendVerificationEmail
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -541,10 +673,12 @@ public class AuthApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthSessionsGetCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call resendVerificationEmailCall(final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -561,7 +695,7 @@ public class AuthApi {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/api/v1/auth/sessions";
+        String localVarPath = "/api/v1/auth/verify-email/resend";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -570,6 +704,7 @@ public class AuthApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -583,33 +718,35 @@ public class AuthApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthSessionsGetValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1AuthSessionsGetCall(_callback);
+    private okhttp3.Call resendVerificationEmailValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return resendVerificationEmailCall(_callback);
 
     }
 
     /**
-     * Lista de sesiones activas del usuario
+     * Re-enviar email de verificación al usuario logueado
      * 
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1AuthSessionsGet() throws ApiException {
-        apiV1AuthSessionsGetWithHttpInfo();
+    public void resendVerificationEmail() throws ApiException {
+        resendVerificationEmailWithHttpInfo();
     }
 
     /**
-     * Lista de sesiones activas del usuario
+     * Re-enviar email de verificación al usuario logueado
      * 
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -617,16 +754,18 @@ public class AuthApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1AuthSessionsGetWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthSessionsGetValidateBeforeCall(null);
+    public ApiResponse<Void> resendVerificationEmailWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = resendVerificationEmailValidateBeforeCall(null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Lista de sesiones activas del usuario (asynchronously)
+     * Re-enviar email de verificación al usuario logueado (asynchronously)
      * 
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
@@ -635,17 +774,19 @@ public class AuthApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthSessionsGetAsync(final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call resendVerificationEmailAsync(final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1AuthSessionsGetValidateBeforeCall(_callback);
+        okhttp3.Call localVarCall = resendVerificationEmailValidateBeforeCall(_callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1AuthSessionsIdDelete
+     * Build call for revokeSession
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -654,10 +795,12 @@ public class AuthApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthSessionsIdDeleteCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call revokeSessionCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -684,6 +827,7 @@ public class AuthApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -697,18 +841,18 @@ public class AuthApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthSessionsIdDeleteValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call revokeSessionValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1AuthSessionsIdDelete(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling revokeSession(Async)");
         }
 
-        return apiV1AuthSessionsIdDeleteCall(id, _callback);
+        return revokeSessionCall(id, _callback);
 
     }
 
@@ -721,11 +865,13 @@ public class AuthApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1AuthSessionsIdDelete(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1AuthSessionsIdDeleteWithHttpInfo(id);
+    public void revokeSession(@javax.annotation.Nonnull UUID id) throws ApiException {
+        revokeSessionWithHttpInfo(id);
     }
 
     /**
@@ -738,11 +884,13 @@ public class AuthApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1AuthSessionsIdDeleteWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthSessionsIdDeleteValidateBeforeCall(id, null);
+    public ApiResponse<Void> revokeSessionWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = revokeSessionValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -757,18 +905,20 @@ public class AuthApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthSessionsIdDeleteAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call revokeSessionAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1AuthSessionsIdDeleteValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = revokeSessionValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1AuthSignupPost
-     * @param apiV1AuthSignupPostRequest  (required)
+     * Build call for signup
+     * @param signupRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -779,7 +929,7 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthSignupPostCall(@javax.annotation.Nonnull ApiV1AuthSignupPostRequest apiV1AuthSignupPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call signupCall(@javax.annotation.Nonnull SignupRequest signupRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -793,7 +943,7 @@ public class AuthApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1AuthSignupPostRequest;
+        Object localVarPostBody = signupRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/auth/signup";
@@ -824,20 +974,20 @@ public class AuthApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthSignupPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1AuthSignupPostRequest apiV1AuthSignupPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1AuthSignupPostRequest' is set
-        if (apiV1AuthSignupPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1AuthSignupPostRequest' when calling apiV1AuthSignupPost(Async)");
+    private okhttp3.Call signupValidateBeforeCall(@javax.annotation.Nonnull SignupRequest signupRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'signupRequest' is set
+        if (signupRequest == null) {
+            throw new ApiException("Missing the required parameter 'signupRequest' when calling signup(Async)");
         }
 
-        return apiV1AuthSignupPostCall(apiV1AuthSignupPostRequest, _callback);
+        return signupCall(signupRequest, _callback);
 
     }
 
     /**
      * Registro público: crea Tenant + User + sesión
      * 
-     * @param apiV1AuthSignupPostRequest  (required)
+     * @param signupRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -846,14 +996,14 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1AuthSignupPost(@javax.annotation.Nonnull ApiV1AuthSignupPostRequest apiV1AuthSignupPostRequest) throws ApiException {
-        apiV1AuthSignupPostWithHttpInfo(apiV1AuthSignupPostRequest);
+    public void signup(@javax.annotation.Nonnull SignupRequest signupRequest) throws ApiException {
+        signupWithHttpInfo(signupRequest);
     }
 
     /**
      * Registro público: crea Tenant + User + sesión
      * 
-     * @param apiV1AuthSignupPostRequest  (required)
+     * @param signupRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -863,15 +1013,15 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1AuthSignupPostWithHttpInfo(@javax.annotation.Nonnull ApiV1AuthSignupPostRequest apiV1AuthSignupPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthSignupPostValidateBeforeCall(apiV1AuthSignupPostRequest, null);
+    public ApiResponse<Void> signupWithHttpInfo(@javax.annotation.Nonnull SignupRequest signupRequest) throws ApiException {
+        okhttp3.Call localVarCall = signupValidateBeforeCall(signupRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
      * Registro público: crea Tenant + User + sesión (asynchronously)
      * 
-     * @param apiV1AuthSignupPostRequest  (required)
+     * @param signupRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -882,14 +1032,14 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthSignupPostAsync(@javax.annotation.Nonnull ApiV1AuthSignupPostRequest apiV1AuthSignupPostRequest, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call signupAsync(@javax.annotation.Nonnull SignupRequest signupRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1AuthSignupPostValidateBeforeCall(apiV1AuthSignupPostRequest, _callback);
+        okhttp3.Call localVarCall = signupValidateBeforeCall(signupRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1AuthVerifyEmailGet
+     * Build call for verifyEmail
      * @param token  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -901,7 +1051,7 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthVerifyEmailGetCall(@javax.annotation.Nonnull String token, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call verifyEmailCall(@javax.annotation.Nonnull String token, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -949,13 +1099,13 @@ public class AuthApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthVerifyEmailGetValidateBeforeCall(@javax.annotation.Nonnull String token, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call verifyEmailValidateBeforeCall(@javax.annotation.Nonnull String token, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'token' is set
         if (token == null) {
-            throw new ApiException("Missing the required parameter 'token' when calling apiV1AuthVerifyEmailGet(Async)");
+            throw new ApiException("Missing the required parameter 'token' when calling verifyEmail(Async)");
         }
 
-        return apiV1AuthVerifyEmailGetCall(token, _callback);
+        return verifyEmailCall(token, _callback);
 
     }
 
@@ -971,8 +1121,8 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1AuthVerifyEmailGet(@javax.annotation.Nonnull String token) throws ApiException {
-        apiV1AuthVerifyEmailGetWithHttpInfo(token);
+    public void verifyEmail(@javax.annotation.Nonnull String token) throws ApiException {
+        verifyEmailWithHttpInfo(token);
     }
 
     /**
@@ -988,8 +1138,8 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1AuthVerifyEmailGetWithHttpInfo(@javax.annotation.Nonnull String token) throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthVerifyEmailGetValidateBeforeCall(token, null);
+    public ApiResponse<Void> verifyEmailWithHttpInfo(@javax.annotation.Nonnull String token) throws ApiException {
+        okhttp3.Call localVarCall = verifyEmailValidateBeforeCall(token, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -1007,121 +1157,9 @@ public class AuthApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1AuthVerifyEmailGetAsync(@javax.annotation.Nonnull String token, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call verifyEmailAsync(@javax.annotation.Nonnull String token, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1AuthVerifyEmailGetValidateBeforeCall(token, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1AuthVerifyEmailResendPost
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1AuthVerifyEmailResendPostCall(final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/auth/verify-email/resend";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1AuthVerifyEmailResendPostValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1AuthVerifyEmailResendPostCall(_callback);
-
-    }
-
-    /**
-     * Re-enviar email de verificación al usuario logueado
-     * 
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public void apiV1AuthVerifyEmailResendPost() throws ApiException {
-        apiV1AuthVerifyEmailResendPostWithHttpInfo();
-    }
-
-    /**
-     * Re-enviar email de verificación al usuario logueado
-     * 
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> apiV1AuthVerifyEmailResendPostWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1AuthVerifyEmailResendPostValidateBeforeCall(null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Re-enviar email de verificación al usuario logueado (asynchronously)
-     * 
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1AuthVerifyEmailResendPostAsync(final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1AuthVerifyEmailResendPostValidateBeforeCall(_callback);
+        okhttp3.Call localVarCall = verifyEmailValidateBeforeCall(token, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }

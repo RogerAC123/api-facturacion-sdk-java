@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1InvoiceComputePost**](InvoiceApi.md#apiV1InvoiceComputePost) | **POST** /api/v1/invoice/compute | Calcular importes (IGV, descuentos, totales) sin emitir |
-| [**apiV1InvoiceIdCdrGet**](InvoiceApi.md#apiV1InvoiceIdCdrGet) | **GET** /api/v1/invoice/{id}/cdr | Descargar CDR (constancia de SUNAT) |
-| [**apiV1InvoiceIdPdfGet**](InvoiceApi.md#apiV1InvoiceIdPdfGet) | **GET** /api/v1/invoice/{id}/pdf | Obtener PDF (A4 oficina, ticket 80mm o ticket 58mm POS) |
-| [**apiV1InvoiceIdXmlGet**](InvoiceApi.md#apiV1InvoiceIdXmlGet) | **GET** /api/v1/invoice/{id}/xml | Descargar XML firmado |
-| [**apiV1InvoiceSendPost**](InvoiceApi.md#apiV1InvoiceSendPost) | **POST** /api/v1/invoice/send | Enviar factura (01) o boleta (03) a SUNAT |
+| [**computeInvoice**](InvoiceApi.md#computeInvoice) | **POST** /api/v1/invoice/compute | Calcular importes (IGV, descuentos, totales) sin emitir |
+| [**getInvoiceCdr**](InvoiceApi.md#getInvoiceCdr) | **GET** /api/v1/invoice/{id}/cdr | Descargar CDR (constancia de SUNAT) |
+| [**getInvoicePdf**](InvoiceApi.md#getInvoicePdf) | **GET** /api/v1/invoice/{id}/pdf | Obtener PDF (A4 oficina, ticket 80mm o ticket 58mm POS) |
+| [**getInvoiceXml**](InvoiceApi.md#getInvoiceXml) | **GET** /api/v1/invoice/{id}/xml | Descargar XML firmado |
+| [**sendInvoice**](InvoiceApi.md#sendInvoice) | **POST** /api/v1/invoice/send | Enviar factura (01) o boleta (03) a SUNAT |
 
 
-<a id="apiV1InvoiceComputePost"></a>
-# **apiV1InvoiceComputePost**
-> ApiV1InvoiceComputePost200Response apiV1InvoiceComputePost(apiV1InvoiceComputePostRequest)
+<a id="computeInvoice"></a>
+# **computeInvoice**
+> ComputeInvoice200Response computeInvoice(computeInvoiceRequest)
 
 Calcular importes (IGV, descuentos, totales) sin emitir
 
@@ -25,6 +25,7 @@ Motor de cálculo: recibe ítems crudos (cantidad, valorUnitario sin IGV, afecta
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.InvoiceApi;
 
@@ -32,14 +33,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     InvoiceApi apiInstance = new InvoiceApi(defaultClient);
-    ApiV1InvoiceComputePostRequest apiV1InvoiceComputePostRequest = new ApiV1InvoiceComputePostRequest(); // ApiV1InvoiceComputePostRequest | 
+    ComputeInvoiceRequest computeInvoiceRequest = new ComputeInvoiceRequest(); // ComputeInvoiceRequest | 
     try {
-      ApiV1InvoiceComputePost200Response result = apiInstance.apiV1InvoiceComputePost(apiV1InvoiceComputePostRequest);
+      ComputeInvoice200Response result = apiInstance.computeInvoice(computeInvoiceRequest);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling InvoiceApi#apiV1InvoiceComputePost");
+      System.err.println("Exception when calling InvoiceApi#computeInvoice");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -53,15 +58,15 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1InvoiceComputePostRequest** | [**ApiV1InvoiceComputePostRequest**](ApiV1InvoiceComputePostRequest.md)|  | |
+| **computeInvoiceRequest** | [**ComputeInvoiceRequest**](ComputeInvoiceRequest.md)|  | |
 
 ### Return type
 
-[**ApiV1InvoiceComputePost200Response**](ApiV1InvoiceComputePost200Response.md)
+[**ComputeInvoice200Response**](ComputeInvoice200Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -72,10 +77,13 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1InvoiceIdCdrGet"></a>
-# **apiV1InvoiceIdCdrGet**
-> apiV1InvoiceIdCdrGet(id)
+<a id="getInvoiceCdr"></a>
+# **getInvoiceCdr**
+> getInvoiceCdr(id)
 
 Descargar CDR (constancia de SUNAT)
 
@@ -85,6 +93,7 @@ Descargar CDR (constancia de SUNAT)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.InvoiceApi;
 
@@ -92,13 +101,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     InvoiceApi apiInstance = new InvoiceApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1InvoiceIdCdrGet(id);
+      apiInstance.getInvoiceCdr(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling InvoiceApi#apiV1InvoiceIdCdrGet");
+      System.err.println("Exception when calling InvoiceApi#getInvoiceCdr");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -120,21 +133,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1InvoiceIdPdfGet"></a>
-# **apiV1InvoiceIdPdfGet**
-> apiV1InvoiceIdPdfGet(id, format)
+<a id="getInvoicePdf"></a>
+# **getInvoicePdf**
+> getInvoicePdf(id, format)
 
 Obtener PDF (A4 oficina, ticket 80mm o ticket 58mm POS)
 
@@ -144,6 +159,7 @@ Obtener PDF (A4 oficina, ticket 80mm o ticket 58mm POS)
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.InvoiceApi;
 
@@ -151,14 +167,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     InvoiceApi apiInstance = new InvoiceApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     String format = "a4"; // String | 
     try {
-      apiInstance.apiV1InvoiceIdPdfGet(id, format);
+      apiInstance.getInvoicePdf(id, format);
     } catch (ApiException e) {
-      System.err.println("Exception when calling InvoiceApi#apiV1InvoiceIdPdfGet");
+      System.err.println("Exception when calling InvoiceApi#getInvoicePdf");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -181,21 +201,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1InvoiceIdXmlGet"></a>
-# **apiV1InvoiceIdXmlGet**
-> apiV1InvoiceIdXmlGet(id)
+<a id="getInvoiceXml"></a>
+# **getInvoiceXml**
+> getInvoiceXml(id)
 
 Descargar XML firmado
 
@@ -205,6 +227,7 @@ Descargar XML firmado
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.InvoiceApi;
 
@@ -212,13 +235,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     InvoiceApi apiInstance = new InvoiceApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1InvoiceIdXmlGet(id);
+      apiInstance.getInvoiceXml(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling InvoiceApi#apiV1InvoiceIdXmlGet");
+      System.err.println("Exception when calling InvoiceApi#getInvoiceXml");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -240,21 +267,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1InvoiceSendPost"></a>
-# **apiV1InvoiceSendPost**
-> ApiV1InvoiceSendPost202Response apiV1InvoiceSendPost(apiV1InvoiceSendPostRequest)
+<a id="sendInvoice"></a>
+# **sendInvoice**
+> SendInvoice202Response sendInvoice(sendInvoiceRequest)
 
 Enviar factura (01) o boleta (03) a SUNAT
 
@@ -266,6 +295,7 @@ Genera el XML UBL 2.1, lo firma digitalmente y lo encola para envío asíncrono 
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.InvoiceApi;
 
@@ -273,14 +303,18 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     InvoiceApi apiInstance = new InvoiceApi(defaultClient);
-    ApiV1InvoiceSendPostRequest apiV1InvoiceSendPostRequest = new ApiV1InvoiceSendPostRequest(); // ApiV1InvoiceSendPostRequest | 
+    SendInvoiceRequest sendInvoiceRequest = new SendInvoiceRequest(); // SendInvoiceRequest | 
     try {
-      ApiV1InvoiceSendPost202Response result = apiInstance.apiV1InvoiceSendPost(apiV1InvoiceSendPostRequest);
+      SendInvoice202Response result = apiInstance.sendInvoice(sendInvoiceRequest);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling InvoiceApi#apiV1InvoiceSendPost");
+      System.err.println("Exception when calling InvoiceApi#sendInvoice");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -294,15 +328,15 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1InvoiceSendPostRequest** | [**ApiV1InvoiceSendPostRequest**](ApiV1InvoiceSendPostRequest.md)|  | |
+| **sendInvoiceRequest** | [**SendInvoiceRequest**](SendInvoiceRequest.md)|  | |
 
 ### Return type
 
-[**ApiV1InvoiceSendPost202Response**](ApiV1InvoiceSendPost202Response.md)
+[**SendInvoice202Response**](SendInvoice202Response.md)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
@@ -314,5 +348,8 @@ No authorization required
 |-------------|-------------|------------------|
 | **202** | Default Response |  -  |
 | **400** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
 | **409** | Default Response |  -  |
+| **429** | Default Response |  -  |
 

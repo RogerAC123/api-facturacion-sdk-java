@@ -27,14 +27,15 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1BoletaCancelPostRequest;
-import com.intifact.sdk.model.ApiV1InvoiceCancelPostRequest;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1SummarySendPost202Response;
-import com.intifact.sdk.model.ApiV1SummarySendPostRequest;
-import com.intifact.sdk.model.ApiV1TicketTicketStatusGet200Response;
-import com.intifact.sdk.model.ApiV1TicketTicketStatusGet202Response;
-import com.intifact.sdk.model.ApiV1VoidedSendPostRequest;
+import com.intifact.sdk.model.CancelBoletaRequest;
+import com.intifact.sdk.model.CancelInvoiceRequest;
+import com.intifact.sdk.model.GetTicketStatus200Response;
+import com.intifact.sdk.model.GetTicketStatus202Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.SendSummary202Response;
+import com.intifact.sdk.model.SendSummaryRequest;
+import com.intifact.sdk.model.SendVoidedRequest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -80,8 +81,8 @@ public class SummaryApi {
     }
 
     /**
-     * Build call for apiV1BoletaCancelPost
-     * @param apiV1BoletaCancelPostRequest  (required)
+     * Build call for cancelBoleta
+     * @param cancelBoletaRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -91,9 +92,12 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1BoletaCancelPostCall(@javax.annotation.Nonnull ApiV1BoletaCancelPostRequest apiV1BoletaCancelPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call cancelBoletaCall(@javax.annotation.Nonnull CancelBoletaRequest cancelBoletaRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -107,7 +111,7 @@ public class SummaryApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1BoletaCancelPostRequest;
+        Object localVarPostBody = cancelBoletaRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/boleta/cancel";
@@ -134,26 +138,26 @@ public class SummaryApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1BoletaCancelPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1BoletaCancelPostRequest apiV1BoletaCancelPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1BoletaCancelPostRequest' is set
-        if (apiV1BoletaCancelPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1BoletaCancelPostRequest' when calling apiV1BoletaCancelPost(Async)");
+    private okhttp3.Call cancelBoletaValidateBeforeCall(@javax.annotation.Nonnull CancelBoletaRequest cancelBoletaRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'cancelBoletaRequest' is set
+        if (cancelBoletaRequest == null) {
+            throw new ApiException("Missing the required parameter 'cancelBoletaRequest' when calling cancelBoleta(Async)");
         }
 
-        return apiV1BoletaCancelPostCall(apiV1BoletaCancelPostRequest, _callback);
+        return cancelBoletaCall(cancelBoletaRequest, _callback);
 
     }
 
     /**
      * Anular boleta via resumen diario (estado&#x3D;3)
      * 
-     * @param apiV1BoletaCancelPostRequest  (required)
-     * @return ApiV1SummarySendPost202Response
+     * @param cancelBoletaRequest  (required)
+     * @return SendSummary202Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -161,18 +165,21 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1SummarySendPost202Response apiV1BoletaCancelPost(@javax.annotation.Nonnull ApiV1BoletaCancelPostRequest apiV1BoletaCancelPostRequest) throws ApiException {
-        ApiResponse<ApiV1SummarySendPost202Response> localVarResp = apiV1BoletaCancelPostWithHttpInfo(apiV1BoletaCancelPostRequest);
+    public SendSummary202Response cancelBoleta(@javax.annotation.Nonnull CancelBoletaRequest cancelBoletaRequest) throws ApiException {
+        ApiResponse<SendSummary202Response> localVarResp = cancelBoletaWithHttpInfo(cancelBoletaRequest);
         return localVarResp.getData();
     }
 
     /**
      * Anular boleta via resumen diario (estado&#x3D;3)
      * 
-     * @param apiV1BoletaCancelPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1SummarySendPost202Response&gt;
+     * @param cancelBoletaRequest  (required)
+     * @return ApiResponse&lt;SendSummary202Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -180,18 +187,21 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1SummarySendPost202Response> apiV1BoletaCancelPostWithHttpInfo(@javax.annotation.Nonnull ApiV1BoletaCancelPostRequest apiV1BoletaCancelPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1BoletaCancelPostValidateBeforeCall(apiV1BoletaCancelPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1SummarySendPost202Response>(){}.getType();
+    public ApiResponse<SendSummary202Response> cancelBoletaWithHttpInfo(@javax.annotation.Nonnull CancelBoletaRequest cancelBoletaRequest) throws ApiException {
+        okhttp3.Call localVarCall = cancelBoletaValidateBeforeCall(cancelBoletaRequest, null);
+        Type localVarReturnType = new TypeToken<SendSummary202Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Anular boleta via resumen diario (estado&#x3D;3) (asynchronously)
      * 
-     * @param apiV1BoletaCancelPostRequest  (required)
+     * @param cancelBoletaRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -201,18 +211,21 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1BoletaCancelPostAsync(@javax.annotation.Nonnull ApiV1BoletaCancelPostRequest apiV1BoletaCancelPostRequest, final ApiCallback<ApiV1SummarySendPost202Response> _callback) throws ApiException {
+    public okhttp3.Call cancelBoletaAsync(@javax.annotation.Nonnull CancelBoletaRequest cancelBoletaRequest, final ApiCallback<SendSummary202Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1BoletaCancelPostValidateBeforeCall(apiV1BoletaCancelPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1SummarySendPost202Response>(){}.getType();
+        okhttp3.Call localVarCall = cancelBoletaValidateBeforeCall(cancelBoletaRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendSummary202Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1InvoiceCancelPost
-     * @param apiV1InvoiceCancelPostRequest  (required)
+     * Build call for cancelInvoice
+     * @param cancelInvoiceRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -222,9 +235,12 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceCancelPostCall(@javax.annotation.Nonnull ApiV1InvoiceCancelPostRequest apiV1InvoiceCancelPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call cancelInvoiceCall(@javax.annotation.Nonnull CancelInvoiceRequest cancelInvoiceRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -238,7 +254,7 @@ public class SummaryApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1InvoiceCancelPostRequest;
+        Object localVarPostBody = cancelInvoiceRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/invoice/cancel";
@@ -265,26 +281,26 @@ public class SummaryApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1InvoiceCancelPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1InvoiceCancelPostRequest apiV1InvoiceCancelPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1InvoiceCancelPostRequest' is set
-        if (apiV1InvoiceCancelPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1InvoiceCancelPostRequest' when calling apiV1InvoiceCancelPost(Async)");
+    private okhttp3.Call cancelInvoiceValidateBeforeCall(@javax.annotation.Nonnull CancelInvoiceRequest cancelInvoiceRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'cancelInvoiceRequest' is set
+        if (cancelInvoiceRequest == null) {
+            throw new ApiException("Missing the required parameter 'cancelInvoiceRequest' when calling cancelInvoice(Async)");
         }
 
-        return apiV1InvoiceCancelPostCall(apiV1InvoiceCancelPostRequest, _callback);
+        return cancelInvoiceCall(cancelInvoiceRequest, _callback);
 
     }
 
     /**
      * Anular factura via comunicación de baja
      * 
-     * @param apiV1InvoiceCancelPostRequest  (required)
-     * @return ApiV1SummarySendPost202Response
+     * @param cancelInvoiceRequest  (required)
+     * @return SendSummary202Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -292,18 +308,21 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1SummarySendPost202Response apiV1InvoiceCancelPost(@javax.annotation.Nonnull ApiV1InvoiceCancelPostRequest apiV1InvoiceCancelPostRequest) throws ApiException {
-        ApiResponse<ApiV1SummarySendPost202Response> localVarResp = apiV1InvoiceCancelPostWithHttpInfo(apiV1InvoiceCancelPostRequest);
+    public SendSummary202Response cancelInvoice(@javax.annotation.Nonnull CancelInvoiceRequest cancelInvoiceRequest) throws ApiException {
+        ApiResponse<SendSummary202Response> localVarResp = cancelInvoiceWithHttpInfo(cancelInvoiceRequest);
         return localVarResp.getData();
     }
 
     /**
      * Anular factura via comunicación de baja
      * 
-     * @param apiV1InvoiceCancelPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1SummarySendPost202Response&gt;
+     * @param cancelInvoiceRequest  (required)
+     * @return ApiResponse&lt;SendSummary202Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -311,18 +330,21 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1SummarySendPost202Response> apiV1InvoiceCancelPostWithHttpInfo(@javax.annotation.Nonnull ApiV1InvoiceCancelPostRequest apiV1InvoiceCancelPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1InvoiceCancelPostValidateBeforeCall(apiV1InvoiceCancelPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1SummarySendPost202Response>(){}.getType();
+    public ApiResponse<SendSummary202Response> cancelInvoiceWithHttpInfo(@javax.annotation.Nonnull CancelInvoiceRequest cancelInvoiceRequest) throws ApiException {
+        okhttp3.Call localVarCall = cancelInvoiceValidateBeforeCall(cancelInvoiceRequest, null);
+        Type localVarReturnType = new TypeToken<SendSummary202Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Anular factura via comunicación de baja (asynchronously)
      * 
-     * @param apiV1InvoiceCancelPostRequest  (required)
+     * @param cancelInvoiceRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -332,148 +354,20 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1InvoiceCancelPostAsync(@javax.annotation.Nonnull ApiV1InvoiceCancelPostRequest apiV1InvoiceCancelPostRequest, final ApiCallback<ApiV1SummarySendPost202Response> _callback) throws ApiException {
+    public okhttp3.Call cancelInvoiceAsync(@javax.annotation.Nonnull CancelInvoiceRequest cancelInvoiceRequest, final ApiCallback<SendSummary202Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1InvoiceCancelPostValidateBeforeCall(apiV1InvoiceCancelPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1SummarySendPost202Response>(){}.getType();
+        okhttp3.Call localVarCall = cancelInvoiceValidateBeforeCall(cancelInvoiceRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendSummary202Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1SummarySendPost
-     * @param apiV1SummarySendPostRequest  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1SummarySendPostCall(@javax.annotation.Nonnull ApiV1SummarySendPostRequest apiV1SummarySendPostRequest, final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = apiV1SummarySendPostRequest;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/summary/send";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1SummarySendPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1SummarySendPostRequest apiV1SummarySendPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1SummarySendPostRequest' is set
-        if (apiV1SummarySendPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1SummarySendPostRequest' when calling apiV1SummarySendPost(Async)");
-        }
-
-        return apiV1SummarySendPostCall(apiV1SummarySendPostRequest, _callback);
-
-    }
-
-    /**
-     * Enviar resumen diario de boletas (RC)
-     * 
-     * @param apiV1SummarySendPostRequest  (required)
-     * @return ApiV1SummarySendPost202Response
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiV1SummarySendPost202Response apiV1SummarySendPost(@javax.annotation.Nonnull ApiV1SummarySendPostRequest apiV1SummarySendPostRequest) throws ApiException {
-        ApiResponse<ApiV1SummarySendPost202Response> localVarResp = apiV1SummarySendPostWithHttpInfo(apiV1SummarySendPostRequest);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Enviar resumen diario de boletas (RC)
-     * 
-     * @param apiV1SummarySendPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1SummarySendPost202Response&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApiV1SummarySendPost202Response> apiV1SummarySendPostWithHttpInfo(@javax.annotation.Nonnull ApiV1SummarySendPostRequest apiV1SummarySendPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1SummarySendPostValidateBeforeCall(apiV1SummarySendPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1SummarySendPost202Response>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Enviar resumen diario de boletas (RC) (asynchronously)
-     * 
-     * @param apiV1SummarySendPostRequest  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1SummarySendPostAsync(@javax.annotation.Nonnull ApiV1SummarySendPostRequest apiV1SummarySendPostRequest, final ApiCallback<ApiV1SummarySendPost202Response> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1SummarySendPostValidateBeforeCall(apiV1SummarySendPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1SummarySendPost202Response>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1TicketTicketStatusGet
+     * Build call for getTicketStatus
      * @param ruc  (required)
      * @param ticket  (required)
      * @param _callback Callback for upload/download progress
@@ -485,9 +379,12 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1TicketTicketStatusGetCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getTicketStatusCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -532,23 +429,23 @@ public class SummaryApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1TicketTicketStatusGetValidateBeforeCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getTicketStatusValidateBeforeCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'ruc' is set
         if (ruc == null) {
-            throw new ApiException("Missing the required parameter 'ruc' when calling apiV1TicketTicketStatusGet(Async)");
+            throw new ApiException("Missing the required parameter 'ruc' when calling getTicketStatus(Async)");
         }
 
         // verify the required parameter 'ticket' is set
         if (ticket == null) {
-            throw new ApiException("Missing the required parameter 'ticket' when calling apiV1TicketTicketStatusGet(Async)");
+            throw new ApiException("Missing the required parameter 'ticket' when calling getTicketStatus(Async)");
         }
 
-        return apiV1TicketTicketStatusGetCall(ruc, ticket, _callback);
+        return getTicketStatusCall(ruc, ticket, _callback);
 
     }
 
@@ -557,7 +454,7 @@ public class SummaryApi {
      * 
      * @param ruc  (required)
      * @param ticket  (required)
-     * @return ApiV1TicketTicketStatusGet200Response
+     * @return GetTicketStatus200Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -565,10 +462,13 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1TicketTicketStatusGet200Response apiV1TicketTicketStatusGet(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket) throws ApiException {
-        ApiResponse<ApiV1TicketTicketStatusGet200Response> localVarResp = apiV1TicketTicketStatusGetWithHttpInfo(ruc, ticket);
+    public GetTicketStatus200Response getTicketStatus(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket) throws ApiException {
+        ApiResponse<GetTicketStatus200Response> localVarResp = getTicketStatusWithHttpInfo(ruc, ticket);
         return localVarResp.getData();
     }
 
@@ -577,7 +477,7 @@ public class SummaryApi {
      * 
      * @param ruc  (required)
      * @param ticket  (required)
-     * @return ApiResponse&lt;ApiV1TicketTicketStatusGet200Response&gt;
+     * @return ApiResponse&lt;GetTicketStatus200Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -585,11 +485,14 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1TicketTicketStatusGet200Response> apiV1TicketTicketStatusGetWithHttpInfo(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket) throws ApiException {
-        okhttp3.Call localVarCall = apiV1TicketTicketStatusGetValidateBeforeCall(ruc, ticket, null);
-        Type localVarReturnType = new TypeToken<ApiV1TicketTicketStatusGet200Response>(){}.getType();
+    public ApiResponse<GetTicketStatus200Response> getTicketStatusWithHttpInfo(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket) throws ApiException {
+        okhttp3.Call localVarCall = getTicketStatusValidateBeforeCall(ruc, ticket, null);
+        Type localVarReturnType = new TypeToken<GetTicketStatus200Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -607,18 +510,21 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1TicketTicketStatusGetAsync(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket, final ApiCallback<ApiV1TicketTicketStatusGet200Response> _callback) throws ApiException {
+    public okhttp3.Call getTicketStatusAsync(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String ticket, final ApiCallback<GetTicketStatus200Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1TicketTicketStatusGetValidateBeforeCall(ruc, ticket, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1TicketTicketStatusGet200Response>(){}.getType();
+        okhttp3.Call localVarCall = getTicketStatusValidateBeforeCall(ruc, ticket, _callback);
+        Type localVarReturnType = new TypeToken<GetTicketStatus200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1VoidedSendPost
-     * @param apiV1VoidedSendPostRequest  (required)
+     * Build call for sendSummary
+     * @param sendSummaryRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -628,9 +534,12 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1VoidedSendPostCall(@javax.annotation.Nonnull ApiV1VoidedSendPostRequest apiV1VoidedSendPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call sendSummaryCall(@javax.annotation.Nonnull SendSummaryRequest sendSummaryRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -644,7 +553,150 @@ public class SummaryApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1VoidedSendPostRequest;
+        Object localVarPostBody = sendSummaryRequest;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/summary/send";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call sendSummaryValidateBeforeCall(@javax.annotation.Nonnull SendSummaryRequest sendSummaryRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'sendSummaryRequest' is set
+        if (sendSummaryRequest == null) {
+            throw new ApiException("Missing the required parameter 'sendSummaryRequest' when calling sendSummary(Async)");
+        }
+
+        return sendSummaryCall(sendSummaryRequest, _callback);
+
+    }
+
+    /**
+     * Enviar resumen diario de boletas (RC)
+     * 
+     * @param sendSummaryRequest  (required)
+     * @return SendSummary202Response
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public SendSummary202Response sendSummary(@javax.annotation.Nonnull SendSummaryRequest sendSummaryRequest) throws ApiException {
+        ApiResponse<SendSummary202Response> localVarResp = sendSummaryWithHttpInfo(sendSummaryRequest);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Enviar resumen diario de boletas (RC)
+     * 
+     * @param sendSummaryRequest  (required)
+     * @return ApiResponse&lt;SendSummary202Response&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<SendSummary202Response> sendSummaryWithHttpInfo(@javax.annotation.Nonnull SendSummaryRequest sendSummaryRequest) throws ApiException {
+        okhttp3.Call localVarCall = sendSummaryValidateBeforeCall(sendSummaryRequest, null);
+        Type localVarReturnType = new TypeToken<SendSummary202Response>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Enviar resumen diario de boletas (RC) (asynchronously)
+     * 
+     * @param sendSummaryRequest  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call sendSummaryAsync(@javax.annotation.Nonnull SendSummaryRequest sendSummaryRequest, final ApiCallback<SendSummary202Response> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = sendSummaryValidateBeforeCall(sendSummaryRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendSummary202Response>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for sendVoided
+     * @param sendVoidedRequest  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call sendVoidedCall(@javax.annotation.Nonnull SendVoidedRequest sendVoidedRequest, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = sendVoidedRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/voided/send";
@@ -671,26 +723,26 @@ public class SummaryApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1VoidedSendPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1VoidedSendPostRequest apiV1VoidedSendPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1VoidedSendPostRequest' is set
-        if (apiV1VoidedSendPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1VoidedSendPostRequest' when calling apiV1VoidedSendPost(Async)");
+    private okhttp3.Call sendVoidedValidateBeforeCall(@javax.annotation.Nonnull SendVoidedRequest sendVoidedRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'sendVoidedRequest' is set
+        if (sendVoidedRequest == null) {
+            throw new ApiException("Missing the required parameter 'sendVoidedRequest' when calling sendVoided(Async)");
         }
 
-        return apiV1VoidedSendPostCall(apiV1VoidedSendPostRequest, _callback);
+        return sendVoidedCall(sendVoidedRequest, _callback);
 
     }
 
     /**
      * Enviar comunicación de baja (RA)
      * 
-     * @param apiV1VoidedSendPostRequest  (required)
-     * @return ApiV1SummarySendPost202Response
+     * @param sendVoidedRequest  (required)
+     * @return SendSummary202Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -698,18 +750,21 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1SummarySendPost202Response apiV1VoidedSendPost(@javax.annotation.Nonnull ApiV1VoidedSendPostRequest apiV1VoidedSendPostRequest) throws ApiException {
-        ApiResponse<ApiV1SummarySendPost202Response> localVarResp = apiV1VoidedSendPostWithHttpInfo(apiV1VoidedSendPostRequest);
+    public SendSummary202Response sendVoided(@javax.annotation.Nonnull SendVoidedRequest sendVoidedRequest) throws ApiException {
+        ApiResponse<SendSummary202Response> localVarResp = sendVoidedWithHttpInfo(sendVoidedRequest);
         return localVarResp.getData();
     }
 
     /**
      * Enviar comunicación de baja (RA)
      * 
-     * @param apiV1VoidedSendPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1SummarySendPost202Response&gt;
+     * @param sendVoidedRequest  (required)
+     * @return ApiResponse&lt;SendSummary202Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -717,18 +772,21 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1SummarySendPost202Response> apiV1VoidedSendPostWithHttpInfo(@javax.annotation.Nonnull ApiV1VoidedSendPostRequest apiV1VoidedSendPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1VoidedSendPostValidateBeforeCall(apiV1VoidedSendPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1SummarySendPost202Response>(){}.getType();
+    public ApiResponse<SendSummary202Response> sendVoidedWithHttpInfo(@javax.annotation.Nonnull SendVoidedRequest sendVoidedRequest) throws ApiException {
+        okhttp3.Call localVarCall = sendVoidedValidateBeforeCall(sendVoidedRequest, null);
+        Type localVarReturnType = new TypeToken<SendSummary202Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Enviar comunicación de baja (RA) (asynchronously)
      * 
-     * @param apiV1VoidedSendPostRequest  (required)
+     * @param sendVoidedRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -738,12 +796,15 @@ public class SummaryApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1VoidedSendPostAsync(@javax.annotation.Nonnull ApiV1VoidedSendPostRequest apiV1VoidedSendPostRequest, final ApiCallback<ApiV1SummarySendPost202Response> _callback) throws ApiException {
+    public okhttp3.Call sendVoidedAsync(@javax.annotation.Nonnull SendVoidedRequest sendVoidedRequest, final ApiCallback<SendSummary202Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1VoidedSendPostValidateBeforeCall(apiV1VoidedSendPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1SummarySendPost202Response>(){}.getType();
+        okhttp3.Call localVarCall = sendVoidedValidateBeforeCall(sendVoidedRequest, _callback);
+        Type localVarReturnType = new TypeToken<SendSummary202Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

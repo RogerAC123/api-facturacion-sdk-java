@@ -73,7 +73,7 @@ public class PublicApi {
     }
 
     /**
-     * Build call for apiV1PublicConsultarRucTipoDocSerieNumeroGet
+     * Build call for consultarComprobante
      * @param ruc  (required)
      * @param tipoDoc  (required)
      * @param serie  (required)
@@ -91,7 +91,7 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroGetCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call consultarComprobanteCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -151,28 +151,28 @@ public class PublicApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroGetValidateBeforeCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call consultarComprobanteValidateBeforeCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'ruc' is set
         if (ruc == null) {
-            throw new ApiException("Missing the required parameter 'ruc' when calling apiV1PublicConsultarRucTipoDocSerieNumeroGet(Async)");
+            throw new ApiException("Missing the required parameter 'ruc' when calling consultarComprobante(Async)");
         }
 
         // verify the required parameter 'tipoDoc' is set
         if (tipoDoc == null) {
-            throw new ApiException("Missing the required parameter 'tipoDoc' when calling apiV1PublicConsultarRucTipoDocSerieNumeroGet(Async)");
+            throw new ApiException("Missing the required parameter 'tipoDoc' when calling consultarComprobante(Async)");
         }
 
         // verify the required parameter 'serie' is set
         if (serie == null) {
-            throw new ApiException("Missing the required parameter 'serie' when calling apiV1PublicConsultarRucTipoDocSerieNumeroGet(Async)");
+            throw new ApiException("Missing the required parameter 'serie' when calling consultarComprobante(Async)");
         }
 
         // verify the required parameter 'numero' is set
         if (numero == null) {
-            throw new ApiException("Missing the required parameter 'numero' when calling apiV1PublicConsultarRucTipoDocSerieNumeroGet(Async)");
+            throw new ApiException("Missing the required parameter 'numero' when calling consultarComprobante(Async)");
         }
 
-        return apiV1PublicConsultarRucTipoDocSerieNumeroGetCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, _callback);
+        return consultarComprobanteCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, _callback);
 
     }
 
@@ -194,8 +194,8 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1PublicConsultarRucTipoDocSerieNumeroGet(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor) throws ApiException {
-        apiV1PublicConsultarRucTipoDocSerieNumeroGetWithHttpInfo(ruc, tipoDoc, serie, numero, total, fecha, receptor);
+    public void consultarComprobante(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor) throws ApiException {
+        consultarComprobanteWithHttpInfo(ruc, tipoDoc, serie, numero, total, fecha, receptor);
     }
 
     /**
@@ -217,8 +217,8 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1PublicConsultarRucTipoDocSerieNumeroGetWithHttpInfo(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor) throws ApiException {
-        okhttp3.Call localVarCall = apiV1PublicConsultarRucTipoDocSerieNumeroGetValidateBeforeCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, null);
+    public ApiResponse<Void> consultarComprobanteWithHttpInfo(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor) throws ApiException {
+        okhttp3.Call localVarCall = consultarComprobanteValidateBeforeCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -242,18 +242,21 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroGetAsync(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call consultarComprobanteAsync(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1PublicConsultarRucTipoDocSerieNumeroGetValidateBeforeCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, _callback);
+        okhttp3.Call localVarCall = consultarComprobanteValidateBeforeCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet
+     * Build call for consultarComprobantePdf
      * @param ruc  (required)
      * @param tipoDoc  (required)
      * @param serie  (required)
      * @param numero  (required)
+     * @param total  (optional)
+     * @param fecha  (optional)
+     * @param receptor  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -264,7 +267,7 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call consultarComprobantePdfCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -293,6 +296,18 @@ public class PublicApi {
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
+        if (total != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("total", total));
+        }
+
+        if (fecha != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fecha", fecha));
+        }
+
+        if (receptor != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("receptor", receptor));
+        }
+
         final String[] localVarAccepts = {
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
@@ -312,28 +327,28 @@ public class PublicApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetValidateBeforeCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call consultarComprobantePdfValidateBeforeCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'ruc' is set
         if (ruc == null) {
-            throw new ApiException("Missing the required parameter 'ruc' when calling apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet(Async)");
+            throw new ApiException("Missing the required parameter 'ruc' when calling consultarComprobantePdf(Async)");
         }
 
         // verify the required parameter 'tipoDoc' is set
         if (tipoDoc == null) {
-            throw new ApiException("Missing the required parameter 'tipoDoc' when calling apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet(Async)");
+            throw new ApiException("Missing the required parameter 'tipoDoc' when calling consultarComprobantePdf(Async)");
         }
 
         // verify the required parameter 'serie' is set
         if (serie == null) {
-            throw new ApiException("Missing the required parameter 'serie' when calling apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet(Async)");
+            throw new ApiException("Missing the required parameter 'serie' when calling consultarComprobantePdf(Async)");
         }
 
         // verify the required parameter 'numero' is set
         if (numero == null) {
-            throw new ApiException("Missing the required parameter 'numero' when calling apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet(Async)");
+            throw new ApiException("Missing the required parameter 'numero' when calling consultarComprobantePdf(Async)");
         }
 
-        return apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetCall(ruc, tipoDoc, serie, numero, _callback);
+        return consultarComprobantePdfCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, _callback);
 
     }
 
@@ -344,6 +359,9 @@ public class PublicApi {
      * @param tipoDoc  (required)
      * @param serie  (required)
      * @param numero  (required)
+     * @param total  (optional)
+     * @param fecha  (optional)
+     * @param receptor  (optional)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -352,8 +370,8 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero) throws ApiException {
-        apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetWithHttpInfo(ruc, tipoDoc, serie, numero);
+    public void consultarComprobantePdf(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor) throws ApiException {
+        consultarComprobantePdfWithHttpInfo(ruc, tipoDoc, serie, numero, total, fecha, receptor);
     }
 
     /**
@@ -363,6 +381,9 @@ public class PublicApi {
      * @param tipoDoc  (required)
      * @param serie  (required)
      * @param numero  (required)
+     * @param total  (optional)
+     * @param fecha  (optional)
+     * @param receptor  (optional)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -372,8 +393,8 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetWithHttpInfo(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero) throws ApiException {
-        okhttp3.Call localVarCall = apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetValidateBeforeCall(ruc, tipoDoc, serie, numero, null);
+    public ApiResponse<Void> consultarComprobantePdfWithHttpInfo(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor) throws ApiException {
+        okhttp3.Call localVarCall = consultarComprobantePdfValidateBeforeCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -384,6 +405,9 @@ public class PublicApi {
      * @param tipoDoc  (required)
      * @param serie  (required)
      * @param numero  (required)
+     * @param total  (optional)
+     * @param fecha  (optional)
+     * @param receptor  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -394,18 +418,21 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetAsync(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call consultarComprobantePdfAsync(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetValidateBeforeCall(ruc, tipoDoc, serie, numero, _callback);
+        okhttp3.Call localVarCall = consultarComprobantePdfValidateBeforeCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet
+     * Build call for consultarComprobanteXml
      * @param ruc  (required)
      * @param tipoDoc  (required)
      * @param serie  (required)
      * @param numero  (required)
+     * @param total  (optional)
+     * @param fecha  (optional)
+     * @param receptor  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -416,7 +443,7 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call consultarComprobanteXmlCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -445,6 +472,18 @@ public class PublicApi {
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
+        if (total != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("total", total));
+        }
+
+        if (fecha != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("fecha", fecha));
+        }
+
+        if (receptor != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("receptor", receptor));
+        }
+
         final String[] localVarAccepts = {
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
@@ -464,28 +503,28 @@ public class PublicApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetValidateBeforeCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call consultarComprobanteXmlValidateBeforeCall(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'ruc' is set
         if (ruc == null) {
-            throw new ApiException("Missing the required parameter 'ruc' when calling apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet(Async)");
+            throw new ApiException("Missing the required parameter 'ruc' when calling consultarComprobanteXml(Async)");
         }
 
         // verify the required parameter 'tipoDoc' is set
         if (tipoDoc == null) {
-            throw new ApiException("Missing the required parameter 'tipoDoc' when calling apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet(Async)");
+            throw new ApiException("Missing the required parameter 'tipoDoc' when calling consultarComprobanteXml(Async)");
         }
 
         // verify the required parameter 'serie' is set
         if (serie == null) {
-            throw new ApiException("Missing the required parameter 'serie' when calling apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet(Async)");
+            throw new ApiException("Missing the required parameter 'serie' when calling consultarComprobanteXml(Async)");
         }
 
         // verify the required parameter 'numero' is set
         if (numero == null) {
-            throw new ApiException("Missing the required parameter 'numero' when calling apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet(Async)");
+            throw new ApiException("Missing the required parameter 'numero' when calling consultarComprobanteXml(Async)");
         }
 
-        return apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetCall(ruc, tipoDoc, serie, numero, _callback);
+        return consultarComprobanteXmlCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, _callback);
 
     }
 
@@ -496,6 +535,9 @@ public class PublicApi {
      * @param tipoDoc  (required)
      * @param serie  (required)
      * @param numero  (required)
+     * @param total  (optional)
+     * @param fecha  (optional)
+     * @param receptor  (optional)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -504,8 +546,8 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero) throws ApiException {
-        apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetWithHttpInfo(ruc, tipoDoc, serie, numero);
+    public void consultarComprobanteXml(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor) throws ApiException {
+        consultarComprobanteXmlWithHttpInfo(ruc, tipoDoc, serie, numero, total, fecha, receptor);
     }
 
     /**
@@ -515,6 +557,9 @@ public class PublicApi {
      * @param tipoDoc  (required)
      * @param serie  (required)
      * @param numero  (required)
+     * @param total  (optional)
+     * @param fecha  (optional)
+     * @param receptor  (optional)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -524,8 +569,8 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetWithHttpInfo(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero) throws ApiException {
-        okhttp3.Call localVarCall = apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetValidateBeforeCall(ruc, tipoDoc, serie, numero, null);
+    public ApiResponse<Void> consultarComprobanteXmlWithHttpInfo(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor) throws ApiException {
+        okhttp3.Call localVarCall = consultarComprobanteXmlValidateBeforeCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -536,6 +581,9 @@ public class PublicApi {
      * @param tipoDoc  (required)
      * @param serie  (required)
      * @param numero  (required)
+     * @param total  (optional)
+     * @param fecha  (optional)
+     * @param receptor  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -546,9 +594,9 @@ public class PublicApi {
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetAsync(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call consultarComprobanteXmlAsync(@javax.annotation.Nonnull String ruc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, @javax.annotation.Nonnull String numero, @javax.annotation.Nullable BigDecimal total, @javax.annotation.Nullable String fecha, @javax.annotation.Nullable String receptor, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetValidateBeforeCall(ruc, tipoDoc, serie, numero, _callback);
+        okhttp3.Call localVarCall = consultarComprobanteXmlValidateBeforeCall(ruc, tipoDoc, serie, numero, total, fecha, receptor, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }

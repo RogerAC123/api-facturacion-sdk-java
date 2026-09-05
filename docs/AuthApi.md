@@ -4,20 +4,144 @@ All URIs are relative to *http://localhost:3000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**apiV1AuthLoginPost**](AuthApi.md#apiV1AuthLoginPost) | **POST** /api/v1/auth/login | Login email+password |
-| [**apiV1AuthLogoutPost**](AuthApi.md#apiV1AuthLogoutPost) | **POST** /api/v1/auth/logout | Cerrar sesión actual (revoca refresh) |
-| [**apiV1AuthMeGet**](AuthApi.md#apiV1AuthMeGet) | **GET** /api/v1/auth/me | Datos del usuario actual |
-| [**apiV1AuthRefreshPost**](AuthApi.md#apiV1AuthRefreshPost) | **POST** /api/v1/auth/refresh | Renovar access token con refresh cookie |
-| [**apiV1AuthSessionsGet**](AuthApi.md#apiV1AuthSessionsGet) | **GET** /api/v1/auth/sessions | Lista de sesiones activas del usuario |
-| [**apiV1AuthSessionsIdDelete**](AuthApi.md#apiV1AuthSessionsIdDelete) | **DELETE** /api/v1/auth/sessions/{id} | Revocar una sesión activa por ID |
-| [**apiV1AuthSignupPost**](AuthApi.md#apiV1AuthSignupPost) | **POST** /api/v1/auth/signup | Registro público: crea Tenant + User + sesión |
-| [**apiV1AuthVerifyEmailGet**](AuthApi.md#apiV1AuthVerifyEmailGet) | **GET** /api/v1/auth/verify-email | Confirmar email con token (one-time, 24h) |
-| [**apiV1AuthVerifyEmailResendPost**](AuthApi.md#apiV1AuthVerifyEmailResendPost) | **POST** /api/v1/auth/verify-email/resend | Re-enviar email de verificación al usuario logueado |
+| [**getCurrentUser**](AuthApi.md#getCurrentUser) | **GET** /api/v1/auth/me | Datos del usuario actual |
+| [**listSessions**](AuthApi.md#listSessions) | **GET** /api/v1/auth/sessions | Lista de sesiones activas del usuario |
+| [**login**](AuthApi.md#login) | **POST** /api/v1/auth/login | Login email+password |
+| [**logout**](AuthApi.md#logout) | **POST** /api/v1/auth/logout | Cerrar sesión actual (revoca refresh) |
+| [**refreshToken**](AuthApi.md#refreshToken) | **POST** /api/v1/auth/refresh | Renovar access token con refresh cookie |
+| [**resendVerificationEmail**](AuthApi.md#resendVerificationEmail) | **POST** /api/v1/auth/verify-email/resend | Re-enviar email de verificación al usuario logueado |
+| [**revokeSession**](AuthApi.md#revokeSession) | **DELETE** /api/v1/auth/sessions/{id} | Revocar una sesión activa por ID |
+| [**signup**](AuthApi.md#signup) | **POST** /api/v1/auth/signup | Registro público: crea Tenant + User + sesión |
+| [**verifyEmail**](AuthApi.md#verifyEmail) | **GET** /api/v1/auth/verify-email | Confirmar email con token (one-time, 24h) |
 
 
-<a id="apiV1AuthLoginPost"></a>
-# **apiV1AuthLoginPost**
-> apiV1AuthLoginPost(apiV1AuthLoginPostRequest)
+<a id="getCurrentUser"></a>
+# **getCurrentUser**
+> getCurrentUser()
+
+Datos del usuario actual
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.AuthApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    AuthApi apiInstance = new AuthApi(defaultClient);
+    try {
+      apiInstance.getCurrentUser();
+    } catch (ApiException e) {
+      System.err.println("Exception when calling AuthApi#getCurrentUser");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="listSessions"></a>
+# **listSessions**
+> listSessions()
+
+Lista de sesiones activas del usuario
+
+### Example
+```java
+// Import classes:
+import com.intifact.sdk.client.ApiClient;
+import com.intifact.sdk.client.ApiException;
+import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
+import com.intifact.sdk.client.models.*;
+import com.intifact.sdk.api.AuthApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
+
+    AuthApi apiInstance = new AuthApi(defaultClient);
+    try {
+      apiInstance.listSessions();
+    } catch (ApiException e) {
+      System.err.println("Exception when calling AuthApi#listSessions");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
+
+<a id="login"></a>
+# **login**
+> login(loginRequest)
 
 Login email+password
 
@@ -36,11 +160,11 @@ public class Example {
     defaultClient.setBasePath("http://localhost:3000");
 
     AuthApi apiInstance = new AuthApi(defaultClient);
-    ApiV1AuthLoginPostRequest apiV1AuthLoginPostRequest = new ApiV1AuthLoginPostRequest(); // ApiV1AuthLoginPostRequest | 
+    LoginRequest loginRequest = new LoginRequest(); // LoginRequest | 
     try {
-      apiInstance.apiV1AuthLoginPost(apiV1AuthLoginPostRequest);
+      apiInstance.login(loginRequest);
     } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthLoginPost");
+      System.err.println("Exception when calling AuthApi#login");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -54,7 +178,7 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1AuthLoginPostRequest** | [**ApiV1AuthLoginPostRequest**](ApiV1AuthLoginPostRequest.md)|  | |
+| **loginRequest** | [**LoginRequest**](LoginRequest.md)|  | |
 
 ### Return type
 
@@ -74,9 +198,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
 
-<a id="apiV1AuthLogoutPost"></a>
-# **apiV1AuthLogoutPost**
-> apiV1AuthLogoutPost()
+<a id="logout"></a>
+# **logout**
+> logout()
 
 Cerrar sesión actual (revoca refresh)
 
@@ -96,9 +220,9 @@ public class Example {
 
     AuthApi apiInstance = new AuthApi(defaultClient);
     try {
-      apiInstance.apiV1AuthLogoutPost();
+      apiInstance.logout();
     } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthLogoutPost");
+      System.err.println("Exception when calling AuthApi#logout");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -129,64 +253,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
 
-<a id="apiV1AuthMeGet"></a>
-# **apiV1AuthMeGet**
-> apiV1AuthMeGet()
-
-Datos del usuario actual
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.AuthApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    AuthApi apiInstance = new AuthApi(defaultClient);
-    try {
-      apiInstance.apiV1AuthMeGet();
-    } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthMeGet");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-null (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-
-<a id="apiV1AuthRefreshPost"></a>
-# **apiV1AuthRefreshPost**
-> apiV1AuthRefreshPost()
+<a id="refreshToken"></a>
+# **refreshToken**
+> refreshToken()
 
 Renovar access token con refresh cookie
 
@@ -206,9 +275,9 @@ public class Example {
 
     AuthApi apiInstance = new AuthApi(defaultClient);
     try {
-      apiInstance.apiV1AuthRefreshPost();
+      apiInstance.refreshToken();
     } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthRefreshPost");
+      System.err.println("Exception when calling AuthApi#refreshToken");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -239,11 +308,11 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
 
-<a id="apiV1AuthSessionsGet"></a>
-# **apiV1AuthSessionsGet**
-> apiV1AuthSessionsGet()
+<a id="resendVerificationEmail"></a>
+# **resendVerificationEmail**
+> resendVerificationEmail()
 
-Lista de sesiones activas del usuario
+Re-enviar email de verificación al usuario logueado
 
 ### Example
 ```java
@@ -251,6 +320,7 @@ Lista de sesiones activas del usuario
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.AuthApi;
 
@@ -258,12 +328,16 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     AuthApi apiInstance = new AuthApi(defaultClient);
     try {
-      apiInstance.apiV1AuthSessionsGet();
+      apiInstance.resendVerificationEmail();
     } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthSessionsGet");
+      System.err.println("Exception when calling AuthApi#resendVerificationEmail");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -282,21 +356,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1AuthSessionsIdDelete"></a>
-# **apiV1AuthSessionsIdDelete**
-> apiV1AuthSessionsIdDelete(id)
+<a id="revokeSession"></a>
+# **revokeSession**
+> revokeSession(id)
 
 Revocar una sesión activa por ID
 
@@ -306,6 +382,7 @@ Revocar una sesión activa por ID
 import com.intifact.sdk.client.ApiClient;
 import com.intifact.sdk.client.ApiException;
 import com.intifact.sdk.client.Configuration;
+import com.intifact.sdk.client.auth.*;
 import com.intifact.sdk.client.models.*;
 import com.intifact.sdk.api.AuthApi;
 
@@ -313,13 +390,17 @@ public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost:3000");
+    
+    // Configure HTTP bearer authorization: apiKey
+    HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
+    apiKey.setBearerToken("BEARER TOKEN");
 
     AuthApi apiInstance = new AuthApi(defaultClient);
     UUID id = UUID.randomUUID(); // UUID | 
     try {
-      apiInstance.apiV1AuthSessionsIdDelete(id);
+      apiInstance.revokeSession(id);
     } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthSessionsIdDelete");
+      System.err.println("Exception when calling AuthApi#revokeSession");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -341,21 +422,23 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[apiKey](../README.md#apiKey)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Default Response |  -  |
+| **401** | Default Response |  -  |
+| **403** | Default Response |  -  |
+| **429** | Default Response |  -  |
 
-<a id="apiV1AuthSignupPost"></a>
-# **apiV1AuthSignupPost**
-> apiV1AuthSignupPost(apiV1AuthSignupPostRequest)
+<a id="signup"></a>
+# **signup**
+> signup(signupRequest)
 
 Registro público: crea Tenant + User + sesión
 
@@ -374,11 +457,11 @@ public class Example {
     defaultClient.setBasePath("http://localhost:3000");
 
     AuthApi apiInstance = new AuthApi(defaultClient);
-    ApiV1AuthSignupPostRequest apiV1AuthSignupPostRequest = new ApiV1AuthSignupPostRequest(); // ApiV1AuthSignupPostRequest | 
+    SignupRequest signupRequest = new SignupRequest(); // SignupRequest | 
     try {
-      apiInstance.apiV1AuthSignupPost(apiV1AuthSignupPostRequest);
+      apiInstance.signup(signupRequest);
     } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthSignupPost");
+      System.err.println("Exception when calling AuthApi#signup");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -392,7 +475,7 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **apiV1AuthSignupPostRequest** | [**ApiV1AuthSignupPostRequest**](ApiV1AuthSignupPostRequest.md)|  | |
+| **signupRequest** | [**SignupRequest**](SignupRequest.md)|  | |
 
 ### Return type
 
@@ -412,9 +495,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | Default Response |  -  |
 
-<a id="apiV1AuthVerifyEmailGet"></a>
-# **apiV1AuthVerifyEmailGet**
-> apiV1AuthVerifyEmailGet(token)
+<a id="verifyEmail"></a>
+# **verifyEmail**
+> verifyEmail(token)
 
 Confirmar email con token (one-time, 24h)
 
@@ -435,9 +518,9 @@ public class Example {
     AuthApi apiInstance = new AuthApi(defaultClient);
     String token = "token_example"; // String | 
     try {
-      apiInstance.apiV1AuthVerifyEmailGet(token);
+      apiInstance.verifyEmail(token);
     } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthVerifyEmailGet");
+      System.err.println("Exception when calling AuthApi#verifyEmail");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -452,61 +535,6 @@ public class Example {
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **token** | **String**|  | |
-
-### Return type
-
-null (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Default Response |  -  |
-
-<a id="apiV1AuthVerifyEmailResendPost"></a>
-# **apiV1AuthVerifyEmailResendPost**
-> apiV1AuthVerifyEmailResendPost()
-
-Re-enviar email de verificación al usuario logueado
-
-### Example
-```java
-// Import classes:
-import com.intifact.sdk.client.ApiClient;
-import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.client.Configuration;
-import com.intifact.sdk.client.models.*;
-import com.intifact.sdk.api.AuthApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
-
-    AuthApi apiInstance = new AuthApi(defaultClient);
-    try {
-      apiInstance.apiV1AuthVerifyEmailResendPost();
-    } catch (ApiException e) {
-      System.err.println("Exception when calling AuthApi#apiV1AuthVerifyEmailResendPost");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
 
 ### Return type
 

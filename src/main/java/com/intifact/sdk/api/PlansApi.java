@@ -27,9 +27,11 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1PlansIdPutRequest;
-import com.intifact.sdk.model.ApiV1PlansPostRequest;
+import com.intifact.sdk.model.CreatePlanRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
+import com.intifact.sdk.model.UpdatePlanRequest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -75,7 +77,8 @@ public class PlansApi {
     }
 
     /**
-     * Build call for apiV1PlansGet
+     * Build call for createPlan
+     * @param createPlanRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -83,10 +86,12 @@ public class PlansApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PlansGetCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call createPlanCall(@javax.annotation.Nonnull CreatePlanRequest createPlanRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -100,7 +105,7 @@ public class PlansApi {
             basePath = null;
         }
 
-        Object localVarPostBody = null;
+        Object localVarPostBody = createPlanRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/plans";
@@ -112,6 +117,7 @@ public class PlansApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -119,57 +125,70 @@ public class PlansApi {
         }
 
         final String[] localVarContentTypes = {
+            "application/json"
         };
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         if (localVarContentType != null) {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1PlansGetValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        return apiV1PlansGetCall(_callback);
+    private okhttp3.Call createPlanValidateBeforeCall(@javax.annotation.Nonnull CreatePlanRequest createPlanRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'createPlanRequest' is set
+        if (createPlanRequest == null) {
+            throw new ApiException("Missing the required parameter 'createPlanRequest' when calling createPlan(Async)");
+        }
+
+        return createPlanCall(createPlanRequest, _callback);
 
     }
 
     /**
-     * Listar planes (solo master)
+     * Crear plan
      * 
+     * @param createPlanRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1PlansGet() throws ApiException {
-        apiV1PlansGetWithHttpInfo();
+    public void createPlan(@javax.annotation.Nonnull CreatePlanRequest createPlanRequest) throws ApiException {
+        createPlanWithHttpInfo(createPlanRequest);
     }
 
     /**
-     * Listar planes (solo master)
+     * Crear plan
      * 
+     * @param createPlanRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1PlansGetWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = apiV1PlansGetValidateBeforeCall(null);
+    public ApiResponse<Void> createPlanWithHttpInfo(@javax.annotation.Nonnull CreatePlanRequest createPlanRequest) throws ApiException {
+        okhttp3.Call localVarCall = createPlanValidateBeforeCall(createPlanRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
-     * Listar planes (solo master) (asynchronously)
+     * Crear plan (asynchronously)
      * 
+     * @param createPlanRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -177,17 +196,19 @@ public class PlansApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PlansGetAsync(final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call createPlanAsync(@javax.annotation.Nonnull CreatePlanRequest createPlanRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1PlansGetValidateBeforeCall(_callback);
+        okhttp3.Call localVarCall = createPlanValidateBeforeCall(createPlanRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1PlansIdDelete
+     * Build call for deactivatePlan
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -196,10 +217,12 @@ public class PlansApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PlansIdDeleteCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call deactivatePlanCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -226,6 +249,7 @@ public class PlansApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -239,18 +263,18 @@ public class PlansApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1PlansIdDeleteValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call deactivatePlanValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1PlansIdDelete(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling deactivatePlan(Async)");
         }
 
-        return apiV1PlansIdDeleteCall(id, _callback);
+        return deactivatePlanCall(id, _callback);
 
     }
 
@@ -263,11 +287,13 @@ public class PlansApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1PlansIdDelete(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1PlansIdDeleteWithHttpInfo(id);
+    public void deactivatePlan(@javax.annotation.Nonnull UUID id) throws ApiException {
+        deactivatePlanWithHttpInfo(id);
     }
 
     /**
@@ -280,11 +306,13 @@ public class PlansApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1PlansIdDeleteWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1PlansIdDeleteValidateBeforeCall(id, null);
+    public ApiResponse<Void> deactivatePlanWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = deactivatePlanValidateBeforeCall(id, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -299,19 +327,19 @@ public class PlansApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PlansIdDeleteAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call deactivatePlanAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1PlansIdDeleteValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = deactivatePlanValidateBeforeCall(id, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1PlansIdPut
-     * @param id  (required)
-     * @param apiV1PlansIdPutRequest  (required)
+     * Build call for listPlans
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -319,10 +347,12 @@ public class PlansApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PlansIdPutCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1PlansIdPutRequest apiV1PlansIdPutRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call listPlansCall(final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -336,7 +366,130 @@ public class PlansApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1PlansIdPutRequest;
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/plans";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call listPlansValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return listPlansCall(_callback);
+
+    }
+
+    /**
+     * Listar planes (solo master)
+     * 
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public void listPlans() throws ApiException {
+        listPlansWithHttpInfo();
+    }
+
+    /**
+     * Listar planes (solo master)
+     * 
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Void> listPlansWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = listPlansValidateBeforeCall(null);
+        return localVarApiClient.execute(localVarCall);
+    }
+
+    /**
+     * Listar planes (solo master) (asynchronously)
+     * 
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call listPlansAsync(final ApiCallback<Void> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = listPlansValidateBeforeCall(_callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for updatePlan
+     * @param id  (required)
+     * @param updatePlanRequest  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call updatePlanCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdatePlanRequest updatePlanRequest, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = updatePlanRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/plans/{id}"
@@ -349,6 +502,7 @@ public class PlansApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
+            "application/json"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -363,23 +517,23 @@ public class PlansApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1PlansIdPutValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1PlansIdPutRequest apiV1PlansIdPutRequest, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call updatePlanValidateBeforeCall(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdatePlanRequest updatePlanRequest, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1PlansIdPut(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling updatePlan(Async)");
         }
 
-        // verify the required parameter 'apiV1PlansIdPutRequest' is set
-        if (apiV1PlansIdPutRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1PlansIdPutRequest' when calling apiV1PlansIdPut(Async)");
+        // verify the required parameter 'updatePlanRequest' is set
+        if (updatePlanRequest == null) {
+            throw new ApiException("Missing the required parameter 'updatePlanRequest' when calling updatePlan(Async)");
         }
 
-        return apiV1PlansIdPutCall(id, apiV1PlansIdPutRequest, _callback);
+        return updatePlanCall(id, updatePlanRequest, _callback);
 
     }
 
@@ -387,35 +541,39 @@ public class PlansApi {
      * Actualizar plan (precio, docs, nombre, estado)
      * 
      * @param id  (required)
-     * @param apiV1PlansIdPutRequest  (required)
+     * @param updatePlanRequest  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public void apiV1PlansIdPut(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1PlansIdPutRequest apiV1PlansIdPutRequest) throws ApiException {
-        apiV1PlansIdPutWithHttpInfo(id, apiV1PlansIdPutRequest);
+    public void updatePlan(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdatePlanRequest updatePlanRequest) throws ApiException {
+        updatePlanWithHttpInfo(id, updatePlanRequest);
     }
 
     /**
      * Actualizar plan (precio, docs, nombre, estado)
      * 
      * @param id  (required)
-     * @param apiV1PlansIdPutRequest  (required)
+     * @param updatePlanRequest  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> apiV1PlansIdPutWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1PlansIdPutRequest apiV1PlansIdPutRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1PlansIdPutValidateBeforeCall(id, apiV1PlansIdPutRequest, null);
+    public ApiResponse<Void> updatePlanWithHttpInfo(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdatePlanRequest updatePlanRequest) throws ApiException {
+        okhttp3.Call localVarCall = updatePlanValidateBeforeCall(id, updatePlanRequest, null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -423,7 +581,7 @@ public class PlansApi {
      * Actualizar plan (precio, docs, nombre, estado) (asynchronously)
      * 
      * @param id  (required)
-     * @param apiV1PlansIdPutRequest  (required)
+     * @param updatePlanRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -431,134 +589,14 @@ public class PlansApi {
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1PlansIdPutAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull ApiV1PlansIdPutRequest apiV1PlansIdPutRequest, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call updatePlanAsync(@javax.annotation.Nonnull UUID id, @javax.annotation.Nonnull UpdatePlanRequest updatePlanRequest, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1PlansIdPutValidateBeforeCall(id, apiV1PlansIdPutRequest, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1PlansPost
-     * @param apiV1PlansPostRequest  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1PlansPostCall(@javax.annotation.Nonnull ApiV1PlansPostRequest apiV1PlansPostRequest, final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = apiV1PlansPostRequest;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/plans";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "application/json"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1PlansPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1PlansPostRequest apiV1PlansPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1PlansPostRequest' is set
-        if (apiV1PlansPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1PlansPostRequest' when calling apiV1PlansPost(Async)");
-        }
-
-        return apiV1PlansPostCall(apiV1PlansPostRequest, _callback);
-
-    }
-
-    /**
-     * Crear plan
-     * 
-     * @param apiV1PlansPostRequest  (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public void apiV1PlansPost(@javax.annotation.Nonnull ApiV1PlansPostRequest apiV1PlansPostRequest) throws ApiException {
-        apiV1PlansPostWithHttpInfo(apiV1PlansPostRequest);
-    }
-
-    /**
-     * Crear plan
-     * 
-     * @param apiV1PlansPostRequest  (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> apiV1PlansPostWithHttpInfo(@javax.annotation.Nonnull ApiV1PlansPostRequest apiV1PlansPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1PlansPostValidateBeforeCall(apiV1PlansPostRequest, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Crear plan (asynchronously)
-     * 
-     * @param apiV1PlansPostRequest  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1PlansPostAsync(@javax.annotation.Nonnull ApiV1PlansPostRequest apiV1PlansPostRequest, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1PlansPostValidateBeforeCall(apiV1PlansPostRequest, _callback);
+        okhttp3.Call localVarCall = updatePlanValidateBeforeCall(id, updatePlanRequest, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }

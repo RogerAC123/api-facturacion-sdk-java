@@ -16,7 +16,7 @@ package com.intifact.sdk.client;
 import java.util.Collection;
 import java.util.Iterator;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-05T12:50:13.755448400-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).

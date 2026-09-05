@@ -27,13 +27,14 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import com.intifact.sdk.model.ApiV1CdrConsultarPost200Response;
-import com.intifact.sdk.model.ApiV1CdrConsultarPostRequest;
-import com.intifact.sdk.model.ApiV1DocumentsGet200Response;
-import com.intifact.sdk.model.ApiV1DocumentsIdRecoverPost200Response;
-import com.intifact.sdk.model.ApiV1DocumentsIdRetryPost202Response;
-import com.intifact.sdk.model.ApiV1DocumentsNextCorrelativoGet200Response;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
+import com.intifact.sdk.model.ConsultarCdr200Response;
+import com.intifact.sdk.model.ConsultarCdrRequest;
+import com.intifact.sdk.model.GetNextCorrelativo200Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.ListDocuments200Response;
+import com.intifact.sdk.model.ReconcileDocument200Response;
+import com.intifact.sdk.model.RetryDocument202Response;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -80,8 +81,8 @@ public class DocumentsApi {
     }
 
     /**
-     * Build call for apiV1CdrConsultarPost
-     * @param apiV1CdrConsultarPostRequest  (required)
+     * Build call for consultarCdr
+     * @param consultarCdrRequest  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -91,10 +92,13 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CdrConsultarPostCall(@javax.annotation.Nonnull ApiV1CdrConsultarPostRequest apiV1CdrConsultarPostRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call consultarCdrCall(@javax.annotation.Nonnull ConsultarCdrRequest consultarCdrRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -108,7 +112,7 @@ public class DocumentsApi {
             basePath = null;
         }
 
-        Object localVarPostBody = apiV1CdrConsultarPostRequest;
+        Object localVarPostBody = consultarCdrRequest;
 
         // create path and map variables
         String localVarPath = "/api/v1/cdr/consultar";
@@ -135,26 +139,26 @@ public class DocumentsApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1CdrConsultarPostValidateBeforeCall(@javax.annotation.Nonnull ApiV1CdrConsultarPostRequest apiV1CdrConsultarPostRequest, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'apiV1CdrConsultarPostRequest' is set
-        if (apiV1CdrConsultarPostRequest == null) {
-            throw new ApiException("Missing the required parameter 'apiV1CdrConsultarPostRequest' when calling apiV1CdrConsultarPost(Async)");
+    private okhttp3.Call consultarCdrValidateBeforeCall(@javax.annotation.Nonnull ConsultarCdrRequest consultarCdrRequest, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'consultarCdrRequest' is set
+        if (consultarCdrRequest == null) {
+            throw new ApiException("Missing the required parameter 'consultarCdrRequest' when calling consultarCdr(Async)");
         }
 
-        return apiV1CdrConsultarPostCall(apiV1CdrConsultarPostRequest, _callback);
+        return consultarCdrCall(consultarCdrRequest, _callback);
 
     }
 
     /**
      * Consultar el CDR de un comprobante en SUNAT por referencia
      * Recupera el CDR oficial (billConsultService / getStatusCdr) de un comprobante 01/03/07/08 por RUC+serie+número, aunque no exista en esta BD. Útil para recuperar el histórico emitido por otro PSE. Solo en producción; usa la Clave SOL de la empresa (debe existir y estar en scope de la API key).
-     * @param apiV1CdrConsultarPostRequest  (required)
-     * @return ApiV1CdrConsultarPost200Response
+     * @param consultarCdrRequest  (required)
+     * @return ConsultarCdr200Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -162,19 +166,22 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1CdrConsultarPost200Response apiV1CdrConsultarPost(@javax.annotation.Nonnull ApiV1CdrConsultarPostRequest apiV1CdrConsultarPostRequest) throws ApiException {
-        ApiResponse<ApiV1CdrConsultarPost200Response> localVarResp = apiV1CdrConsultarPostWithHttpInfo(apiV1CdrConsultarPostRequest);
+    public ConsultarCdr200Response consultarCdr(@javax.annotation.Nonnull ConsultarCdrRequest consultarCdrRequest) throws ApiException {
+        ApiResponse<ConsultarCdr200Response> localVarResp = consultarCdrWithHttpInfo(consultarCdrRequest);
         return localVarResp.getData();
     }
 
     /**
      * Consultar el CDR de un comprobante en SUNAT por referencia
      * Recupera el CDR oficial (billConsultService / getStatusCdr) de un comprobante 01/03/07/08 por RUC+serie+número, aunque no exista en esta BD. Útil para recuperar el histórico emitido por otro PSE. Solo en producción; usa la Clave SOL de la empresa (debe existir y estar en scope de la API key).
-     * @param apiV1CdrConsultarPostRequest  (required)
-     * @return ApiResponse&lt;ApiV1CdrConsultarPost200Response&gt;
+     * @param consultarCdrRequest  (required)
+     * @return ApiResponse&lt;ConsultarCdr200Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -182,19 +189,22 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1CdrConsultarPost200Response> apiV1CdrConsultarPostWithHttpInfo(@javax.annotation.Nonnull ApiV1CdrConsultarPostRequest apiV1CdrConsultarPostRequest) throws ApiException {
-        okhttp3.Call localVarCall = apiV1CdrConsultarPostValidateBeforeCall(apiV1CdrConsultarPostRequest, null);
-        Type localVarReturnType = new TypeToken<ApiV1CdrConsultarPost200Response>(){}.getType();
+    public ApiResponse<ConsultarCdr200Response> consultarCdrWithHttpInfo(@javax.annotation.Nonnull ConsultarCdrRequest consultarCdrRequest) throws ApiException {
+        okhttp3.Call localVarCall = consultarCdrValidateBeforeCall(consultarCdrRequest, null);
+        Type localVarReturnType = new TypeToken<ConsultarCdr200Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Consultar el CDR de un comprobante en SUNAT por referencia (asynchronously)
      * Recupera el CDR oficial (billConsultService / getStatusCdr) de un comprobante 01/03/07/08 por RUC+serie+número, aunque no exista en esta BD. Útil para recuperar el histórico emitido por otro PSE. Solo en producción; usa la Clave SOL de la empresa (debe existir y estar en scope de la API key).
-     * @param apiV1CdrConsultarPostRequest  (required)
+     * @param consultarCdrRequest  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -204,18 +214,324 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1CdrConsultarPostAsync(@javax.annotation.Nonnull ApiV1CdrConsultarPostRequest apiV1CdrConsultarPostRequest, final ApiCallback<ApiV1CdrConsultarPost200Response> _callback) throws ApiException {
+    public okhttp3.Call consultarCdrAsync(@javax.annotation.Nonnull ConsultarCdrRequest consultarCdrRequest, final ApiCallback<ConsultarCdr200Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1CdrConsultarPostValidateBeforeCall(apiV1CdrConsultarPostRequest, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1CdrConsultarPost200Response>(){}.getType();
+        okhttp3.Call localVarCall = consultarCdrValidateBeforeCall(consultarCdrRequest, _callback);
+        Type localVarReturnType = new TypeToken<ConsultarCdr200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1DocumentsGet
+     * Build call for getDocument
+     * @param id  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getDocumentCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/documents/{id}"
+            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getDocumentValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'id' is set
+        if (id == null) {
+            throw new ApiException("Missing the required parameter 'id' when calling getDocument(Async)");
+        }
+
+        return getDocumentCall(id, _callback);
+
+    }
+
+    /**
+     * Detalle completo de un documento
+     * 
+     * @param id  (required)
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public void getDocument(@javax.annotation.Nonnull UUID id) throws ApiException {
+        getDocumentWithHttpInfo(id);
+    }
+
+    /**
+     * Detalle completo de un documento
+     * 
+     * @param id  (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Void> getDocumentWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = getDocumentValidateBeforeCall(id, null);
+        return localVarApiClient.execute(localVarCall);
+    }
+
+    /**
+     * Detalle completo de un documento (asynchronously)
+     * 
+     * @param id  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getDocumentAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getDocumentValidateBeforeCall(id, _callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for getNextCorrelativo
+     * @param companyRuc  (required)
+     * @param tipoDoc  (required)
+     * @param serie  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getNextCorrelativoCall(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/documents/next-correlativo";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (companyRuc != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("companyRuc", companyRuc));
+        }
+
+        if (tipoDoc != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("tipoDoc", tipoDoc));
+        }
+
+        if (serie != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("serie", serie));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getNextCorrelativoValidateBeforeCall(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'companyRuc' is set
+        if (companyRuc == null) {
+            throw new ApiException("Missing the required parameter 'companyRuc' when calling getNextCorrelativo(Async)");
+        }
+
+        // verify the required parameter 'tipoDoc' is set
+        if (tipoDoc == null) {
+            throw new ApiException("Missing the required parameter 'tipoDoc' when calling getNextCorrelativo(Async)");
+        }
+
+        // verify the required parameter 'serie' is set
+        if (serie == null) {
+            throw new ApiException("Missing the required parameter 'serie' when calling getNextCorrelativo(Async)");
+        }
+
+        return getNextCorrelativoCall(companyRuc, tipoDoc, serie, _callback);
+
+    }
+
+    /**
+     * Obtener el siguiente correlativo disponible para una serie
+     * Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie y retorna el siguiente. Útil para auto-numeración.
+     * @param companyRuc  (required)
+     * @param tipoDoc  (required)
+     * @param serie  (required)
+     * @return GetNextCorrelativo200Response
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public GetNextCorrelativo200Response getNextCorrelativo(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie) throws ApiException {
+        ApiResponse<GetNextCorrelativo200Response> localVarResp = getNextCorrelativoWithHttpInfo(companyRuc, tipoDoc, serie);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Obtener el siguiente correlativo disponible para una serie
+     * Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie y retorna el siguiente. Útil para auto-numeración.
+     * @param companyRuc  (required)
+     * @param tipoDoc  (required)
+     * @param serie  (required)
+     * @return ApiResponse&lt;GetNextCorrelativo200Response&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<GetNextCorrelativo200Response> getNextCorrelativoWithHttpInfo(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie) throws ApiException {
+        okhttp3.Call localVarCall = getNextCorrelativoValidateBeforeCall(companyRuc, tipoDoc, serie, null);
+        Type localVarReturnType = new TypeToken<GetNextCorrelativo200Response>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Obtener el siguiente correlativo disponible para una serie (asynchronously)
+     * Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie y retorna el siguiente. Útil para auto-numeración.
+     * @param companyRuc  (required)
+     * @param tipoDoc  (required)
+     * @param serie  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getNextCorrelativoAsync(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, final ApiCallback<GetNextCorrelativo200Response> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getNextCorrelativoValidateBeforeCall(companyRuc, tipoDoc, serie, _callback);
+        Type localVarReturnType = new TypeToken<GetNextCorrelativo200Response>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for listDocuments
      * @param ruc  (optional)
      * @param tipoDoc  (optional)
      * @param serie  (optional)
@@ -234,9 +550,12 @@ public class DocumentsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DocumentsGetCall(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call listDocumentsCall(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -316,13 +635,13 @@ public class DocumentsApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DocumentsGetValidateBeforeCall(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
-        return apiV1DocumentsGetCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, _callback);
+    private okhttp3.Call listDocumentsValidateBeforeCall(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
+        return listDocumentsCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, _callback);
 
     }
 
@@ -339,17 +658,20 @@ public class DocumentsApi {
      * @param clienteNumDoc  (optional)
      * @param page  (optional, default to 1)
      * @param limit  (optional, default to 20)
-     * @return ApiV1DocumentsGet200Response
+     * @return ListDocuments200Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1DocumentsGet200Response apiV1DocumentsGet(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit) throws ApiException {
-        ApiResponse<ApiV1DocumentsGet200Response> localVarResp = apiV1DocumentsGetWithHttpInfo(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
+    public ListDocuments200Response listDocuments(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit) throws ApiException {
+        ApiResponse<ListDocuments200Response> localVarResp = listDocumentsWithHttpInfo(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
         return localVarResp.getData();
     }
 
@@ -366,18 +688,21 @@ public class DocumentsApi {
      * @param clienteNumDoc  (optional)
      * @param page  (optional, default to 1)
      * @param limit  (optional, default to 20)
-     * @return ApiResponse&lt;ApiV1DocumentsGet200Response&gt;
+     * @return ApiResponse&lt;ListDocuments200Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1DocumentsGet200Response> apiV1DocumentsGetWithHttpInfo(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DocumentsGetValidateBeforeCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, null);
-        Type localVarReturnType = new TypeToken<ApiV1DocumentsGet200Response>(){}.getType();
+    public ApiResponse<ListDocuments200Response> listDocumentsWithHttpInfo(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit) throws ApiException {
+        okhttp3.Call localVarCall = listDocumentsValidateBeforeCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, null);
+        Type localVarReturnType = new TypeToken<ListDocuments200Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -402,139 +727,20 @@ public class DocumentsApi {
        <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DocumentsGetAsync(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback<ApiV1DocumentsGet200Response> _callback) throws ApiException {
+    public okhttp3.Call listDocumentsAsync(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback<ListDocuments200Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1DocumentsGetValidateBeforeCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1DocumentsGet200Response>(){}.getType();
+        okhttp3.Call localVarCall = listDocumentsValidateBeforeCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, _callback);
+        Type localVarReturnType = new TypeToken<ListDocuments200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1DocumentsIdGet
-     * @param id  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1DocumentsIdGetCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/documents/{id}"
-            .replace("{" + "id" + "}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DocumentsIdGetValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1DocumentsIdGet(Async)");
-        }
-
-        return apiV1DocumentsIdGetCall(id, _callback);
-
-    }
-
-    /**
-     * Detalle completo de un documento
-     * 
-     * @param id  (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public void apiV1DocumentsIdGet(@javax.annotation.Nonnull UUID id) throws ApiException {
-        apiV1DocumentsIdGetWithHttpInfo(id);
-    }
-
-    /**
-     * Detalle completo de un documento
-     * 
-     * @param id  (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> apiV1DocumentsIdGetWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DocumentsIdGetValidateBeforeCall(id, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     * Detalle completo de un documento (asynchronously)
-     * 
-     * @param id  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1DocumentsIdGetAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1DocumentsIdGetValidateBeforeCall(id, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1DocumentsIdRecoverPost
+     * Build call for reconcileDocument
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -545,11 +751,13 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DocumentsIdRecoverPostCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call reconcileDocumentCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -590,18 +798,18 @@ public class DocumentsApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DocumentsIdRecoverPostValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call reconcileDocumentValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1DocumentsIdRecoverPost(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling reconcileDocument(Async)");
         }
 
-        return apiV1DocumentsIdRecoverPostCall(id, _callback);
+        return reconcileDocumentCall(id, _callback);
 
     }
 
@@ -609,7 +817,7 @@ public class DocumentsApi {
      * Reconciliar un documento con SUNAT (consulta de CDR, solo master)
      * Consulta el estado REAL en SUNAT (getStatusCdr / billConsultService) SIN reenviar y corrige la BD. Útil cuando un documento quedó desincronizado (ej. una boleta ACEPTADA figurando RECHAZADO/COLA_FALLIDA/ENCOLADO). Solo comprobantes 01/03/07/08, solo en producción. Restringido al master API key.
      * @param id  (required)
-     * @return ApiV1DocumentsIdRecoverPost200Response
+     * @return ReconcileDocument200Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -617,12 +825,14 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1DocumentsIdRecoverPost200Response apiV1DocumentsIdRecoverPost(@javax.annotation.Nonnull UUID id) throws ApiException {
-        ApiResponse<ApiV1DocumentsIdRecoverPost200Response> localVarResp = apiV1DocumentsIdRecoverPostWithHttpInfo(id);
+    public ReconcileDocument200Response reconcileDocument(@javax.annotation.Nonnull UUID id) throws ApiException {
+        ApiResponse<ReconcileDocument200Response> localVarResp = reconcileDocumentWithHttpInfo(id);
         return localVarResp.getData();
     }
 
@@ -630,7 +840,7 @@ public class DocumentsApi {
      * Reconciliar un documento con SUNAT (consulta de CDR, solo master)
      * Consulta el estado REAL en SUNAT (getStatusCdr / billConsultService) SIN reenviar y corrige la BD. Útil cuando un documento quedó desincronizado (ej. una boleta ACEPTADA figurando RECHAZADO/COLA_FALLIDA/ENCOLADO). Solo comprobantes 01/03/07/08, solo en producción. Restringido al master API key.
      * @param id  (required)
-     * @return ApiResponse&lt;ApiV1DocumentsIdRecoverPost200Response&gt;
+     * @return ApiResponse&lt;ReconcileDocument200Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -638,13 +848,15 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1DocumentsIdRecoverPost200Response> apiV1DocumentsIdRecoverPostWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DocumentsIdRecoverPostValidateBeforeCall(id, null);
-        Type localVarReturnType = new TypeToken<ApiV1DocumentsIdRecoverPost200Response>(){}.getType();
+    public ApiResponse<ReconcileDocument200Response> reconcileDocumentWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = reconcileDocumentValidateBeforeCall(id, null);
+        Type localVarReturnType = new TypeToken<ReconcileDocument200Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -661,19 +873,21 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DocumentsIdRecoverPostAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<ApiV1DocumentsIdRecoverPost200Response> _callback) throws ApiException {
+    public okhttp3.Call reconcileDocumentAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<ReconcileDocument200Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1DocumentsIdRecoverPostValidateBeforeCall(id, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1DocumentsIdRecoverPost200Response>(){}.getType();
+        okhttp3.Call localVarCall = reconcileDocumentValidateBeforeCall(id, _callback);
+        Type localVarReturnType = new TypeToken<ReconcileDocument200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for apiV1DocumentsIdRetryPost
+     * Build call for retryDocument
      * @param id  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
@@ -684,9 +898,12 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DocumentsIdRetryPostCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call retryDocumentCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -727,18 +944,18 @@ public class DocumentsApi {
             localVarHeaderParams.put("Content-Type", localVarContentType);
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey" };
         return localVarApiClient.buildCall(basePath, localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DocumentsIdRetryPostValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call retryDocumentValidateBeforeCall(@javax.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'id' is set
         if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling apiV1DocumentsIdRetryPost(Async)");
+            throw new ApiException("Missing the required parameter 'id' when calling retryDocument(Async)");
         }
 
-        return apiV1DocumentsIdRetryPostCall(id, _callback);
+        return retryDocumentCall(id, _callback);
 
     }
 
@@ -746,7 +963,7 @@ public class DocumentsApi {
      * Re-encolar un documento fallido
      * Útil cuando un documento quedó en estado COLA_FALLIDA tras agotar los reintentos automáticos.
      * @param id  (required)
-     * @return ApiV1DocumentsIdRetryPost202Response
+     * @return RetryDocument202Response
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -754,10 +971,13 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiV1DocumentsIdRetryPost202Response apiV1DocumentsIdRetryPost(@javax.annotation.Nonnull UUID id) throws ApiException {
-        ApiResponse<ApiV1DocumentsIdRetryPost202Response> localVarResp = apiV1DocumentsIdRetryPostWithHttpInfo(id);
+    public RetryDocument202Response retryDocument(@javax.annotation.Nonnull UUID id) throws ApiException {
+        ApiResponse<RetryDocument202Response> localVarResp = retryDocumentWithHttpInfo(id);
         return localVarResp.getData();
     }
 
@@ -765,7 +985,7 @@ public class DocumentsApi {
      * Re-encolar un documento fallido
      * Útil cuando un documento quedó en estado COLA_FALLIDA tras agotar los reintentos automáticos.
      * @param id  (required)
-     * @return ApiResponse&lt;ApiV1DocumentsIdRetryPost202Response&gt;
+     * @return ApiResponse&lt;RetryDocument202Response&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table border="1">
@@ -773,11 +993,14 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ApiV1DocumentsIdRetryPost202Response> apiV1DocumentsIdRetryPostWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DocumentsIdRetryPostValidateBeforeCall(id, null);
-        Type localVarReturnType = new TypeToken<ApiV1DocumentsIdRetryPost202Response>(){}.getType();
+    public ApiResponse<RetryDocument202Response> retryDocumentWithHttpInfo(@javax.annotation.Nonnull UUID id) throws ApiException {
+        okhttp3.Call localVarCall = retryDocumentValidateBeforeCall(id, null);
+        Type localVarReturnType = new TypeToken<RetryDocument202Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -794,172 +1017,15 @@ public class DocumentsApi {
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 202 </td><td> Default Response </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call apiV1DocumentsIdRetryPostAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<ApiV1DocumentsIdRetryPost202Response> _callback) throws ApiException {
+    public okhttp3.Call retryDocumentAsync(@javax.annotation.Nonnull UUID id, final ApiCallback<RetryDocument202Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = apiV1DocumentsIdRetryPostValidateBeforeCall(id, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1DocumentsIdRetryPost202Response>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for apiV1DocumentsNextCorrelativoGet
-     * @param companyRuc  (required)
-     * @param tipoDoc  (required)
-     * @param serie  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1DocumentsNextCorrelativoGetCall(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/api/v1/documents/next-correlativo";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (companyRuc != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("companyRuc", companyRuc));
-        }
-
-        if (tipoDoc != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("tipoDoc", tipoDoc));
-        }
-
-        if (serie != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("serie", serie));
-        }
-
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call apiV1DocumentsNextCorrelativoGetValidateBeforeCall(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, final ApiCallback _callback) throws ApiException {
-        // verify the required parameter 'companyRuc' is set
-        if (companyRuc == null) {
-            throw new ApiException("Missing the required parameter 'companyRuc' when calling apiV1DocumentsNextCorrelativoGet(Async)");
-        }
-
-        // verify the required parameter 'tipoDoc' is set
-        if (tipoDoc == null) {
-            throw new ApiException("Missing the required parameter 'tipoDoc' when calling apiV1DocumentsNextCorrelativoGet(Async)");
-        }
-
-        // verify the required parameter 'serie' is set
-        if (serie == null) {
-            throw new ApiException("Missing the required parameter 'serie' when calling apiV1DocumentsNextCorrelativoGet(Async)");
-        }
-
-        return apiV1DocumentsNextCorrelativoGetCall(companyRuc, tipoDoc, serie, _callback);
-
-    }
-
-    /**
-     * Obtener el siguiente correlativo disponible para una serie
-     * Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie y retorna el siguiente. Útil para auto-numeración.
-     * @param companyRuc  (required)
-     * @param tipoDoc  (required)
-     * @param serie  (required)
-     * @return ApiV1DocumentsNextCorrelativoGet200Response
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiV1DocumentsNextCorrelativoGet200Response apiV1DocumentsNextCorrelativoGet(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie) throws ApiException {
-        ApiResponse<ApiV1DocumentsNextCorrelativoGet200Response> localVarResp = apiV1DocumentsNextCorrelativoGetWithHttpInfo(companyRuc, tipoDoc, serie);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Obtener el siguiente correlativo disponible para una serie
-     * Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie y retorna el siguiente. Útil para auto-numeración.
-     * @param companyRuc  (required)
-     * @param tipoDoc  (required)
-     * @param serie  (required)
-     * @return ApiResponse&lt;ApiV1DocumentsNextCorrelativoGet200Response&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ApiV1DocumentsNextCorrelativoGet200Response> apiV1DocumentsNextCorrelativoGetWithHttpInfo(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie) throws ApiException {
-        okhttp3.Call localVarCall = apiV1DocumentsNextCorrelativoGetValidateBeforeCall(companyRuc, tipoDoc, serie, null);
-        Type localVarReturnType = new TypeToken<ApiV1DocumentsNextCorrelativoGet200Response>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Obtener el siguiente correlativo disponible para una serie (asynchronously)
-     * Busca el correlativo más alto existente para la combinación empresa+tipoDoc+serie y retorna el siguiente. Útil para auto-numeración.
-     * @param companyRuc  (required)
-     * @param tipoDoc  (required)
-     * @param serie  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table border="1">
-       <caption>Response Details</caption>
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call apiV1DocumentsNextCorrelativoGetAsync(@javax.annotation.Nonnull String companyRuc, @javax.annotation.Nonnull String tipoDoc, @javax.annotation.Nonnull String serie, final ApiCallback<ApiV1DocumentsNextCorrelativoGet200Response> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = apiV1DocumentsNextCorrelativoGetValidateBeforeCall(companyRuc, tipoDoc, serie, _callback);
-        Type localVarReturnType = new TypeToken<ApiV1DocumentsNextCorrelativoGet200Response>(){}.getType();
+        okhttp3.Call localVarCall = retryDocumentValidateBeforeCall(id, _callback);
+        Type localVarReturnType = new TypeToken<RetryDocument202Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

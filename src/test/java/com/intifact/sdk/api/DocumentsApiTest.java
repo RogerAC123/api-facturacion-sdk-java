@@ -14,13 +14,14 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1CdrConsultarPost200Response;
-import com.intifact.sdk.model.ApiV1CdrConsultarPostRequest;
-import com.intifact.sdk.model.ApiV1DocumentsGet200Response;
-import com.intifact.sdk.model.ApiV1DocumentsIdRecoverPost200Response;
-import com.intifact.sdk.model.ApiV1DocumentsIdRetryPost202Response;
-import com.intifact.sdk.model.ApiV1DocumentsNextCorrelativoGet200Response;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
+import com.intifact.sdk.model.ConsultarCdr200Response;
+import com.intifact.sdk.model.ConsultarCdrRequest;
+import com.intifact.sdk.model.GetNextCorrelativo200Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.ListDocuments200Response;
+import com.intifact.sdk.model.ReconcileDocument200Response;
+import com.intifact.sdk.model.RetryDocument202Response;
 import java.util.UUID;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -46,30 +47,9 @@ public class DocumentsApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1CdrConsultarPostTest() throws ApiException {
-        ApiV1CdrConsultarPostRequest apiV1CdrConsultarPostRequest = null;
-        ApiV1CdrConsultarPost200Response response = api.apiV1CdrConsultarPost(apiV1CdrConsultarPostRequest);
-        // TODO: test validations
-    }
-
-    /**
-     * Listar documentos con filtros y paginación
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1DocumentsGetTest() throws ApiException {
-        String ruc = null;
-        String tipoDoc = null;
-        String serie = null;
-        String estado = null;
-        String env = null;
-        String fechaDesde = null;
-        String fechaHasta = null;
-        String clienteNumDoc = null;
-        Integer page = null;
-        Integer limit = null;
-        ApiV1DocumentsGet200Response response = api.apiV1DocumentsGet(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
+    public void consultarCdrTest() throws ApiException {
+        ConsultarCdrRequest consultarCdrRequest = null;
+        ConsultarCdr200Response response = api.consultarCdr(consultarCdrRequest);
         // TODO: test validations
     }
 
@@ -79,37 +59,9 @@ public class DocumentsApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1DocumentsIdGetTest() throws ApiException {
+    public void getDocumentTest() throws ApiException {
         UUID id = null;
-        api.apiV1DocumentsIdGet(id);
-        // TODO: test validations
-    }
-
-    /**
-     * Reconciliar un documento con SUNAT (consulta de CDR, solo master)
-     *
-     * Consulta el estado REAL en SUNAT (getStatusCdr / billConsultService) SIN reenviar y corrige la BD. Útil cuando un documento quedó desincronizado (ej. una boleta ACEPTADA figurando RECHAZADO/COLA_FALLIDA/ENCOLADO). Solo comprobantes 01/03/07/08, solo en producción. Restringido al master API key.
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1DocumentsIdRecoverPostTest() throws ApiException {
-        UUID id = null;
-        ApiV1DocumentsIdRecoverPost200Response response = api.apiV1DocumentsIdRecoverPost(id);
-        // TODO: test validations
-    }
-
-    /**
-     * Re-encolar un documento fallido
-     *
-     * Útil cuando un documento quedó en estado COLA_FALLIDA tras agotar los reintentos automáticos.
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1DocumentsIdRetryPostTest() throws ApiException {
-        UUID id = null;
-        ApiV1DocumentsIdRetryPost202Response response = api.apiV1DocumentsIdRetryPost(id);
+        api.getDocument(id);
         // TODO: test validations
     }
 
@@ -121,11 +73,60 @@ public class DocumentsApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1DocumentsNextCorrelativoGetTest() throws ApiException {
+    public void getNextCorrelativoTest() throws ApiException {
         String companyRuc = null;
         String tipoDoc = null;
         String serie = null;
-        ApiV1DocumentsNextCorrelativoGet200Response response = api.apiV1DocumentsNextCorrelativoGet(companyRuc, tipoDoc, serie);
+        GetNextCorrelativo200Response response = api.getNextCorrelativo(companyRuc, tipoDoc, serie);
+        // TODO: test validations
+    }
+
+    /**
+     * Listar documentos con filtros y paginación
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void listDocumentsTest() throws ApiException {
+        String ruc = null;
+        String tipoDoc = null;
+        String serie = null;
+        String estado = null;
+        String env = null;
+        String fechaDesde = null;
+        String fechaHasta = null;
+        String clienteNumDoc = null;
+        Integer page = null;
+        Integer limit = null;
+        ListDocuments200Response response = api.listDocuments(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
+        // TODO: test validations
+    }
+
+    /**
+     * Reconciliar un documento con SUNAT (consulta de CDR, solo master)
+     *
+     * Consulta el estado REAL en SUNAT (getStatusCdr / billConsultService) SIN reenviar y corrige la BD. Útil cuando un documento quedó desincronizado (ej. una boleta ACEPTADA figurando RECHAZADO/COLA_FALLIDA/ENCOLADO). Solo comprobantes 01/03/07/08, solo en producción. Restringido al master API key.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void reconcileDocumentTest() throws ApiException {
+        UUID id = null;
+        ReconcileDocument200Response response = api.reconcileDocument(id);
+        // TODO: test validations
+    }
+
+    /**
+     * Re-encolar un documento fallido
+     *
+     * Útil cuando un documento quedó en estado COLA_FALLIDA tras agotar los reintentos automáticos.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void retryDocumentTest() throws ApiException {
+        UUID id = null;
+        RetryDocument202Response response = api.retryDocument(id);
         // TODO: test validations
     }
 

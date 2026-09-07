@@ -116,8 +116,12 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreateCompanyRequestCuentasBancariasInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreatePlanRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreateWebhookRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ExportProductoSunat200Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ExportProductoSunat200ResponseData.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ExportProductoSunat200ResponseDataItemsInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetNextCorrelativo200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetNextCorrelativo200ResponseData.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetProductoSunat200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetQueueStats200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetQueueStats200ResponseData.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetTicketStatus200Response.CustomTypeAdapterFactory());
@@ -139,6 +143,8 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.LoginRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ReconcileDocument200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.RetryDocument202Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SearchProductoSunat200Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SearchProductoSunat200ResponseData.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendDespatchMulti202Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendDespatchMulti202ResponseData.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendDespatchMulti202ResponseDataGuiasInner.CustomTypeAdapterFactory());

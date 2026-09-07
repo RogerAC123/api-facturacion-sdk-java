@@ -14,9 +14,11 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1PlansIdPutRequest;
-import com.intifact.sdk.model.ApiV1PlansPostRequest;
+import com.intifact.sdk.model.CreatePlanRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
+import com.intifact.sdk.model.UpdatePlanRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -34,13 +36,14 @@ public class PlansApiTest {
     private final PlansApi api = new PlansApi();
 
     /**
-     * Listar planes (solo master)
+     * Crear plan
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1PlansGetTest() throws ApiException {
-        api.apiV1PlansGet();
+    public void createPlanTest() throws ApiException {
+        CreatePlanRequest createPlanRequest = null;
+        api.createPlan(createPlanRequest);
         // TODO: test validations
     }
 
@@ -50,9 +53,20 @@ public class PlansApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1PlansIdDeleteTest() throws ApiException {
+    public void deactivatePlanTest() throws ApiException {
         UUID id = null;
-        api.apiV1PlansIdDelete(id);
+        api.deactivatePlan(id);
+        // TODO: test validations
+    }
+
+    /**
+     * Listar planes (solo master)
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void listPlansTest() throws ApiException {
+        api.listPlans();
         // TODO: test validations
     }
 
@@ -62,22 +76,10 @@ public class PlansApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1PlansIdPutTest() throws ApiException {
+    public void updatePlanTest() throws ApiException {
         UUID id = null;
-        ApiV1PlansIdPutRequest apiV1PlansIdPutRequest = null;
-        api.apiV1PlansIdPut(id, apiV1PlansIdPutRequest);
-        // TODO: test validations
-    }
-
-    /**
-     * Crear plan
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1PlansPostTest() throws ApiException {
-        ApiV1PlansPostRequest apiV1PlansPostRequest = null;
-        api.apiV1PlansPost(apiV1PlansPostRequest);
+        UpdatePlanRequest updatePlanRequest = null;
+        api.updatePlan(id, updatePlanRequest);
         // TODO: test validations
     }
 

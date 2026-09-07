@@ -2925,6 +2925,159 @@ paths:
       - system
       x-accepts:
       - application/json
+  /api/v1/catalogs/producto/export:
+    get:
+      description: "Devuelve `{ success, data: { version, total, items[] } }` con\
+        \ TODO el catálogo, en el mismo shape que devuelve la búsqueda. Pensado para\
+        \ cachearlo del lado del integrador: manda `If-None-Match` con el ETag recibido\
+        \ y la API responde 304 si nada cambió. Se sirve con `Content-Encoding: gzip`\
+        \ si el cliente lo acepta (~600 KB vs ~8 MB)."
+      operationId: exportProductoSunat
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/exportProductoSunat_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Descargar el Catálogo 25 completo (52.840 códigos)
+      tags:
+      - system
+      x-accepts:
+      - application/json
+  /api/v1/catalogs/producto/search:
+    get:
+      description: "Busca por texto libre (sin distinguir tildes ni mayúsculas, todos\
+        \ los términos deben aparecer) o por prefijo de código si `q` son dígitos.\
+        \ Devuelve primero las CLASE: SUNAT exige llegar como mínimo a ese nivel y\
+        \ es la respuesta correcta en la mayoría de casos."
+      operationId: searchProductoSunat
+      parameters:
+      - explode: true
+        in: query
+        name: q
+        required: true
+        schema:
+          maxLength: 80
+          minLength: 2
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: nivel
+        required: false
+        schema:
+          enum:
+          - CLASE
+          - PRODUCTO
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 20
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/searchProductoSunat_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Buscar Código de Producto SUNAT (Catálogo 25 / UNSPSC)
+      tags:
+      - system
+      x-accepts:
+      - application/json
+  /api/v1/catalogs/producto/{codigo}:
+    get:
+      operationId: getProductoSunat
+      parameters:
+      - explode: false
+        in: path
+        name: codigo
+        required: true
+        schema:
+          nullable: true
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getProductoSunat_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Obtener un Código de Producto SUNAT por código
+      tags:
+      - system
+      x-accepts:
+      - application/json
 components:
   schemas:
     _internal_certificates_expiring_get_401_response_errors_inner:
@@ -3100,7 +3253,7 @@ components:
           minimum: 0
           type: number
         codProdSunat:
-          maxLength: 20
+          pattern: "^\\d{8}$"
           type: string
       required:
       - cantidad
@@ -3451,7 +3604,7 @@ components:
           maxLength: 100
           type: string
         codProdSunat:
-          maxLength: 20
+          pattern: "^\\d{8}$"
           type: string
       required:
       - cantidad
@@ -3543,7 +3696,7 @@ components:
         factorIcbper:
           type: number
         codProdSunat:
-          nullable: true
+          pattern: "^\\d{8}$"
           type: string
       required:
       - cantidad
@@ -3960,8 +4113,9 @@ components:
     sendDespatch_request_vehiculosSecundarios_inner:
       properties:
         placa:
-          maxLength: 8
+          maxLength: 10
           minLength: 1
+          pattern: "^[A-Z0-9]+$"
           type: string
         tuc:
           maxLength: 15
@@ -4132,6 +4286,8 @@ components:
           type: string
         guiaVehiculoPlaca:
           maxLength: 10
+          minLength: 1
+          pattern: "^[A-Z0-9]+$"
           type: string
         transportistaTipoDoc:
           nullable: true
@@ -4417,6 +4573,8 @@ components:
           type: string
         guiaVehiculoPlaca:
           maxLength: 10
+          minLength: 1
+          pattern: "^[A-Z0-9]+$"
           type: string
         transportistaTipoDoc:
           nullable: true
@@ -4682,8 +4840,9 @@ components:
     sendDespatchTransportista_request_vehiculosSecundarios_inner:
       properties:
         placa:
-          maxLength: 8
+          maxLength: 10
           minLength: 1
+          pattern: "^[A-Z0-9]+$"
           type: string
         tuc:
           maxLength: 15
@@ -4808,8 +4967,9 @@ components:
           type: array
           default: null
         guiaVehiculoPlaca:
-          maxLength: 8
+          maxLength: 10
           minLength: 1
+          pattern: "^[A-Z0-9]+$"
           type: string
         guiaVehiculoTuc:
           maxLength: 15
@@ -6145,6 +6305,190 @@ components:
             $ref: "#/components/schemas/listCatalogs_200_response_data_inner"
           type: array
           default: null
+      required:
+      - data
+      - success
+    exportProductoSunat_200_response_data_items_inner:
+      additionalProperties: {}
+      example:
+        codigo: codigo
+        descripcion: descripcion
+        nivel: CLASE
+        claseCodigo: claseCodigo
+        familia: familia
+        segmento: segmento
+      properties:
+        codigo:
+          nullable: true
+          type: string
+        descripcion:
+          nullable: true
+          type: string
+        nivel:
+          enum:
+          - CLASE
+          - PRODUCTO
+          type: string
+        claseCodigo:
+          nullable: true
+          type: string
+        familia:
+          nullable: true
+          type: string
+        segmento:
+          nullable: true
+          type: string
+      required:
+      - claseCodigo
+      - codigo
+      - descripcion
+      - familia
+      - nivel
+      - segmento
+    exportProductoSunat_200_response_data:
+      additionalProperties: {}
+      example:
+        version: version
+        total: 0.8008281904610115
+        items:
+        - codigo: codigo
+          descripcion: descripcion
+          nivel: CLASE
+          claseCodigo: claseCodigo
+          familia: familia
+          segmento: segmento
+        - codigo: codigo
+          descripcion: descripcion
+          nivel: CLASE
+          claseCodigo: claseCodigo
+          familia: familia
+          segmento: segmento
+      properties:
+        version:
+          nullable: true
+          type: string
+        total:
+          type: number
+        items:
+          items:
+            $ref: "#/components/schemas/exportProductoSunat_200_response_data_items_inner"
+          type: array
+          default: null
+      required:
+      - items
+      - total
+      - version
+    exportProductoSunat_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        data:
+          version: version
+          total: 0.8008281904610115
+          items:
+          - codigo: codigo
+            descripcion: descripcion
+            nivel: CLASE
+            claseCodigo: claseCodigo
+            familia: familia
+            segmento: segmento
+          - codigo: codigo
+            descripcion: descripcion
+            nivel: CLASE
+            claseCodigo: claseCodigo
+            familia: familia
+            segmento: segmento
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/exportProductoSunat_200_response_data"
+      required:
+      - data
+      - success
+    searchProductoSunat_200_response_data:
+      additionalProperties: {}
+      example:
+        version: version
+        q: q
+        total: 0.8008281904610115
+        items:
+        - codigo: codigo
+          descripcion: descripcion
+          nivel: CLASE
+          claseCodigo: claseCodigo
+          familia: familia
+          segmento: segmento
+        - codigo: codigo
+          descripcion: descripcion
+          nivel: CLASE
+          claseCodigo: claseCodigo
+          familia: familia
+          segmento: segmento
+      properties:
+        version:
+          nullable: true
+          type: string
+        q:
+          nullable: true
+          type: string
+        total:
+          type: number
+        items:
+          items:
+            $ref: "#/components/schemas/exportProductoSunat_200_response_data_items_inner"
+          type: array
+          default: null
+      required:
+      - items
+      - q
+      - total
+      - version
+    searchProductoSunat_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        data:
+          version: version
+          q: q
+          total: 0.8008281904610115
+          items:
+          - codigo: codigo
+            descripcion: descripcion
+            nivel: CLASE
+            claseCodigo: claseCodigo
+            familia: familia
+            segmento: segmento
+          - codigo: codigo
+            descripcion: descripcion
+            nivel: CLASE
+            claseCodigo: claseCodigo
+            familia: familia
+            segmento: segmento
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/searchProductoSunat_200_response_data"
+      required:
+      - data
+      - success
+    getProductoSunat_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        data:
+          codigo: codigo
+          descripcion: descripcion
+          nivel: CLASE
+          claseCodigo: claseCodigo
+          familia: familia
+          segmento: segmento
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/exportProductoSunat_200_response_data_items_inner"
       required:
       - data
       - success

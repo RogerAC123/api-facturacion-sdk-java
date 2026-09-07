@@ -14,9 +14,11 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1WebhooksIdPutRequest;
-import com.intifact.sdk.model.ApiV1WebhooksPostRequest;
+import com.intifact.sdk.model.CreateWebhookRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
+import com.intifact.sdk.model.UpdateWebhookRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -34,14 +36,16 @@ public class WebhooksApiTest {
     private final WebhooksApi api = new WebhooksApi();
 
     /**
-     * Listar webhooks (filtra por RUC opcional)
+     * Crear endpoint webhook
+     *
+     * Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1WebhooksGetTest() throws ApiException {
-        String ruc = null;
-        api.apiV1WebhooksGet(ruc);
+    public void createWebhookTest() throws ApiException {
+        CreateWebhookRequest createWebhookRequest = null;
+        api.createWebhook(createWebhookRequest);
         // TODO: test validations
     }
 
@@ -51,36 +55,9 @@ public class WebhooksApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1WebhooksIdDeleteTest() throws ApiException {
+    public void deleteWebhookTest() throws ApiException {
         UUID id = null;
-        api.apiV1WebhooksIdDelete(id);
-        // TODO: test validations
-    }
-
-    /**
-     * Reintentar manualmente una entrega
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPostTest() throws ApiException {
-        UUID id = null;
-        UUID deliveryId = null;
-        api.apiV1WebhooksIdDeliveriesDeliveryIdRedeliverPost(id, deliveryId);
-        // TODO: test validations
-    }
-
-    /**
-     * Log de entregas del webhook
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1WebhooksIdDeliveriesGetTest() throws ApiException {
-        UUID id = null;
-        Integer limit = null;
-        String success = null;
-        api.apiV1WebhooksIdDeliveriesGet(id, limit, success);
+        api.deleteWebhook(id);
         // TODO: test validations
     }
 
@@ -90,22 +67,48 @@ public class WebhooksApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1WebhooksIdGetTest() throws ApiException {
+    public void getWebhookTest() throws ApiException {
         UUID id = null;
-        api.apiV1WebhooksIdGet(id);
+        api.getWebhook(id);
         // TODO: test validations
     }
 
     /**
-     * Actualizar webhook (url, eventos, activación)
+     * Log de entregas del webhook
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1WebhooksIdPutTest() throws ApiException {
+    public void listWebhookDeliveriesTest() throws ApiException {
         UUID id = null;
-        ApiV1WebhooksIdPutRequest apiV1WebhooksIdPutRequest = null;
-        api.apiV1WebhooksIdPut(id, apiV1WebhooksIdPutRequest);
+        Integer limit = null;
+        String success = null;
+        api.listWebhookDeliveries(id, limit, success);
+        // TODO: test validations
+    }
+
+    /**
+     * Listar webhooks (filtra por RUC opcional)
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void listWebhooksTest() throws ApiException {
+        String ruc = null;
+        api.listWebhooks(ruc);
+        // TODO: test validations
+    }
+
+    /**
+     * Reintentar manualmente una entrega
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void redeliverWebhookDeliveryTest() throws ApiException {
+        UUID id = null;
+        UUID deliveryId = null;
+        api.redeliverWebhookDelivery(id, deliveryId);
         // TODO: test validations
     }
 
@@ -117,9 +120,9 @@ public class WebhooksApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1WebhooksIdRotateSecretPostTest() throws ApiException {
+    public void rotateWebhookSecretTest() throws ApiException {
         UUID id = null;
-        api.apiV1WebhooksIdRotateSecretPost(id);
+        api.rotateWebhookSecret(id);
         // TODO: test validations
     }
 
@@ -129,23 +132,22 @@ public class WebhooksApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1WebhooksIdTestPostTest() throws ApiException {
+    public void testWebhookTest() throws ApiException {
         UUID id = null;
-        api.apiV1WebhooksIdTestPost(id);
+        api.testWebhook(id);
         // TODO: test validations
     }
 
     /**
-     * Crear endpoint webhook
-     *
-     * Registra una URL que recibirá POSTs cuando ocurran los eventos suscritos. Sin &#x60;empresaRuc&#x60; el webhook cubre TODAS las empresas de tu cuenta (un solo secret; el &#x60;empresaRuc&#x60; viaja en cada payload). La respuesta incluye el &#x60;secret&#x60; (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
+     * Actualizar webhook (url, eventos, activación)
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1WebhooksPostTest() throws ApiException {
-        ApiV1WebhooksPostRequest apiV1WebhooksPostRequest = null;
-        api.apiV1WebhooksPost(apiV1WebhooksPostRequest);
+    public void updateWebhookTest() throws ApiException {
+        UUID id = null;
+        UpdateWebhookRequest updateWebhookRequest = null;
+        api.updateWebhook(id, updateWebhookRequest);
         // TODO: test validations
     }
 

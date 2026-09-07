@@ -39,7 +39,7 @@ public class PublicApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1PublicConsultarRucTipoDocSerieNumeroGetTest() throws ApiException {
+    public void consultarComprobanteTest() throws ApiException {
         String ruc = null;
         String tipoDoc = null;
         String serie = null;
@@ -47,7 +47,7 @@ public class PublicApiTest {
         BigDecimal total = null;
         String fecha = null;
         String receptor = null;
-        api.apiV1PublicConsultarRucTipoDocSerieNumeroGet(ruc, tipoDoc, serie, numero, total, fecha, receptor);
+        api.consultarComprobante(ruc, tipoDoc, serie, numero, total, fecha, receptor);
         // TODO: test validations
     }
 
@@ -57,12 +57,15 @@ public class PublicApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1PublicConsultarRucTipoDocSerieNumeroPdfGetTest() throws ApiException {
+    public void consultarComprobantePdfTest() throws ApiException {
         String ruc = null;
         String tipoDoc = null;
         String serie = null;
         String numero = null;
-        api.apiV1PublicConsultarRucTipoDocSerieNumeroPdfGet(ruc, tipoDoc, serie, numero);
+        BigDecimal total = null;
+        String fecha = null;
+        String receptor = null;
+        api.consultarComprobantePdf(ruc, tipoDoc, serie, numero, total, fecha, receptor);
         // TODO: test validations
     }
 
@@ -72,12 +75,15 @@ public class PublicApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1PublicConsultarRucTipoDocSerieNumeroXmlGetTest() throws ApiException {
+    public void consultarComprobanteXmlTest() throws ApiException {
         String ruc = null;
         String tipoDoc = null;
         String serie = null;
         String numero = null;
-        api.apiV1PublicConsultarRucTipoDocSerieNumeroXmlGet(ruc, tipoDoc, serie, numero);
+        BigDecimal total = null;
+        String fecha = null;
+        String receptor = null;
+        api.consultarComprobanteXml(ruc, tipoDoc, serie, numero, total, fecha, receptor);
         // TODO: test validations
     }
 

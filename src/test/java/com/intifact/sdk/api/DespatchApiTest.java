@@ -14,12 +14,13 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1DespatchSendMultiPost202Response;
-import com.intifact.sdk.model.ApiV1DespatchSendMultiPostRequest;
-import com.intifact.sdk.model.ApiV1DespatchSendPostRequest;
-import com.intifact.sdk.model.ApiV1DespatchTransportistaSendPostRequest;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1NoteSendPost202Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.SendDespatchMulti202Response;
+import com.intifact.sdk.model.SendDespatchMultiRequest;
+import com.intifact.sdk.model.SendDespatchRequest;
+import com.intifact.sdk.model.SendDespatchTransportistaRequest;
+import com.intifact.sdk.model.SendInvoice202Response;
 import java.util.UUID;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -43,9 +44,9 @@ public class DespatchApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1DespatchIdCdrGetTest() throws ApiException {
+    public void getDespatchCdrTest() throws ApiException {
         UUID id = null;
-        api.apiV1DespatchIdCdrGet(id);
+        api.getDespatchCdr(id);
         // TODO: test validations
     }
 
@@ -55,10 +56,10 @@ public class DespatchApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1DespatchIdPdfGetTest() throws ApiException {
+    public void getDespatchPdfTest() throws ApiException {
         UUID id = null;
         String format = null;
-        api.apiV1DespatchIdPdfGet(id, format);
+        api.getDespatchPdf(id, format);
         // TODO: test validations
     }
 
@@ -68,23 +69,9 @@ public class DespatchApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1DespatchIdXmlGetTest() throws ApiException {
+    public void getDespatchXmlTest() throws ApiException {
         UUID id = null;
-        api.apiV1DespatchIdXmlGet(id);
-        // TODO: test validations
-    }
-
-    /**
-     * Enviar múltiples guías de remisión por destino
-     *
-     * Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1DespatchSendMultiPostTest() throws ApiException {
-        ApiV1DespatchSendMultiPostRequest apiV1DespatchSendMultiPostRequest = null;
-        ApiV1DespatchSendMultiPost202Response response = api.apiV1DespatchSendMultiPost(apiV1DespatchSendMultiPostRequest);
+        api.getDespatchXml(id);
         // TODO: test validations
     }
 
@@ -96,9 +83,23 @@ public class DespatchApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1DespatchSendPostTest() throws ApiException {
-        ApiV1DespatchSendPostRequest apiV1DespatchSendPostRequest = null;
-        ApiV1NoteSendPost202Response response = api.apiV1DespatchSendPost(apiV1DespatchSendPostRequest);
+    public void sendDespatchTest() throws ApiException {
+        SendDespatchRequest sendDespatchRequest = null;
+        SendInvoice202Response response = api.sendDespatch(sendDespatchRequest);
+        // TODO: test validations
+    }
+
+    /**
+     * Enviar múltiples guías de remisión por destino
+     *
+     * Recibe datos comunes de transporte + array de destinos. Genera una guía por cada destino con correlativo auto-asignado. Cada guía se encola independientemente para envío a SUNAT GRE.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void sendDespatchMultiTest() throws ApiException {
+        SendDespatchMultiRequest sendDespatchMultiRequest = null;
+        SendDespatchMulti202Response response = api.sendDespatchMulti(sendDespatchMultiRequest);
         // TODO: test validations
     }
 
@@ -110,9 +111,9 @@ public class DespatchApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1DespatchTransportistaSendPostTest() throws ApiException {
-        ApiV1DespatchTransportistaSendPostRequest apiV1DespatchTransportistaSendPostRequest = null;
-        ApiV1NoteSendPost202Response response = api.apiV1DespatchTransportistaSendPost(apiV1DespatchTransportistaSendPostRequest);
+    public void sendDespatchTransportistaTest() throws ApiException {
+        SendDespatchTransportistaRequest sendDespatchTransportistaRequest = null;
+        SendInvoice202Response response = api.sendDespatchTransportista(sendDespatchTransportistaRequest);
         // TODO: test validations
     }
 

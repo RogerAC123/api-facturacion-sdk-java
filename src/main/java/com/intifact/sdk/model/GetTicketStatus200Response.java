@@ -50,7 +50,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * GetTicketStatus200Response
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-05T12:50:13.755448400-05:00[America/Lima]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-07T00:25:59.873852369Z[Etc/UTC]", comments = "Generator version: 7.25.0")
 public class GetTicketStatus200Response {
   public static final String SERIALIZED_NAME_SUCCESS = "success";
   @SerializedName(SERIALIZED_NAME_SUCCESS)

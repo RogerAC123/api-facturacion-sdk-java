@@ -14,11 +14,12 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1InvoiceComputePost200Response;
-import com.intifact.sdk.model.ApiV1InvoiceComputePostRequest;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost202Response;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1InvoiceSendPostRequest;
+import com.intifact.sdk.model.ComputeInvoice200Response;
+import com.intifact.sdk.model.ComputeInvoiceRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.SendInvoice202Response;
+import com.intifact.sdk.model.SendInvoiceRequest;
 import java.util.UUID;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -44,9 +45,9 @@ public class InvoiceApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1InvoiceComputePostTest() throws ApiException {
-        ApiV1InvoiceComputePostRequest apiV1InvoiceComputePostRequest = null;
-        ApiV1InvoiceComputePost200Response response = api.apiV1InvoiceComputePost(apiV1InvoiceComputePostRequest);
+    public void computeInvoiceTest() throws ApiException {
+        ComputeInvoiceRequest computeInvoiceRequest = null;
+        ComputeInvoice200Response response = api.computeInvoice(computeInvoiceRequest);
         // TODO: test validations
     }
 
@@ -56,9 +57,9 @@ public class InvoiceApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1InvoiceIdCdrGetTest() throws ApiException {
+    public void getInvoiceCdrTest() throws ApiException {
         UUID id = null;
-        api.apiV1InvoiceIdCdrGet(id);
+        api.getInvoiceCdr(id);
         // TODO: test validations
     }
 
@@ -68,10 +69,10 @@ public class InvoiceApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1InvoiceIdPdfGetTest() throws ApiException {
+    public void getInvoicePdfTest() throws ApiException {
         UUID id = null;
         String format = null;
-        api.apiV1InvoiceIdPdfGet(id, format);
+        api.getInvoicePdf(id, format);
         // TODO: test validations
     }
 
@@ -81,9 +82,9 @@ public class InvoiceApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1InvoiceIdXmlGetTest() throws ApiException {
+    public void getInvoiceXmlTest() throws ApiException {
         UUID id = null;
-        api.apiV1InvoiceIdXmlGet(id);
+        api.getInvoiceXml(id);
         // TODO: test validations
     }
 
@@ -95,9 +96,9 @@ public class InvoiceApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1InvoiceSendPostTest() throws ApiException {
-        ApiV1InvoiceSendPostRequest apiV1InvoiceSendPostRequest = null;
-        ApiV1InvoiceSendPost202Response response = api.apiV1InvoiceSendPost(apiV1InvoiceSendPostRequest);
+    public void sendInvoiceTest() throws ApiException {
+        SendInvoiceRequest sendInvoiceRequest = null;
+        SendInvoice202Response response = api.sendInvoice(sendInvoiceRequest);
         // TODO: test validations
     }
 

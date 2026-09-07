@@ -14,9 +14,11 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1CompaniesIdBranchesBranchIdPutRequest;
-import com.intifact.sdk.model.ApiV1CompaniesIdBranchesPostRequest;
+import com.intifact.sdk.model.CreateBranchRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
+import com.intifact.sdk.model.UpdateBranchRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +36,21 @@ public class BranchesApiTest {
     private final BranchesApi api = new BranchesApi();
 
     /**
+     * Crear establecimiento (sucursal)
+     *
+     * El código debe coincidir con el que SUNAT asignó a la sucursal al registrarla en el portal SOL (Mis Trámites &gt; Establecimientos Anexos).
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void createBranchTest() throws ApiException {
+        UUID id = null;
+        CreateBranchRequest createBranchRequest = null;
+        api.createBranch(id, createBranchRequest);
+        // TODO: test validations
+    }
+
+    /**
      * Desactivar establecimiento (soft-delete)
      *
      * No se elimina físicamente porque puede haber documentos emitidos desde ahí. Solo se desactiva (isActive&#x3D;false).
@@ -41,24 +58,10 @@ public class BranchesApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1CompaniesIdBranchesBranchIdDeleteTest() throws ApiException {
+    public void deactivateBranchTest() throws ApiException {
         UUID id = null;
         UUID branchId = null;
-        api.apiV1CompaniesIdBranchesBranchIdDelete(id, branchId);
-        // TODO: test validations
-    }
-
-    /**
-     * Actualizar establecimiento
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1CompaniesIdBranchesBranchIdPutTest() throws ApiException {
-        UUID id = null;
-        UUID branchId = null;
-        ApiV1CompaniesIdBranchesBranchIdPutRequest apiV1CompaniesIdBranchesBranchIdPutRequest = null;
-        api.apiV1CompaniesIdBranchesBranchIdPut(id, branchId, apiV1CompaniesIdBranchesBranchIdPutRequest);
+        api.deactivateBranch(id, branchId);
         // TODO: test validations
     }
 
@@ -68,24 +71,23 @@ public class BranchesApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1CompaniesIdBranchesGetTest() throws ApiException {
+    public void listBranchesTest() throws ApiException {
         UUID id = null;
-        api.apiV1CompaniesIdBranchesGet(id);
+        api.listBranches(id);
         // TODO: test validations
     }
 
     /**
-     * Crear establecimiento (sucursal)
-     *
-     * El código debe coincidir con el que SUNAT asignó a la sucursal al registrarla en el portal SOL (Mis Trámites &gt; Establecimientos Anexos).
+     * Actualizar establecimiento
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1CompaniesIdBranchesPostTest() throws ApiException {
+    public void updateBranchTest() throws ApiException {
         UUID id = null;
-        ApiV1CompaniesIdBranchesPostRequest apiV1CompaniesIdBranchesPostRequest = null;
-        api.apiV1CompaniesIdBranchesPost(id, apiV1CompaniesIdBranchesPostRequest);
+        UUID branchId = null;
+        UpdateBranchRequest updateBranchRequest = null;
+        api.updateBranch(id, branchId, updateBranchRequest);
         // TODO: test validations
     }
 

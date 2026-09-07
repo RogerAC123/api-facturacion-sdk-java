@@ -14,8 +14,9 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1QueuesStatsGet200Response;
+import com.intifact.sdk.model.GetQueueStats200Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -38,8 +39,8 @@ public class QueuesApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1QueuesStatsGetTest() throws ApiException {
-        ApiV1QueuesStatsGet200Response response = api.apiV1QueuesStatsGet();
+    public void getQueueStatsTest() throws ApiException {
+        GetQueueStats200Response response = api.getQueueStats();
         // TODO: test validations
     }
 

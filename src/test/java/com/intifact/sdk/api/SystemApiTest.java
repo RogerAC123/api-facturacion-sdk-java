@@ -14,7 +14,13 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1CatalogsGet200Response;
+import com.intifact.sdk.model.ExportProductoSunat200Response;
+import com.intifact.sdk.model.GetProductoSunat200Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet401Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.ListCatalogs200Response;
+import com.intifact.sdk.model.SearchProductoSunat200Response;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -32,15 +38,15 @@ public class SystemApiTest {
     private final SystemApi api = new SystemApi();
 
     /**
-     * Listar catálogos SUNAT (código → descripción)
+     * Descargar el Catálogo 25 completo (52.840 códigos)
      *
-     * Devuelve los catálogos SUNAT más usados y los específicos de guías de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado, 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.).
+     * Devuelve &#x60;{ success, data: { version, total, items[] } }&#x60; con TODO el catálogo, en el mismo shape que devuelve la búsqueda. Pensado para cachearlo del lado del integrador: manda &#x60;If-None-Match&#x60; con el ETag recibido y la API responde 304 si nada cambió. Se sirve con &#x60;Content-Encoding: gzip&#x60; si el cliente lo acepta (~600 KB vs ~8 MB).
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1CatalogsGetTest() throws ApiException {
-        ApiV1CatalogsGet200Response response = api.apiV1CatalogsGet();
+    public void exportProductoSunatTest() throws ApiException {
+        ExportProductoSunat200Response response = api.exportProductoSunat();
         // TODO: test validations
     }
 
@@ -50,9 +56,21 @@ public class SystemApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1CatalogsKeyGetTest() throws ApiException {
+    public void getCatalogTest() throws ApiException {
         String key = null;
-        api.apiV1CatalogsKeyGet(key);
+        api.getCatalog(key);
+        // TODO: test validations
+    }
+
+    /**
+     * Obtener un Código de Producto SUNAT por código
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void getProductoSunatTest() throws ApiException {
+        String codigo = null;
+        GetProductoSunat200Response response = api.getProductoSunat(codigo);
         // TODO: test validations
     }
 
@@ -88,6 +106,35 @@ public class SystemApiTest {
     public void internalWebhooksStatsGetTest() throws ApiException {
         Integer days = null;
         api.internalWebhooksStatsGet(days);
+        // TODO: test validations
+    }
+
+    /**
+     * Listar catálogos SUNAT (código → descripción)
+     *
+     * Devuelve los catálogos SUNAT más usados y los específicos de guías de remisión (01 tipo doc, 06 doc identidad, 18 modalidad, 20 motivo traslado, 61 doc relacionado, 07 afectación IGV, 25 unidad, etc.).
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void listCatalogsTest() throws ApiException {
+        ListCatalogs200Response response = api.listCatalogs();
+        // TODO: test validations
+    }
+
+    /**
+     * Buscar Código de Producto SUNAT (Catálogo 25 / UNSPSC)
+     *
+     * Busca por texto libre (sin distinguir tildes ni mayúsculas, todos los términos deben aparecer) o por prefijo de código si &#x60;q&#x60; son dígitos. Devuelve primero las CLASE: SUNAT exige llegar como mínimo a ese nivel y es la respuesta correcta en la mayoría de casos.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void searchProductoSunatTest() throws ApiException {
+        String q = null;
+        String nivel = null;
+        Integer limit = null;
+        SearchProductoSunat200Response response = api.searchProductoSunat(q, nivel, limit);
         // TODO: test validations
     }
 

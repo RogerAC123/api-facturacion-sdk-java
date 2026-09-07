@@ -14,8 +14,10 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1AuthLoginPostRequest;
-import com.intifact.sdk.model.ApiV1AuthSignupPostRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.LoginRequest;
+import com.intifact.sdk.model.SignupRequest;
 import java.util.UUID;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -34,47 +36,13 @@ public class AuthApiTest {
     private final AuthApi api = new AuthApi();
 
     /**
-     * Login email+password
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1AuthLoginPostTest() throws ApiException {
-        ApiV1AuthLoginPostRequest apiV1AuthLoginPostRequest = null;
-        api.apiV1AuthLoginPost(apiV1AuthLoginPostRequest);
-        // TODO: test validations
-    }
-
-    /**
-     * Cerrar sesión actual (revoca refresh)
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1AuthLogoutPostTest() throws ApiException {
-        api.apiV1AuthLogoutPost();
-        // TODO: test validations
-    }
-
-    /**
      * Datos del usuario actual
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1AuthMeGetTest() throws ApiException {
-        api.apiV1AuthMeGet();
-        // TODO: test validations
-    }
-
-    /**
-     * Renovar access token con refresh cookie
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1AuthRefreshPostTest() throws ApiException {
-        api.apiV1AuthRefreshPost();
+    public void getCurrentUserTest() throws ApiException {
+        api.getCurrentUser();
         // TODO: test validations
     }
 
@@ -84,44 +52,42 @@ public class AuthApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1AuthSessionsGetTest() throws ApiException {
-        api.apiV1AuthSessionsGet();
+    public void listSessionsTest() throws ApiException {
+        api.listSessions();
         // TODO: test validations
     }
 
     /**
-     * Revocar una sesión activa por ID
+     * Login email+password
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1AuthSessionsIdDeleteTest() throws ApiException {
-        UUID id = null;
-        api.apiV1AuthSessionsIdDelete(id);
+    public void loginTest() throws ApiException {
+        LoginRequest loginRequest = null;
+        api.login(loginRequest);
         // TODO: test validations
     }
 
     /**
-     * Registro público: crea Tenant + User + sesión
+     * Cerrar sesión actual (revoca refresh)
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1AuthSignupPostTest() throws ApiException {
-        ApiV1AuthSignupPostRequest apiV1AuthSignupPostRequest = null;
-        api.apiV1AuthSignupPost(apiV1AuthSignupPostRequest);
+    public void logoutTest() throws ApiException {
+        api.logout();
         // TODO: test validations
     }
 
     /**
-     * Confirmar email con token (one-time, 24h)
+     * Renovar access token con refresh cookie
      *
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1AuthVerifyEmailGetTest() throws ApiException {
-        String token = null;
-        api.apiV1AuthVerifyEmailGet(token);
+    public void refreshTokenTest() throws ApiException {
+        api.refreshToken();
         // TODO: test validations
     }
 
@@ -131,8 +97,44 @@ public class AuthApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1AuthVerifyEmailResendPostTest() throws ApiException {
-        api.apiV1AuthVerifyEmailResendPost();
+    public void resendVerificationEmailTest() throws ApiException {
+        api.resendVerificationEmail();
+        // TODO: test validations
+    }
+
+    /**
+     * Revocar una sesión activa por ID
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void revokeSessionTest() throws ApiException {
+        UUID id = null;
+        api.revokeSession(id);
+        // TODO: test validations
+    }
+
+    /**
+     * Registro público: crea Tenant + User + sesión
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void signupTest() throws ApiException {
+        SignupRequest signupRequest = null;
+        api.signup(signupRequest);
+        // TODO: test validations
+    }
+
+    /**
+     * Confirmar email con token (one-time, 24h)
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void verifyEmailTest() throws ApiException {
+        String token = null;
+        api.verifyEmail(token);
         // TODO: test validations
     }
 

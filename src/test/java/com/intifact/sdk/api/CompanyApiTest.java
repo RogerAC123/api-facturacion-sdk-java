@@ -14,10 +14,12 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1CompaniesClaimPostRequest;
-import com.intifact.sdk.model.ApiV1CompaniesIdPutRequest;
-import com.intifact.sdk.model.ApiV1CompaniesPostRequest;
+import com.intifact.sdk.model.ClaimCompanyRequest;
+import com.intifact.sdk.model.CreateCompanyRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
+import com.intifact.sdk.model.UpdateCompanyRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -42,57 +44,9 @@ public class CompanyApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1CompaniesClaimPostTest() throws ApiException {
-        ApiV1CompaniesClaimPostRequest apiV1CompaniesClaimPostRequest = null;
-        api.apiV1CompaniesClaimPost(apiV1CompaniesClaimPostRequest);
-        // TODO: test validations
-    }
-
-    /**
-     * Listar empresas emisoras
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1CompaniesGetTest() throws ApiException {
-        api.apiV1CompaniesGet();
-        // TODO: test validations
-    }
-
-    /**
-     * Detalle de empresa
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1CompaniesIdGetTest() throws ApiException {
-        UUID id = null;
-        api.apiV1CompaniesIdGet(id);
-        // TODO: test validations
-    }
-
-    /**
-     * Obtener logo de la empresa (PNG/JPG)
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1CompaniesIdLogoGetTest() throws ApiException {
-        UUID id = null;
-        api.apiV1CompaniesIdLogoGet(id);
-        // TODO: test validations
-    }
-
-    /**
-     * Actualizar empresa
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1CompaniesIdPutTest() throws ApiException {
-        UUID id = null;
-        ApiV1CompaniesIdPutRequest apiV1CompaniesIdPutRequest = null;
-        api.apiV1CompaniesIdPut(id, apiV1CompaniesIdPutRequest);
+    public void claimCompanyTest() throws ApiException {
+        ClaimCompanyRequest claimCompanyRequest = null;
+        api.claimCompany(claimCompanyRequest);
         // TODO: test validations
     }
 
@@ -102,9 +56,57 @@ public class CompanyApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1CompaniesPostTest() throws ApiException {
-        ApiV1CompaniesPostRequest apiV1CompaniesPostRequest = null;
-        api.apiV1CompaniesPost(apiV1CompaniesPostRequest);
+    public void createCompanyTest() throws ApiException {
+        CreateCompanyRequest createCompanyRequest = null;
+        api.createCompany(createCompanyRequest);
+        // TODO: test validations
+    }
+
+    /**
+     * Detalle de empresa
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void getCompanyTest() throws ApiException {
+        UUID id = null;
+        api.getCompany(id);
+        // TODO: test validations
+    }
+
+    /**
+     * Obtener logo de la empresa (PNG/JPG)
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void getCompanyLogoTest() throws ApiException {
+        UUID id = null;
+        api.getCompanyLogo(id);
+        // TODO: test validations
+    }
+
+    /**
+     * Listar empresas emisoras
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void listCompaniesTest() throws ApiException {
+        api.listCompanies();
+        // TODO: test validations
+    }
+
+    /**
+     * Actualizar empresa
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void updateCompanyTest() throws ApiException {
+        UUID id = null;
+        UpdateCompanyRequest updateCompanyRequest = null;
+        api.updateCompany(id, updateCompanyRequest);
         // TODO: test validations
     }
 

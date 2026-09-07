@@ -14,14 +14,15 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1BoletaCancelPostRequest;
-import com.intifact.sdk.model.ApiV1InvoiceCancelPostRequest;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1SummarySendPost202Response;
-import com.intifact.sdk.model.ApiV1SummarySendPostRequest;
-import com.intifact.sdk.model.ApiV1TicketTicketStatusGet200Response;
-import com.intifact.sdk.model.ApiV1TicketTicketStatusGet202Response;
-import com.intifact.sdk.model.ApiV1VoidedSendPostRequest;
+import com.intifact.sdk.model.CancelBoletaRequest;
+import com.intifact.sdk.model.CancelInvoiceRequest;
+import com.intifact.sdk.model.GetTicketStatus200Response;
+import com.intifact.sdk.model.GetTicketStatus202Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.SendSummary202Response;
+import com.intifact.sdk.model.SendSummaryRequest;
+import com.intifact.sdk.model.SendVoidedRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -44,9 +45,9 @@ public class SummaryApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1BoletaCancelPostTest() throws ApiException {
-        ApiV1BoletaCancelPostRequest apiV1BoletaCancelPostRequest = null;
-        ApiV1SummarySendPost202Response response = api.apiV1BoletaCancelPost(apiV1BoletaCancelPostRequest);
+    public void cancelBoletaTest() throws ApiException {
+        CancelBoletaRequest cancelBoletaRequest = null;
+        SendSummary202Response response = api.cancelBoleta(cancelBoletaRequest);
         // TODO: test validations
     }
 
@@ -56,21 +57,9 @@ public class SummaryApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1InvoiceCancelPostTest() throws ApiException {
-        ApiV1InvoiceCancelPostRequest apiV1InvoiceCancelPostRequest = null;
-        ApiV1SummarySendPost202Response response = api.apiV1InvoiceCancelPost(apiV1InvoiceCancelPostRequest);
-        // TODO: test validations
-    }
-
-    /**
-     * Enviar resumen diario de boletas (RC)
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void apiV1SummarySendPostTest() throws ApiException {
-        ApiV1SummarySendPostRequest apiV1SummarySendPostRequest = null;
-        ApiV1SummarySendPost202Response response = api.apiV1SummarySendPost(apiV1SummarySendPostRequest);
+    public void cancelInvoiceTest() throws ApiException {
+        CancelInvoiceRequest cancelInvoiceRequest = null;
+        SendSummary202Response response = api.cancelInvoice(cancelInvoiceRequest);
         // TODO: test validations
     }
 
@@ -80,10 +69,22 @@ public class SummaryApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1TicketTicketStatusGetTest() throws ApiException {
+    public void getTicketStatusTest() throws ApiException {
         String ruc = null;
         String ticket = null;
-        ApiV1TicketTicketStatusGet200Response response = api.apiV1TicketTicketStatusGet(ruc, ticket);
+        GetTicketStatus200Response response = api.getTicketStatus(ruc, ticket);
+        // TODO: test validations
+    }
+
+    /**
+     * Enviar resumen diario de boletas (RC)
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void sendSummaryTest() throws ApiException {
+        SendSummaryRequest sendSummaryRequest = null;
+        SendSummary202Response response = api.sendSummary(sendSummaryRequest);
         // TODO: test validations
     }
 
@@ -93,9 +94,9 @@ public class SummaryApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1VoidedSendPostTest() throws ApiException {
-        ApiV1VoidedSendPostRequest apiV1VoidedSendPostRequest = null;
-        ApiV1SummarySendPost202Response response = api.apiV1VoidedSendPost(apiV1VoidedSendPostRequest);
+    public void sendVoidedTest() throws ApiException {
+        SendVoidedRequest sendVoidedRequest = null;
+        SendSummary202Response response = api.sendVoided(sendVoidedRequest);
         // TODO: test validations
     }
 

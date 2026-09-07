@@ -14,11 +14,12 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ApiV1InvoiceComputePost200Response;
-import com.intifact.sdk.model.ApiV1InvoiceSendPost400Response;
-import com.intifact.sdk.model.ApiV1NoteComputePostRequest;
-import com.intifact.sdk.model.ApiV1NoteSendPost202Response;
-import com.intifact.sdk.model.ApiV1NoteSendPostRequest;
+import com.intifact.sdk.model.ComputeInvoice200Response;
+import com.intifact.sdk.model.ComputeInvoiceRequest;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
+import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
+import com.intifact.sdk.model.SendInvoice202Response;
+import com.intifact.sdk.model.SendNoteRequest;
 import java.util.UUID;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -44,9 +45,9 @@ public class NoteApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1NoteComputePostTest() throws ApiException {
-        ApiV1NoteComputePostRequest apiV1NoteComputePostRequest = null;
-        ApiV1InvoiceComputePost200Response response = api.apiV1NoteComputePost(apiV1NoteComputePostRequest);
+    public void computeNoteTest() throws ApiException {
+        ComputeInvoiceRequest computeInvoiceRequest = null;
+        ComputeInvoice200Response response = api.computeNote(computeInvoiceRequest);
         // TODO: test validations
     }
 
@@ -56,9 +57,9 @@ public class NoteApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1NoteIdCdrGetTest() throws ApiException {
+    public void getNoteCdrTest() throws ApiException {
         UUID id = null;
-        api.apiV1NoteIdCdrGet(id);
+        api.getNoteCdr(id);
         // TODO: test validations
     }
 
@@ -68,9 +69,9 @@ public class NoteApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1NoteIdPdfGetTest() throws ApiException {
+    public void getNotePdfTest() throws ApiException {
         UUID id = null;
-        api.apiV1NoteIdPdfGet(id);
+        api.getNotePdf(id);
         // TODO: test validations
     }
 
@@ -80,9 +81,9 @@ public class NoteApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1NoteIdXmlGetTest() throws ApiException {
+    public void getNoteXmlTest() throws ApiException {
         UUID id = null;
-        api.apiV1NoteIdXmlGet(id);
+        api.getNoteXml(id);
         // TODO: test validations
     }
 
@@ -94,9 +95,9 @@ public class NoteApiTest {
      * @throws ApiException if the Api call fails
      */
     @Test
-    public void apiV1NoteSendPostTest() throws ApiException {
-        ApiV1NoteSendPostRequest apiV1NoteSendPostRequest = null;
-        ApiV1NoteSendPost202Response response = api.apiV1NoteSendPost(apiV1NoteSendPostRequest);
+    public void sendNoteTest() throws ApiException {
+        SendNoteRequest sendNoteRequest = null;
+        SendInvoice202Response response = api.sendNote(sendNoteRequest);
         // TODO: test validations
     }
 

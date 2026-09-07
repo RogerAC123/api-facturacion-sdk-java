@@ -27,10 +27,13 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
+import com.intifact.sdk.model.ExportProductoSunat200Response;
+import com.intifact.sdk.model.GetProductoSunat200Response;
 import com.intifact.sdk.model.InternalCertificatesExpiringGet401Response;
 import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
 import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import com.intifact.sdk.model.ListCatalogs200Response;
+import com.intifact.sdk.model.SearchProductoSunat200Response;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -75,6 +78,135 @@ public class SystemApi {
         this.localCustomBaseUrl = customBaseUrl;
     }
 
+    /**
+     * Build call for exportProductoSunat
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call exportProductoSunatCall(final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/catalogs/producto/export";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call exportProductoSunatValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+        return exportProductoSunatCall(_callback);
+
+    }
+
+    /**
+     * Descargar el Catálogo 25 completo (52.840 códigos)
+     * Devuelve &#x60;{ success, data: { version, total, items[] } }&#x60; con TODO el catálogo, en el mismo shape que devuelve la búsqueda. Pensado para cachearlo del lado del integrador: manda &#x60;If-None-Match&#x60; con el ETag recibido y la API responde 304 si nada cambió. Se sirve con &#x60;Content-Encoding: gzip&#x60; si el cliente lo acepta (~600 KB vs ~8 MB).
+     * @return ExportProductoSunat200Response
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ExportProductoSunat200Response exportProductoSunat() throws ApiException {
+        ApiResponse<ExportProductoSunat200Response> localVarResp = exportProductoSunatWithHttpInfo();
+        return localVarResp.getData();
+    }
+
+    /**
+     * Descargar el Catálogo 25 completo (52.840 códigos)
+     * Devuelve &#x60;{ success, data: { version, total, items[] } }&#x60; con TODO el catálogo, en el mismo shape que devuelve la búsqueda. Pensado para cachearlo del lado del integrador: manda &#x60;If-None-Match&#x60; con el ETag recibido y la API responde 304 si nada cambió. Se sirve con &#x60;Content-Encoding: gzip&#x60; si el cliente lo acepta (~600 KB vs ~8 MB).
+     * @return ApiResponse&lt;ExportProductoSunat200Response&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<ExportProductoSunat200Response> exportProductoSunatWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = exportProductoSunatValidateBeforeCall(null);
+        Type localVarReturnType = new TypeToken<ExportProductoSunat200Response>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Descargar el Catálogo 25 completo (52.840 códigos) (asynchronously)
+     * Devuelve &#x60;{ success, data: { version, total, items[] } }&#x60; con TODO el catálogo, en el mismo shape que devuelve la búsqueda. Pensado para cachearlo del lado del integrador: manda &#x60;If-None-Match&#x60; con el ETag recibido y la API responde 304 si nada cambió. Se sirve con &#x60;Content-Encoding: gzip&#x60; si el cliente lo acepta (~600 KB vs ~8 MB).
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call exportProductoSunatAsync(final ApiCallback<ExportProductoSunat200Response> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = exportProductoSunatValidateBeforeCall(_callback);
+        Type localVarReturnType = new TypeToken<ExportProductoSunat200Response>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
     /**
      * Build call for getCatalog
      * @param key  (required)
@@ -204,6 +336,149 @@ public class SystemApi {
 
         okhttp3.Call localVarCall = getCatalogValidateBeforeCall(key, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for getProductoSunat
+     * @param codigo  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getProductoSunatCall(@javax.annotation.Nullable String codigo, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/catalogs/producto/{codigo}"
+            .replace("{" + "codigo" + "}", localVarApiClient.escapeString(codigo.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getProductoSunatValidateBeforeCall(@javax.annotation.Nullable String codigo, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'codigo' is set
+        if (codigo == null) {
+            throw new ApiException("Missing the required parameter 'codigo' when calling getProductoSunat(Async)");
+        }
+
+        return getProductoSunatCall(codigo, _callback);
+
+    }
+
+    /**
+     * Obtener un Código de Producto SUNAT por código
+     * 
+     * @param codigo  (required)
+     * @return GetProductoSunat200Response
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public GetProductoSunat200Response getProductoSunat(@javax.annotation.Nullable String codigo) throws ApiException {
+        ApiResponse<GetProductoSunat200Response> localVarResp = getProductoSunatWithHttpInfo(codigo);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Obtener un Código de Producto SUNAT por código
+     * 
+     * @param codigo  (required)
+     * @return ApiResponse&lt;GetProductoSunat200Response&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<GetProductoSunat200Response> getProductoSunatWithHttpInfo(@javax.annotation.Nullable String codigo) throws ApiException {
+        okhttp3.Call localVarCall = getProductoSunatValidateBeforeCall(codigo, null);
+        Type localVarReturnType = new TypeToken<GetProductoSunat200Response>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Obtener un Código de Producto SUNAT por código (asynchronously)
+     * 
+     * @param codigo  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getProductoSunatAsync(@javax.annotation.Nullable String codigo, final ApiCallback<GetProductoSunat200Response> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getProductoSunatValidateBeforeCall(codigo, _callback);
+        Type localVarReturnType = new TypeToken<GetProductoSunat200Response>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
@@ -702,6 +977,164 @@ public class SystemApi {
 
         okhttp3.Call localVarCall = listCatalogsValidateBeforeCall(_callback);
         Type localVarReturnType = new TypeToken<ListCatalogs200Response>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for searchProductoSunat
+     * @param q  (required)
+     * @param nivel  (optional)
+     * @param limit  (optional, default to 20)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call searchProductoSunatCall(@javax.annotation.Nonnull String q, @javax.annotation.Nullable String nivel, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/api/v1/catalogs/producto/search";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (q != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("q", q));
+        }
+
+        if (nivel != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("nivel", nivel));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call searchProductoSunatValidateBeforeCall(@javax.annotation.Nonnull String q, @javax.annotation.Nullable String nivel, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'q' is set
+        if (q == null) {
+            throw new ApiException("Missing the required parameter 'q' when calling searchProductoSunat(Async)");
+        }
+
+        return searchProductoSunatCall(q, nivel, limit, _callback);
+
+    }
+
+    /**
+     * Buscar Código de Producto SUNAT (Catálogo 25 / UNSPSC)
+     * Busca por texto libre (sin distinguir tildes ni mayúsculas, todos los términos deben aparecer) o por prefijo de código si &#x60;q&#x60; son dígitos. Devuelve primero las CLASE: SUNAT exige llegar como mínimo a ese nivel y es la respuesta correcta en la mayoría de casos.
+     * @param q  (required)
+     * @param nivel  (optional)
+     * @param limit  (optional, default to 20)
+     * @return SearchProductoSunat200Response
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public SearchProductoSunat200Response searchProductoSunat(@javax.annotation.Nonnull String q, @javax.annotation.Nullable String nivel, @javax.annotation.Nullable Integer limit) throws ApiException {
+        ApiResponse<SearchProductoSunat200Response> localVarResp = searchProductoSunatWithHttpInfo(q, nivel, limit);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Buscar Código de Producto SUNAT (Catálogo 25 / UNSPSC)
+     * Busca por texto libre (sin distinguir tildes ni mayúsculas, todos los términos deben aparecer) o por prefijo de código si &#x60;q&#x60; son dígitos. Devuelve primero las CLASE: SUNAT exige llegar como mínimo a ese nivel y es la respuesta correcta en la mayoría de casos.
+     * @param q  (required)
+     * @param nivel  (optional)
+     * @param limit  (optional, default to 20)
+     * @return ApiResponse&lt;SearchProductoSunat200Response&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<SearchProductoSunat200Response> searchProductoSunatWithHttpInfo(@javax.annotation.Nonnull String q, @javax.annotation.Nullable String nivel, @javax.annotation.Nullable Integer limit) throws ApiException {
+        okhttp3.Call localVarCall = searchProductoSunatValidateBeforeCall(q, nivel, limit, null);
+        Type localVarReturnType = new TypeToken<SearchProductoSunat200Response>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Buscar Código de Producto SUNAT (Catálogo 25 / UNSPSC) (asynchronously)
+     * Busca por texto libre (sin distinguir tildes ni mayúsculas, todos los términos deben aparecer) o por prefijo de código si &#x60;q&#x60; son dígitos. Devuelve primero las CLASE: SUNAT exige llegar como mínimo a ese nivel y es la respuesta correcta en la mayoría de casos.
+     * @param q  (required)
+     * @param nivel  (optional)
+     * @param limit  (optional, default to 20)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Default Response </td><td>  -  </td></tr>
+        <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call searchProductoSunatAsync(@javax.annotation.Nonnull String q, @javax.annotation.Nullable String nivel, @javax.annotation.Nullable Integer limit, final ApiCallback<SearchProductoSunat200Response> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = searchProductoSunatValidateBeforeCall(q, nivel, limit, _callback);
+        Type localVarReturnType = new TypeToken<SearchProductoSunat200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

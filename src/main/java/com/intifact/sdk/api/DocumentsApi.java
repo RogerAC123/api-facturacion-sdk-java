@@ -533,8 +533,10 @@ public class DocumentsApi {
     /**
      * Build call for listDocuments
      * @param ruc  (optional)
+     * @param tenantId  (optional)
      * @param tipoDoc  (optional)
      * @param serie  (optional)
+     * @param correlativo  (optional)
      * @param estado  (optional)
      * @param env  (optional)
      * @param fechaDesde  (optional)
@@ -555,7 +557,7 @@ public class DocumentsApi {
         <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call listDocumentsCall(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call listDocumentsCall(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable UUID tenantId, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String correlativo, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -584,12 +586,20 @@ public class DocumentsApi {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("ruc", ruc));
         }
 
+        if (tenantId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("tenantId", tenantId));
+        }
+
         if (tipoDoc != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("tipoDoc", tipoDoc));
         }
 
         if (serie != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("serie", serie));
+        }
+
+        if (correlativo != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("correlativo", correlativo));
         }
 
         if (estado != null) {
@@ -640,8 +650,8 @@ public class DocumentsApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call listDocumentsValidateBeforeCall(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
-        return listDocumentsCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, _callback);
+    private okhttp3.Call listDocumentsValidateBeforeCall(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable UUID tenantId, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String correlativo, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback _callback) throws ApiException {
+        return listDocumentsCall(ruc, tenantId, tipoDoc, serie, correlativo, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, _callback);
 
     }
 
@@ -649,8 +659,10 @@ public class DocumentsApi {
      * Listar documentos con filtros y paginación
      * 
      * @param ruc  (optional)
+     * @param tenantId  (optional)
      * @param tipoDoc  (optional)
      * @param serie  (optional)
+     * @param correlativo  (optional)
      * @param estado  (optional)
      * @param env  (optional)
      * @param fechaDesde  (optional)
@@ -670,8 +682,8 @@ public class DocumentsApi {
         <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ListDocuments200Response listDocuments(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit) throws ApiException {
-        ApiResponse<ListDocuments200Response> localVarResp = listDocumentsWithHttpInfo(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
+    public ListDocuments200Response listDocuments(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable UUID tenantId, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String correlativo, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit) throws ApiException {
+        ApiResponse<ListDocuments200Response> localVarResp = listDocumentsWithHttpInfo(ruc, tenantId, tipoDoc, serie, correlativo, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
         return localVarResp.getData();
     }
 
@@ -679,8 +691,10 @@ public class DocumentsApi {
      * Listar documentos con filtros y paginación
      * 
      * @param ruc  (optional)
+     * @param tenantId  (optional)
      * @param tipoDoc  (optional)
      * @param serie  (optional)
+     * @param correlativo  (optional)
      * @param estado  (optional)
      * @param env  (optional)
      * @param fechaDesde  (optional)
@@ -700,8 +714,8 @@ public class DocumentsApi {
         <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<ListDocuments200Response> listDocumentsWithHttpInfo(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit) throws ApiException {
-        okhttp3.Call localVarCall = listDocumentsValidateBeforeCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, null);
+    public ApiResponse<ListDocuments200Response> listDocumentsWithHttpInfo(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable UUID tenantId, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String correlativo, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit) throws ApiException {
+        okhttp3.Call localVarCall = listDocumentsValidateBeforeCall(ruc, tenantId, tipoDoc, serie, correlativo, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, null);
         Type localVarReturnType = new TypeToken<ListDocuments200Response>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -710,8 +724,10 @@ public class DocumentsApi {
      * Listar documentos con filtros y paginación (asynchronously)
      * 
      * @param ruc  (optional)
+     * @param tenantId  (optional)
      * @param tipoDoc  (optional)
      * @param serie  (optional)
+     * @param correlativo  (optional)
      * @param estado  (optional)
      * @param env  (optional)
      * @param fechaDesde  (optional)
@@ -732,9 +748,9 @@ public class DocumentsApi {
         <tr><td> 429 </td><td> Default Response </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call listDocumentsAsync(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback<ListDocuments200Response> _callback) throws ApiException {
+    public okhttp3.Call listDocumentsAsync(@javax.annotation.Nullable String ruc, @javax.annotation.Nullable UUID tenantId, @javax.annotation.Nullable String tipoDoc, @javax.annotation.Nullable String serie, @javax.annotation.Nullable String correlativo, @javax.annotation.Nullable String estado, @javax.annotation.Nullable String env, @javax.annotation.Nullable String fechaDesde, @javax.annotation.Nullable String fechaHasta, @javax.annotation.Nullable String clienteNumDoc, @javax.annotation.Nullable Integer page, @javax.annotation.Nullable Integer limit, final ApiCallback<ListDocuments200Response> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = listDocumentsValidateBeforeCall(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, _callback);
+        okhttp3.Call localVarCall = listDocumentsValidateBeforeCall(ruc, tenantId, tipoDoc, serie, correlativo, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit, _callback);
         Type localVarReturnType = new TypeToken<ListDocuments200Response>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

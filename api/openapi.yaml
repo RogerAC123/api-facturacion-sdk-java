@@ -6,7 +6,7 @@ info:
   version: 1.0.0
 servers:
 - description: Local
-  url: http://localhost:3000
+  url: http://localhost:3099
 security:
 - apiKey: []
 tags:
@@ -1116,6 +1116,15 @@ paths:
         style: form
       - explode: true
         in: query
+        name: tenantId
+        required: false
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: form
+      - explode: true
+        in: query
         name: tipoDoc
         required: false
         schema:
@@ -1128,6 +1137,14 @@ paths:
         required: false
         schema:
           nullable: true
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: correlativo
+        required: false
+        schema:
+          pattern: "^\\d{1,8}$"
           type: string
         style: form
       - explode: true
@@ -1557,39 +1574,6 @@ paths:
       - company
       x-accepts:
       - application/json
-    post:
-      operationId: createCompany
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/createCompany_request"
-        required: true
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Crear empresa emisora
-      tags:
-      - company
-      x-content-type: application/json
-      x-accepts:
-      - application/json
   /api/v1/companies/{id}:
     get:
       operationId: getCompany
@@ -1625,86 +1609,6 @@ paths:
       summary: Detalle de empresa
       tags:
       - company
-      x-accepts:
-      - application/json
-    put:
-      operationId: updateCompany
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/updateCompany_request"
-        required: true
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Actualizar empresa
-      tags:
-      - company
-      x-content-type: application/json
-      x-accepts:
-      - application/json
-  /api/v1/companies/claim:
-    post:
-      description: "Prueba de titularidad = certificado digital del RUC. Si la cuenta\
-        \ que lo tiene no acreditó titularidad y no emitió documentos, el RUC pasa\
-        \ a tu cuenta."
-      operationId: claimCompany
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/claimCompany_request"
-        required: true
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: "Reclamar un RUC registrado por otra cuenta, con su certificado"
-      tags:
-      - company
-      x-content-type: application/json
       x-accepts:
       - application/json
   /api/v1/companies/{id}/logo:
@@ -1744,376 +1648,6 @@ paths:
       - company
       x-accepts:
       - application/json
-  /api/v1/webhooks:
-    get:
-      operationId: listWebhooks
-      parameters:
-      - explode: true
-        in: query
-        name: ruc
-        required: false
-        schema:
-          maxLength: 11
-          minLength: 11
-          type: string
-        style: form
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Listar webhooks (filtra por RUC opcional)
-      tags:
-      - webhooks
-      x-accepts:
-      - application/json
-    post:
-      description: Registra una URL que recibirá POSTs cuando ocurran los eventos
-        suscritos. Sin `empresaRuc` el webhook cubre TODAS las empresas de tu cuenta
-        (un solo secret; el `empresaRuc` viaja en cada payload). La respuesta incluye
-        el `secret` (mostrado UNA sola vez) — guárdalo para verificar las firmas HMAC-SHA256.
-      operationId: createWebhook
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/createWebhook_request"
-        required: true
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Crear endpoint webhook
-      tags:
-      - webhooks
-      x-content-type: application/json
-      x-accepts:
-      - application/json
-  /api/v1/webhooks/{id}:
-    delete:
-      operationId: deleteWebhook
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Eliminar webhook (también elimina su historial de deliveries)
-      tags:
-      - webhooks
-      x-accepts:
-      - application/json
-    get:
-      operationId: getWebhook
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Detalle de webhook (sin secret)
-      tags:
-      - webhooks
-      x-accepts:
-      - application/json
-    put:
-      operationId: updateWebhook
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/updateWebhook_request"
-        required: true
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: "Actualizar webhook (url, eventos, activación)"
-      tags:
-      - webhooks
-      x-content-type: application/json
-      x-accepts:
-      - application/json
-  /api/v1/webhooks/{id}/deliveries:
-    get:
-      operationId: listWebhookDeliveries
-      parameters:
-      - explode: true
-        in: query
-        name: limit
-        required: false
-        schema:
-          default: 50
-          maximum: 200
-          minimum: 1
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: success
-        required: false
-        schema:
-          enum:
-          - "true"
-          - "false"
-          type: string
-        style: form
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Log de entregas del webhook
-      tags:
-      - webhooks
-      x-accepts:
-      - application/json
-  /api/v1/webhooks/{id}/deliveries/{deliveryId}/redeliver:
-    post:
-      operationId: redeliverWebhookDelivery
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      - explode: false
-        in: path
-        name: deliveryId
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Reintentar manualmente una entrega
-      tags:
-      - webhooks
-      x-accepts:
-      - application/json
-  /api/v1/webhooks/{id}/test:
-    post:
-      operationId: testWebhook
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Enviar un evento de prueba (webhook.test)
-      tags:
-      - webhooks
-      x-accepts:
-      - application/json
-  /api/v1/webhooks/{id}/rotate-secret:
-    post:
-      description: Genera un nuevo secret HMAC y lo devuelve una única vez. Las firmas
-        de entregas posteriores usarán el nuevo secret; actualiza tu receptor antes
-        de rotar.
-      operationId: rotateWebhookSecret
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Rotar el secret de firma (devuelto UNA sola vez)
-      tags:
-      - webhooks
-      x-accepts:
-      - application/json
   /api/v1/companies/{id}/branches:
     get:
       operationId: listBranches
@@ -2149,151 +1683,6 @@ paths:
       summary: Listar establecimientos (sucursales) de una empresa
       tags:
       - branches
-      x-accepts:
-      - application/json
-    post:
-      description: El código debe coincidir con el que SUNAT asignó a la sucursal
-        al registrarla en el portal SOL (Mis Trámites > Establecimientos Anexos).
-      operationId: createBranch
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/createBranch_request"
-        required: true
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Crear establecimiento (sucursal)
-      tags:
-      - branches
-      x-content-type: application/json
-      x-accepts:
-      - application/json
-  /api/v1/companies/{id}/branches/{branchId}:
-    delete:
-      description: No se elimina físicamente porque puede haber documentos emitidos
-        desde ahí. Solo se desactiva (isActive=false).
-      operationId: deactivateBranch
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      - explode: false
-        in: path
-        name: branchId
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Desactivar establecimiento (soft-delete)
-      tags:
-      - branches
-      x-accepts:
-      - application/json
-    put:
-      operationId: updateBranch
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      - explode: false
-        in: path
-        name: branchId
-        required: true
-        schema:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/updateBranch_request"
-        required: true
-      responses:
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
-          description: Default Response
-        "429":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
-          description: Default Response
-      summary: Actualizar establecimiento
-      tags:
-      - branches
-      x-content-type: application/json
       x-accepts:
       - application/json
   /api/v1/plans:
@@ -4249,7 +3638,6 @@ components:
           type: string
         destinatarioEmail:
           maxLength: 120
-          nullable: true
           type: string
         entregaReferencia:
           maxLength: 500
@@ -4490,7 +3878,6 @@ components:
           type: string
         destinatarioEmail:
           maxLength: 120
-          nullable: true
           type: string
         entregaReferencia:
           maxLength: 500
@@ -4910,7 +4297,6 @@ components:
           type: string
         destinatarioEmail:
           maxLength: 120
-          nullable: true
           type: string
         entregaReferencia:
           maxLength: 500
@@ -5379,11 +4765,15 @@ components:
       example:
         ruc: ruc
         razonSocial: razonSocial
+        tenantId: tenantId
       properties:
         ruc:
           nullable: true
           type: string
         razonSocial:
+          nullable: true
+          type: string
+        tenantId:
           nullable: true
           type: string
       required:
@@ -5411,6 +4801,7 @@ components:
         company:
           ruc: ruc
           razonSocial: razonSocial
+          tenantId: tenantId
       properties:
         id:
           nullable: true
@@ -5525,6 +4916,7 @@ components:
           company:
             ruc: ruc
             razonSocial: razonSocial
+            tenantId: tenantId
         - id: id
           env: live
           tipoDoc: tipoDoc
@@ -5544,6 +4936,7 @@ components:
           company:
             ruc: ruc
             razonSocial: razonSocial
+            tenantId: tenantId
         pagination:
           page: 0.8008281904610115
           limit: 6.027456183070403
@@ -5750,372 +5143,6 @@ components:
       required:
       - data
       - success
-    createCompany_request_cuentasBancarias_inner:
-      properties:
-        nombre:
-          maxLength: 40
-          minLength: 1
-          type: string
-        bancos:
-          default: []
-          items:
-            maxLength: 20
-            type: string
-          maxItems: 2
-          type: array
-        tipoLabel:
-          maxLength: 40
-          type: string
-        titularLabel:
-          maxLength: 20
-          type: string
-        titular:
-          maxLength: 80
-          type: string
-        titularRuc:
-          maxLength: 11
-          type: string
-        numero:
-          maxLength: 40
-          minLength: 1
-          type: string
-        cci:
-          maxLength: 40
-          type: string
-      required:
-      - nombre
-      - numero
-      - tipoLabel
-    createCompany_request:
-      properties:
-        ruc:
-          maxLength: 11
-          minLength: 11
-          type: string
-        razonSocial:
-          maxLength: 255
-          minLength: 1
-          type: string
-        nombreComercial:
-          maxLength: 255
-          type: string
-        ubigeo:
-          maxLength: 6
-          minLength: 6
-          type: string
-        direccion:
-          maxLength: 500
-          type: string
-        departamento:
-          maxLength: 100
-          type: string
-        provincia:
-          maxLength: 100
-          type: string
-        distrito:
-          maxLength: 100
-          type: string
-        urbanizacion:
-          maxLength: 200
-          type: string
-        telefono:
-          maxLength: 50
-          type: string
-        email:
-          format: email
-          maxLength: 120
-          pattern: "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\
-            -]*\\.)+[A-Za-z]{2,}$"
-          type: string
-        web:
-          maxLength: 120
-          nullable: true
-          type: string
-        solUser:
-          maxLength: 50
-          type: string
-        solPassword:
-          maxLength: 100
-          type: string
-        tenantId:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        greClientId:
-          maxLength: 100
-          type: string
-        greClientSecret:
-          maxLength: 255
-          type: string
-        sunatProduction:
-          type: boolean
-        cuentasBancarias:
-          items:
-            $ref: "#/components/schemas/createCompany_request_cuentasBancarias_inner"
-          maxItems: 6
-          type: array
-          default: null
-        terminosTitulo:
-          maxLength: 120
-          nullable: true
-          type: string
-        terminos:
-          items:
-            maxLength: 200
-            type: string
-          maxItems: 8
-          type: array
-          default: null
-        notaPagoTitulo:
-          maxLength: 60
-          nullable: true
-          type: string
-        notaPagoTexto:
-          maxLength: 300
-          nullable: true
-          type: string
-      required:
-      - razonSocial
-      - ruc
-    updateCompany_request:
-      properties:
-        ruc:
-          maxLength: 11
-          minLength: 11
-          type: string
-        razonSocial:
-          maxLength: 255
-          minLength: 1
-          type: string
-        nombreComercial:
-          maxLength: 255
-          type: string
-        ubigeo:
-          maxLength: 6
-          minLength: 6
-          type: string
-        direccion:
-          maxLength: 500
-          type: string
-        departamento:
-          maxLength: 100
-          type: string
-        provincia:
-          maxLength: 100
-          type: string
-        distrito:
-          maxLength: 100
-          type: string
-        urbanizacion:
-          maxLength: 200
-          type: string
-        telefono:
-          maxLength: 50
-          type: string
-        email:
-          format: email
-          maxLength: 120
-          pattern: "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\
-            -]*\\.)+[A-Za-z]{2,}$"
-          type: string
-        web:
-          maxLength: 120
-          nullable: true
-          type: string
-        solUser:
-          maxLength: 50
-          type: string
-        solPassword:
-          maxLength: 100
-          type: string
-        tenantId:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        greClientId:
-          maxLength: 100
-          type: string
-        greClientSecret:
-          maxLength: 255
-          type: string
-        sunatProduction:
-          type: boolean
-        cuentasBancarias:
-          items:
-            $ref: "#/components/schemas/createCompany_request_cuentasBancarias_inner"
-          maxItems: 6
-          type: array
-          default: null
-        terminosTitulo:
-          maxLength: 120
-          nullable: true
-          type: string
-        terminos:
-          items:
-            maxLength: 200
-            type: string
-          maxItems: 8
-          type: array
-          default: null
-        notaPagoTitulo:
-          maxLength: 60
-          nullable: true
-          type: string
-        notaPagoTexto:
-          maxLength: 300
-          nullable: true
-          type: string
-    claimCompany_request:
-      properties:
-        ruc:
-          maxLength: 11
-          minLength: 11
-          type: string
-        password:
-          maxLength: 255
-          minLength: 1
-          type: string
-        content:
-          description: Base64 del .p12/.pfx
-          maxLength: 200000
-          minLength: 1
-          type: string
-        name:
-          maxLength: 255
-          minLength: 1
-          type: string
-        razonSocial:
-          maxLength: 255
-          minLength: 1
-          type: string
-        tenantId:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-      required:
-      - content
-      - password
-      - ruc
-    createWebhook_request:
-      properties:
-        empresaRuc:
-          maxLength: 11
-          minLength: 11
-          type: string
-        tenantId:
-          format: uuid
-          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-          type: string
-        url:
-          format: uri
-          maxLength: 500
-          type: string
-        events:
-          items:
-            enum:
-            - document.accepted
-            - document.rejected
-            - document.queue_failed
-            - document.retried
-            - ticket.resolved
-            type: string
-          maxItems: 5
-          minItems: 1
-          type: array
-          default: null
-        description:
-          maxLength: 500
-          type: string
-        secret:
-          maxLength: 200
-          minLength: 16
-          type: string
-      required:
-      - events
-      - url
-    updateWebhook_request:
-      properties:
-        url:
-          format: uri
-          maxLength: 500
-          type: string
-        events:
-          items:
-            enum:
-            - document.accepted
-            - document.rejected
-            - document.queue_failed
-            - document.retried
-            - ticket.resolved
-            type: string
-          maxItems: 5
-          minItems: 1
-          type: array
-          default: null
-        description:
-          maxLength: 500
-          type: string
-        isActive:
-          type: boolean
-    createBranch_request:
-      properties:
-        codigo:
-          pattern: "^\\d{4}$"
-          type: string
-        nombre:
-          maxLength: 255
-          type: string
-        ubigeo:
-          maxLength: 6
-          minLength: 6
-          type: string
-        direccion:
-          maxLength: 500
-          type: string
-        departamento:
-          maxLength: 100
-          type: string
-        provincia:
-          maxLength: 100
-          type: string
-        distrito:
-          maxLength: 100
-          type: string
-        urbanizacion:
-          maxLength: 200
-          type: string
-        isActive:
-          default: true
-          type: boolean
-      required:
-      - codigo
-    updateBranch_request:
-      properties:
-        nombre:
-          maxLength: 255
-          type: string
-        ubigeo:
-          maxLength: 6
-          minLength: 6
-          type: string
-        direccion:
-          maxLength: 500
-          type: string
-        departamento:
-          maxLength: 100
-          type: string
-        provincia:
-          maxLength: 100
-          type: string
-        distrito:
-          maxLength: 100
-          type: string
-        urbanizacion:
-          maxLength: 200
-          type: string
-        isActive:
-          default: true
-          type: boolean
     createPlan_request:
       properties:
         code:

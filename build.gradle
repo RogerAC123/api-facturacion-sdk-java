@@ -5,7 +5,7 @@ apply plugin: 'com.diffplug.spotless'
 apply plugin: 'com.vanniktech.maven.publish'
 
 group = 'com.intifact'
-version = '2.1.0'
+version = '3.0.0'
 
 buildscript {
     repositories {

@@ -1,6 +1,6 @@
 # NoteApi
 
-All URIs are relative to *http://localhost:3000*
+All URIs are relative to *http://localhost:3099*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -32,7 +32,7 @@ import com.intifact.sdk.api.NoteApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -100,7 +100,7 @@ import com.intifact.sdk.api.NoteApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -166,7 +166,7 @@ import com.intifact.sdk.api.NoteApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -232,7 +232,7 @@ import com.intifact.sdk.api.NoteApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -300,7 +300,7 @@ import com.intifact.sdk.api.NoteApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");

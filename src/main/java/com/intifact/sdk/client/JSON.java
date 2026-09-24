@@ -102,7 +102,6 @@ public class JSON {
         gsonBuilder.registerTypeAdapter(byte[].class, byteArrayAdapter);
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CancelBoletaRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CancelInvoiceRequest.CustomTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ClaimCompanyRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ComputeInvoice200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ComputeInvoice200ResponseData.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ComputeInvoice200ResponseDataItemsInner.CustomTypeAdapterFactory());
@@ -111,11 +110,7 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ComputeInvoiceRequestItemsInnerDescuento.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ConsultarCdr200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ConsultarCdrRequest.CustomTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreateBranchRequest.CustomTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreateCompanyRequest.CustomTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreateCompanyRequestCuentasBancariasInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreatePlanRequest.CustomTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreateWebhookRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ExportProductoSunat200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ExportProductoSunat200ResponseData.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ExportProductoSunat200ResponseDataItemsInner.CustomTypeAdapterFactory());
@@ -178,10 +173,7 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendVoidedRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendVoidedRequestItemsInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SignupRequest.CustomTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UpdateBranchRequest.CustomTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UpdateCompanyRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UpdatePlanRequest.CustomTypeAdapterFactory());
-        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UpdateWebhookRequest.CustomTypeAdapterFactory());
         gson = gsonBuilder.create();
     }
 

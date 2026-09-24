@@ -14,12 +14,9 @@
 package com.intifact.sdk.api;
 
 import com.intifact.sdk.client.ApiException;
-import com.intifact.sdk.model.ClaimCompanyRequest;
-import com.intifact.sdk.model.CreateCompanyRequest;
 import com.intifact.sdk.model.InternalCertificatesExpiringGet403Response;
 import com.intifact.sdk.model.InternalCertificatesExpiringGet429Response;
 import java.util.UUID;
-import com.intifact.sdk.model.UpdateCompanyRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -35,32 +32,6 @@ import java.util.Map;
 public class CompanyApiTest {
 
     private final CompanyApi api = new CompanyApi();
-
-    /**
-     * Reclamar un RUC registrado por otra cuenta, con su certificado
-     *
-     * Prueba de titularidad &#x3D; certificado digital del RUC. Si la cuenta que lo tiene no acreditó titularidad y no emitió documentos, el RUC pasa a tu cuenta.
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void claimCompanyTest() throws ApiException {
-        ClaimCompanyRequest claimCompanyRequest = null;
-        api.claimCompany(claimCompanyRequest);
-        // TODO: test validations
-    }
-
-    /**
-     * Crear empresa emisora
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void createCompanyTest() throws ApiException {
-        CreateCompanyRequest createCompanyRequest = null;
-        api.createCompany(createCompanyRequest);
-        // TODO: test validations
-    }
 
     /**
      * Detalle de empresa
@@ -94,19 +65,6 @@ public class CompanyApiTest {
     @Test
     public void listCompaniesTest() throws ApiException {
         api.listCompanies();
-        // TODO: test validations
-    }
-
-    /**
-     * Actualizar empresa
-     *
-     * @throws ApiException if the Api call fails
-     */
-    @Test
-    public void updateCompanyTest() throws ApiException {
-        UUID id = null;
-        UpdateCompanyRequest updateCompanyRequest = null;
-        api.updateCompany(id, updateCompanyRequest);
         // TODO: test validations
     }
 

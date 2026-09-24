@@ -9,6 +9,7 @@
 |------------ | ------------- | ------------- | -------------|
 |**ruc** | **String** |  |  |
 |**razonSocial** | **String** |  |  |
+|**tenantId** | **String** |  |  [optional] |
 
 
 

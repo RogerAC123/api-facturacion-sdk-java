@@ -61,10 +61,10 @@ import com.intifact.sdk.client.auth.ApiKeyAuth;
  */
 public class ApiClient {
 
-    protected String basePath = "http://localhost:3000";
+    protected String basePath = "http://localhost:3099";
     protected List<ServerConfiguration> servers = new ArrayList<ServerConfiguration>(Arrays.asList(
     new ServerConfiguration(
-      "http://localhost:3000",
+      "http://localhost:3099",
       "Local",
       new HashMap<String, ServerVariable>()
     )
@@ -142,7 +142,7 @@ public class ApiClient {
         json = new JSON();
 
         // Set default User-Agent.
-        setUserAgent("OpenAPI-Generator/2.1.0/java");
+        setUserAgent("OpenAPI-Generator/3.0.0/java");
 
         authentications = new HashMap<String, Authentication>();
     }
@@ -159,7 +159,7 @@ public class ApiClient {
     /**
      * Set base path
      *
-     * @param basePath Base path of the URL (e.g http://localhost:3000)
+     * @param basePath Base path of the URL (e.g http://localhost:3099)
      * @return An instance of ApiClient
      */
     public ApiClient setBasePath(String basePath) {

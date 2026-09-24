@@ -89,8 +89,10 @@ public class DocumentsApiTest {
     @Test
     public void listDocumentsTest() throws ApiException {
         String ruc = null;
+        UUID tenantId = null;
         String tipoDoc = null;
         String serie = null;
+        String correlativo = null;
         String estado = null;
         String env = null;
         String fechaDesde = null;
@@ -98,7 +100,7 @@ public class DocumentsApiTest {
         String clienteNumDoc = null;
         Integer page = null;
         Integer limit = null;
-        ListDocuments200Response response = api.listDocuments(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
+        ListDocuments200Response response = api.listDocuments(ruc, tenantId, tipoDoc, serie, correlativo, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
         // TODO: test validations
     }
 

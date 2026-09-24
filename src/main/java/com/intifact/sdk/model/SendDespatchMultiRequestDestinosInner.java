@@ -25,7 +25,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -54,7 +53,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * SendDespatchMultiRequestDestinosInner
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-07T00:25:59.873852369Z[Etc/UTC]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-24T07:54:53.593354100-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class SendDespatchMultiRequestDestinosInner {
   public static final String SERIALIZED_NAME_CLIENTE_TIPO_DOC = "clienteTipoDoc";
   @SerializedName(SERIALIZED_NAME_CLIENTE_TIPO_DOC)
@@ -607,20 +606,9 @@ public class SendDespatchMultiRequestDestinosInner {
         Objects.equals(this.detalle, sendDespatchMultiRequestDestinosInner.detalle);
   }
 
-  private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
-    return a == b || (a != null && b != null && a.isPresent() && b.isPresent() && Objects.deepEquals(a.get(), b.get()));
-  }
-
   @Override
   public int hashCode() {
     return Objects.hash(clienteTipoDoc, clienteNumDoc, clienteRazonSocial, clienteDireccion, clienteDistrito, clienteProvincia, clienteDepartamento, destinatarioContacto, destinatarioTelefono, destinatarioEmail, entregaReferencia, modalidadEntrega, agenciaNombre, agenciaSede, guiaLlegadaUbigeo, guiaLlegadaDireccion, guiaPesoTotal, guiaUndPesoTotal, detalle);
-  }
-
-  private static <T> int hashCodeNullable(JsonNullable<T> a) {
-    if (a == null) {
-      return 1;
-    }
-    return a.isPresent() ? Arrays.deepHashCode(new Object[]{a.get()}) : 31;
   }
 
   @Override

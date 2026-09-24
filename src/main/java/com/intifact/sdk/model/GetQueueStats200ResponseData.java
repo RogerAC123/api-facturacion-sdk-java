@@ -52,7 +52,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * GetQueueStats200ResponseData
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-07T00:25:59.873852369Z[Etc/UTC]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-24T07:54:53.593354100-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class GetQueueStats200ResponseData {
   public static final String SERIALIZED_NAME_SUNAT_SEND = "sunat-send";
   @SerializedName(SERIALIZED_NAME_SUNAT_SEND)

@@ -1,6 +1,6 @@
 # DocumentsApi
 
-All URIs are relative to *http://localhost:3000*
+All URIs are relative to *http://localhost:3099*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -33,7 +33,7 @@ import com.intifact.sdk.api.DocumentsApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -103,7 +103,7 @@ import com.intifact.sdk.api.DocumentsApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -171,7 +171,7 @@ import com.intifact.sdk.api.DocumentsApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -227,7 +227,7 @@ public class Example {
 
 <a id="listDocuments"></a>
 # **listDocuments**
-> ListDocuments200Response listDocuments(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit)
+> ListDocuments200Response listDocuments(ruc, tenantId, tipoDoc, serie, correlativo, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit)
 
 Listar documentos con filtros y paginación
 
@@ -244,7 +244,7 @@ import com.intifact.sdk.api.DocumentsApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -252,8 +252,10 @@ public class Example {
 
     DocumentsApi apiInstance = new DocumentsApi(defaultClient);
     String ruc = "ruc_example"; // String | 
+    UUID tenantId = UUID.randomUUID(); // UUID | 
     String tipoDoc = "tipoDoc_example"; // String | 
     String serie = "serie_example"; // String | 
+    String correlativo = "correlativo_example"; // String | 
     String estado = "estado_example"; // String | 
     String env = "live"; // String | 
     String fechaDesde = "fechaDesde_example"; // String | 
@@ -262,7 +264,7 @@ public class Example {
     Integer page = 1; // Integer | 
     Integer limit = 20; // Integer | 
     try {
-      ListDocuments200Response result = apiInstance.listDocuments(ruc, tipoDoc, serie, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
+      ListDocuments200Response result = apiInstance.listDocuments(ruc, tenantId, tipoDoc, serie, correlativo, estado, env, fechaDesde, fechaHasta, clienteNumDoc, page, limit);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling DocumentsApi#listDocuments");
@@ -280,8 +282,10 @@ public class Example {
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **ruc** | **String**|  | [optional] |
+| **tenantId** | **UUID**|  | [optional] |
 | **tipoDoc** | **String**|  | [optional] |
 | **serie** | **String**|  | [optional] |
+| **correlativo** | **String**|  | [optional] |
 | **estado** | **String**|  | [optional] |
 | **env** | **String**|  | [optional] [enum: live, test] |
 | **fechaDesde** | **String**|  | [optional] |
@@ -332,7 +336,7 @@ import com.intifact.sdk.api.DocumentsApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -404,7 +408,7 @@ import com.intifact.sdk.api.DocumentsApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");

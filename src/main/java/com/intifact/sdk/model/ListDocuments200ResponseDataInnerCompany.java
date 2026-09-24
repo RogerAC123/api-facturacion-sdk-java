@@ -21,6 +21,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,7 +50,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * ListDocuments200ResponseDataInnerCompany
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-07T00:25:59.873852369Z[Etc/UTC]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-24T07:54:53.593354100-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class ListDocuments200ResponseDataInnerCompany {
   public static final String SERIALIZED_NAME_RUC = "ruc";
   @SerializedName(SERIALIZED_NAME_RUC)
@@ -60,6 +61,11 @@ public class ListDocuments200ResponseDataInnerCompany {
   @SerializedName(SERIALIZED_NAME_RAZON_SOCIAL)
   @javax.annotation.Nullable
   private String razonSocial;
+
+  public static final String SERIALIZED_NAME_TENANT_ID = "tenantId";
+  @SerializedName(SERIALIZED_NAME_TENANT_ID)
+  @javax.annotation.Nullable
+  private String tenantId;
 
   public ListDocuments200ResponseDataInnerCompany() {
   }
@@ -99,6 +105,25 @@ public class ListDocuments200ResponseDataInnerCompany {
 
   public void setRazonSocial(@javax.annotation.Nullable String razonSocial) {
     this.razonSocial = razonSocial;
+  }
+
+
+  public ListDocuments200ResponseDataInnerCompany tenantId(@javax.annotation.Nullable String tenantId) {
+    this.tenantId = tenantId;
+    return this;
+  }
+
+  /**
+   * Get tenantId
+   * @return tenantId
+   */
+  @javax.annotation.Nullable
+  public String getTenantId() {
+    return tenantId;
+  }
+
+  public void setTenantId(@javax.annotation.Nullable String tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**
@@ -157,13 +182,25 @@ public class ListDocuments200ResponseDataInnerCompany {
     }
     ListDocuments200ResponseDataInnerCompany listDocuments200ResponseDataInnerCompany = (ListDocuments200ResponseDataInnerCompany) o;
     return Objects.equals(this.ruc, listDocuments200ResponseDataInnerCompany.ruc) &&
-        Objects.equals(this.razonSocial, listDocuments200ResponseDataInnerCompany.razonSocial)&&
+        Objects.equals(this.razonSocial, listDocuments200ResponseDataInnerCompany.razonSocial) &&
+        Objects.equals(this.tenantId, listDocuments200ResponseDataInnerCompany.tenantId)&&
         Objects.equals(this.additionalProperties, listDocuments200ResponseDataInnerCompany.additionalProperties);
+  }
+
+  private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
+    return a == b || (a != null && b != null && a.isPresent() && b.isPresent() && Objects.deepEquals(a.get(), b.get()));
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ruc, razonSocial, additionalProperties);
+    return Objects.hash(ruc, razonSocial, tenantId, additionalProperties);
+  }
+
+  private static <T> int hashCodeNullable(JsonNullable<T> a) {
+    if (a == null) {
+      return 1;
+    }
+    return a.isPresent() ? Arrays.deepHashCode(new Object[]{a.get()}) : 31;
   }
 
   @Override
@@ -172,6 +209,7 @@ public class ListDocuments200ResponseDataInnerCompany {
     sb.append("class ListDocuments200ResponseDataInnerCompany {\n");
     sb.append("    ruc: ").append(toIndentedString(ruc)).append("\n");
     sb.append("    razonSocial: ").append(toIndentedString(razonSocial)).append("\n");
+    sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -191,7 +229,7 @@ public class ListDocuments200ResponseDataInnerCompany {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("ruc", "razonSocial"));
+    openapiFields = new HashSet<String>(Arrays.asList("ruc", "razonSocial", "tenantId"));
 
     // a set of required properties/fields (JSON key names)
     openapiRequiredFields = new HashSet<String>(Arrays.asList("ruc", "razonSocial"));
@@ -222,6 +260,9 @@ public class ListDocuments200ResponseDataInnerCompany {
       }
       if ((jsonObj.get("razonSocial") != null && !jsonObj.get("razonSocial").isJsonNull()) && !jsonObj.get("razonSocial").isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `razonSocial` to be a primitive type in the JSON string but got `%s`", jsonObj.get("razonSocial").toString()));
+      }
+      if ((jsonObj.get("tenantId") != null && !jsonObj.get("tenantId").isJsonNull()) && !jsonObj.get("tenantId").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `tenantId` to be a primitive type in the JSON string but got `%s`", jsonObj.get("tenantId").toString()));
       }
   }
 

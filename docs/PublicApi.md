@@ -1,6 +1,6 @@
 # PublicApi
 
-All URIs are relative to *http://localhost:3000*
+All URIs are relative to *http://localhost:3099*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -29,7 +29,7 @@ import com.intifact.sdk.api.PublicApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
 
     PublicApi apiInstance = new PublicApi(defaultClient);
     String ruc = "ruc_example"; // String | 
@@ -100,7 +100,7 @@ import com.intifact.sdk.api.PublicApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
 
     PublicApi apiInstance = new PublicApi(defaultClient);
     String ruc = "ruc_example"; // String | 
@@ -171,7 +171,7 @@ import com.intifact.sdk.api.PublicApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3000");
+    defaultClient.setBasePath("http://localhost:3099");
 
     PublicApi apiInstance = new PublicApi(defaultClient);
     String ruc = "ruc_example"; // String | 

@@ -27,6 +27,9 @@ docs/GetNextCorrelativo200ResponseData.md
 docs/GetProductoSunat200Response.md
 docs/GetQueueStats200Response.md
 docs/GetQueueStats200ResponseData.md
+docs/GetSummary200Response.md
+docs/GetSummary200ResponseData.md
+docs/GetSummary200ResponseDataItemsInner.md
 docs/GetTicketStatus200Response.md
 docs/GetTicketStatus200ResponseCdrResponse.md
 docs/GetTicketStatus202Response.md
@@ -147,6 +150,9 @@ src/main/java/com/intifact/sdk/model/GetNextCorrelativo200ResponseData.java
 src/main/java/com/intifact/sdk/model/GetProductoSunat200Response.java
 src/main/java/com/intifact/sdk/model/GetQueueStats200Response.java
 src/main/java/com/intifact/sdk/model/GetQueueStats200ResponseData.java
+src/main/java/com/intifact/sdk/model/GetSummary200Response.java
+src/main/java/com/intifact/sdk/model/GetSummary200ResponseData.java
+src/main/java/com/intifact/sdk/model/GetSummary200ResponseDataItemsInner.java
 src/main/java/com/intifact/sdk/model/GetTicketStatus200Response.java
 src/main/java/com/intifact/sdk/model/GetTicketStatus200ResponseCdrResponse.java
 src/main/java/com/intifact/sdk/model/GetTicketStatus202Response.java
@@ -233,6 +239,9 @@ src/test/java/com/intifact/sdk/model/GetNextCorrelativo200ResponseTest.java
 src/test/java/com/intifact/sdk/model/GetProductoSunat200ResponseTest.java
 src/test/java/com/intifact/sdk/model/GetQueueStats200ResponseDataTest.java
 src/test/java/com/intifact/sdk/model/GetQueueStats200ResponseTest.java
+src/test/java/com/intifact/sdk/model/GetSummary200ResponseDataItemsInnerTest.java
+src/test/java/com/intifact/sdk/model/GetSummary200ResponseDataTest.java
+src/test/java/com/intifact/sdk/model/GetSummary200ResponseTest.java
 src/test/java/com/intifact/sdk/model/GetTicketStatus200ResponseCdrResponseTest.java
 src/test/java/com/intifact/sdk/model/GetTicketStatus200ResponseTest.java
 src/test/java/com/intifact/sdk/model/GetTicketStatus202ResponseCdrResponseTest.java

@@ -1,6 +1,6 @@
 # DespatchApi
 
-All URIs are relative to *http://localhost:3099*
+All URIs are relative to *https://api-facturacion.intifact.com*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -31,7 +31,7 @@ import com.intifact.sdk.api.DespatchApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3099");
+    defaultClient.setBasePath("https://api-facturacion.intifact.com");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -97,7 +97,7 @@ import com.intifact.sdk.api.DespatchApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3099");
+    defaultClient.setBasePath("https://api-facturacion.intifact.com");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -165,7 +165,7 @@ import com.intifact.sdk.api.DespatchApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3099");
+    defaultClient.setBasePath("https://api-facturacion.intifact.com");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -233,7 +233,7 @@ import com.intifact.sdk.api.DespatchApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3099");
+    defaultClient.setBasePath("https://api-facturacion.intifact.com");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -305,7 +305,7 @@ import com.intifact.sdk.api.DespatchApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3099");
+    defaultClient.setBasePath("https://api-facturacion.intifact.com");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");
@@ -376,7 +376,7 @@ import com.intifact.sdk.api.DespatchApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost:3099");
+    defaultClient.setBasePath("https://api-facturacion.intifact.com");
     
     // Configure HTTP bearer authorization: apiKey
     HttpBearerAuth apiKey = (HttpBearerAuth) defaultClient.getAuthentication("apiKey");

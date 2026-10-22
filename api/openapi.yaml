@@ -5,8 +5,8 @@ info:
   title: API de Facturación Electrónica SUNAT
   version: 1.0.0
 servers:
-- description: Local
-  url: http://localhost:3099
+- description: Producción
+  url: https://api-facturacion.intifact.com
 security:
 - apiKey: []
 tags:
@@ -20,6 +20,9 @@ tags:
   name: summary
 - description: Consulta y gestión de documentos
   name: documents
+- description: "SIRE (uso interno del ERP, solo master): compras, conciliación de\
+    \ ventas e IGV estimado"
+  name: sire
 - description: CRUD de empresas emisoras
   name: company
 - description: Estado de las colas BullMQ
@@ -1005,6 +1008,55 @@ paths:
                 $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Consultar estado de ticket asíncrono (SOAP o GRE)
+      tags:
+      - summary
+      x-accepts:
+      - application/json
+  /api/v1/summaries/{id}:
+    get:
+      operationId: getSummary
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getSummary_200_response"
+          description: Default Response
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Estado de un Resumen Diario (RC) o Comunicación de Baja (RA)
       tags:
       - summary
       x-accepts:
@@ -4704,6 +4756,164 @@ components:
       required:
       - message
       - statusCode
+      - success
+    getSummary_200_response_data_items_inner:
+      additionalProperties: {}
+      example:
+        tipoDoc: tipoDoc
+        serie: serie
+        correlativo: correlativo
+        documentId: documentId
+        estadoDocumento: estadoDocumento
+      properties:
+        tipoDoc:
+          nullable: true
+          type: string
+        serie:
+          nullable: true
+          type: string
+        correlativo:
+          nullable: true
+          type: string
+        documentId:
+          nullable: true
+          type: string
+        estadoDocumento:
+          nullable: true
+          type: string
+      required:
+      - correlativo
+      - documentId
+      - estadoDocumento
+      - serie
+      - tipoDoc
+    getSummary_200_response_data:
+      additionalProperties: {}
+      example:
+        id: id
+        env: env
+        tipo: tipo
+        correlativo: correlativo
+        fechaEmision: fechaEmision
+        fechaReferencia: fechaReferencia
+        estado: estado
+        ticket: ticket
+        codigoRespuesta: codigoRespuesta
+        descripcionRespuesta: descripcionRespuesta
+        ultimoError: ultimoError
+        intentos: 0.8008281904610115
+        tieneCdr: true
+        items:
+        - tipoDoc: tipoDoc
+          serie: serie
+          correlativo: correlativo
+          documentId: documentId
+          estadoDocumento: estadoDocumento
+        - tipoDoc: tipoDoc
+          serie: serie
+          correlativo: correlativo
+          documentId: documentId
+          estadoDocumento: estadoDocumento
+        createdAt: createdAt
+      properties:
+        id:
+          nullable: true
+          type: string
+        env:
+          nullable: true
+          type: string
+        tipo:
+          nullable: true
+          type: string
+        correlativo:
+          nullable: true
+          type: string
+        fechaEmision:
+          nullable: true
+          type: string
+        fechaReferencia:
+          nullable: true
+          type: string
+        estado:
+          nullable: true
+          type: string
+        ticket:
+          nullable: true
+          type: string
+        codigoRespuesta:
+          nullable: true
+          type: string
+        descripcionRespuesta:
+          nullable: true
+          type: string
+        ultimoError:
+          nullable: true
+          type: string
+        intentos:
+          type: number
+        tieneCdr:
+          type: boolean
+        items:
+          items:
+            $ref: "#/components/schemas/getSummary_200_response_data_items_inner"
+          type: array
+          default: null
+        createdAt:
+          nullable: true
+          type: string
+      required:
+      - codigoRespuesta
+      - correlativo
+      - createdAt
+      - descripcionRespuesta
+      - env
+      - estado
+      - fechaEmision
+      - fechaReferencia
+      - id
+      - intentos
+      - items
+      - ticket
+      - tieneCdr
+      - tipo
+      - ultimoError
+    getSummary_200_response:
+      additionalProperties: {}
+      example:
+        success: true
+        data:
+          id: id
+          env: env
+          tipo: tipo
+          correlativo: correlativo
+          fechaEmision: fechaEmision
+          fechaReferencia: fechaReferencia
+          estado: estado
+          ticket: ticket
+          codigoRespuesta: codigoRespuesta
+          descripcionRespuesta: descripcionRespuesta
+          ultimoError: ultimoError
+          intentos: 0.8008281904610115
+          tieneCdr: true
+          items:
+          - tipoDoc: tipoDoc
+            serie: serie
+            correlativo: correlativo
+            documentId: documentId
+            estadoDocumento: estadoDocumento
+          - tipoDoc: tipoDoc
+            serie: serie
+            correlativo: correlativo
+            documentId: documentId
+            estadoDocumento: estadoDocumento
+          createdAt: createdAt
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/getSummary_200_response_data"
+      required:
+      - data
       - success
     cancelInvoice_request:
       properties:

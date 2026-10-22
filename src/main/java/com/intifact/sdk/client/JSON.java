@@ -119,6 +119,9 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetProductoSunat200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetQueueStats200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetQueueStats200ResponseData.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetSummary200Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetSummary200ResponseData.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetSummary200ResponseDataItemsInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetTicketStatus200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetTicketStatus200ResponseCdrResponse.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.GetTicketStatus202Response.CustomTypeAdapterFactory());

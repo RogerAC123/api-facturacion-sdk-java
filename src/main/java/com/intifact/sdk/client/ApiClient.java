@@ -61,11 +61,11 @@ import com.intifact.sdk.client.auth.ApiKeyAuth;
  */
 public class ApiClient {
 
-    protected String basePath = "http://localhost:3099";
+    protected String basePath = "https://api-facturacion.intifact.com";
     protected List<ServerConfiguration> servers = new ArrayList<ServerConfiguration>(Arrays.asList(
     new ServerConfiguration(
-      "http://localhost:3099",
-      "Local",
+      "https://api-facturacion.intifact.com",
+      "Producción",
       new HashMap<String, ServerVariable>()
     )
   ));
@@ -159,7 +159,7 @@ public class ApiClient {
     /**
      * Set base path
      *
-     * @param basePath Base path of the URL (e.g http://localhost:3099)
+     * @param basePath Base path of the URL (e.g https://api-facturacion.intifact.com)
      * @return An instance of ApiClient
      */
     public ApiClient setBasePath(String basePath) {

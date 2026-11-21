@@ -50,7 +50,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * SendInvoiceRequestDetraccion
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-24T07:54:53.593354100-05:00[America/Lima]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-11-21T10:12:02.865034800-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class SendInvoiceRequestDetraccion {
   public static final String SERIALIZED_NAME_COD_BIEN_SERVICIO = "codBienServicio";
   @SerializedName(SERIALIZED_NAME_COD_BIEN_SERVICIO)

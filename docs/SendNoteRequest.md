@@ -12,6 +12,7 @@
 |**serie** | **String** |  |  |
 |**correlativo** | **String** |  |  |
 |**tipoMoneda** | **String** |  |  [optional] |
+|**tipoCambio** | **BigDecimal** |  |  [optional] |
 |**fechaEmision** | **String** |  |  |
 |**empresaRuc** | **String** |  |  |
 |**establecimientoCodigo** | **String** |  |  [optional] |

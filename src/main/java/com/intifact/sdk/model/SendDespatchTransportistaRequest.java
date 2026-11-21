@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -56,7 +57,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * SendDespatchTransportistaRequest
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-24T07:54:53.593354100-05:00[America/Lima]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-11-21T10:12:02.865034800-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class SendDespatchTransportistaRequest {
   /**
    * Gets or Sets tipoDoc
@@ -1235,9 +1236,20 @@ public class SendDespatchTransportistaRequest {
         Objects.equals(this.detalle, sendDespatchTransportistaRequest.detalle);
   }
 
+  private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
+    return a == b || (a != null && b != null && a.isPresent() && b.isPresent() && Objects.deepEquals(a.get(), b.get()));
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(tipoDoc, serie, correlativo, observacion, fechaEmision, empresaRuc, establecimientoCodigo, transportistaNroMtc, destinatarioTipoDoc, destinatarioNumDoc, destinatarioRazonSocial, destinatarioDireccion, destinatarioDistrito, destinatarioProvincia, destinatarioDepartamento, destinatarioContacto, destinatarioTelefono, destinatarioEmail, entregaReferencia, modalidadEntrega, agenciaNombre, agenciaSede, remitenteTipoDoc, remitenteNumDoc, remitenteRazonSocial, guiaCodTraslado, guiaDesTraslado, guiaPesoTotal, guiaUndPesoTotal, guiaNumBultos, guiaFecTraslado, chofer, guiaVehiculoPlaca, guiaVehiculoTuc, vehiculosSecundarios, guiaPartidaUbigeo, guiaPartidaDireccion, guiaLlegadaUbigeo, guiaLlegadaDireccion, documentosRelacionados, detalle);
+  }
+
+  private static <T> int hashCodeNullable(JsonNullable<T> a) {
+    if (a == null) {
+      return 1;
+    }
+    return a.isPresent() ? Arrays.deepHashCode(new Object[]{a.get()}) : 31;
   }
 
   @Override

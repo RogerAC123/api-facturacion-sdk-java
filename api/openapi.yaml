@@ -5,8 +5,8 @@ info:
   title: API de Facturación Electrónica SUNAT
   version: 1.0.0
 servers:
-- description: Producción
-  url: https://api-facturacion.intifact.com
+- description: Local
+  url: http://localhost:3000
 security:
 - apiKey: []
 tags:
@@ -14,6 +14,10 @@ tags:
   name: invoice
 - description: "Notas de Crédito/Débito (07, 08)"
   name: note
+- description: Comprobante de Retención (20) — agentes de retención del IGV
+  name: retention
+- description: Liquidación de Compra (04) — compras a personas sin RUC
+  name: purchase
 - description: Guías de Remisión (09 — GRE REST)
   name: despatch
 - description: Resumen Diario / Comunicación de Baja
@@ -27,6 +31,8 @@ tags:
   name: company
 - description: Estado de las colas BullMQ
   name: queues
+- description: "Consumo del plan: comprobantes emitidos en el periodo y su límite"
+  name: usage
 - description: Cuentas cliente del SaaS (poseen Companies y ApiKeys) — solo master
   name: tenants
 - description: "Signup, login y sesión de usuarios humanos"
@@ -1663,7 +1669,167 @@ paths:
       - company
       x-accepts:
       - application/json
+    put:
+      operationId: updateCompany
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateCompany_request"
+        required: true
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Actualizar empresa
+      tags:
+      - company
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/companies/register:
+    post:
+      description: "Requiere una API key live de cuenta en un plan pago (autogestió\
+        n incluida). El certificado (.p12/.pfx en base64) tiene que declarar el mismo\
+        \ RUC; si no, no se crea nada."
+      operationId: registerCompany
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/registerCompany_request"
+        required: true
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Dar de alta una empresa con su certificado digital
+      tags:
+      - company
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/companies/{id}/certificate:
+    post:
+      operationId: uploadCompanyCertificate
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/uploadCompanyCertificate_request"
+        required: true
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Subir certificado digital (.p12/.pfx en base64)
+      tags:
+      - company
+      x-content-type: application/json
+      x-accepts:
+      - application/json
   /api/v1/companies/{id}/logo:
+    delete:
+      operationId: deleteCompanyLogo
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Eliminar logo de la empresa
+      tags:
+      - company
+      x-accepts:
+      - application/json
     get:
       operationId: getCompanyLogo
       parameters:
@@ -1696,6 +1862,43 @@ paths:
                 $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
           description: Default Response
       summary: Obtener logo de la empresa (PNG/JPG)
+      tags:
+      - company
+      x-accepts:
+      - application/json
+    post:
+      description: El logo aparecerá en los PDFs (A4 y ticket). Reemplaza el anterior.
+      operationId: uploadCompanyLogo
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: "Subir logo de la empresa (PNG/JPG, max 200KB)"
       tags:
       - company
       x-accepts:
@@ -1735,6 +1938,151 @@ paths:
       summary: Listar establecimientos (sucursales) de una empresa
       tags:
       - branches
+      x-accepts:
+      - application/json
+    post:
+      description: El código debe coincidir con el que SUNAT asignó a la sucursal
+        al registrarla en el portal SOL (Mis Trámites > Establecimientos Anexos).
+      operationId: createBranch
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createBranch_request"
+        required: true
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Crear establecimiento (sucursal)
+      tags:
+      - branches
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/companies/{id}/branches/{branchId}:
+    delete:
+      description: No se elimina físicamente porque puede haber documentos emitidos
+        desde ahí. Solo se desactiva (isActive=false).
+      operationId: deactivateBranch
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: branchId
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Desactivar establecimiento (soft-delete)
+      tags:
+      - branches
+      x-accepts:
+      - application/json
+    put:
+      operationId: updateBranch
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: branchId
+        required: true
+        schema:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateBranch_request"
+        required: true
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Actualizar establecimiento
+      tags:
+      - branches
+      x-content-type: application/json
       x-accepts:
       - application/json
   /api/v1/plans:
@@ -1875,6 +2223,33 @@ paths:
       tags:
       - plans
       x-content-type: application/json
+      x-accepts:
+      - application/json
+  /api/v1/usage:
+    get:
+      operationId: getUsage
+      responses:
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_403_response"
+          description: Default Response
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_internal_certificates_expiring_get_429_response"
+          description: Default Response
+      summary: Consumo del tenant actual (docs emitidos / límite del plan)
+      tags:
+      - usage
       x-accepts:
       - application/json
   /api/v1/auth/signup:
@@ -2791,6 +3166,36 @@ components:
           type: string
       required:
       - nroDoc
+    sendInvoice_request_anticipos_inner:
+      properties:
+        tipoDoc:
+          enum:
+          - "02"
+          - "03"
+          type: string
+        nroDoc:
+          pattern: "^[FB][A-Z0-9]{3}-\\d{1,8}$"
+          type: string
+        total:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        valor:
+          exclusiveMinimum: true
+          minimum: 0
+          type: number
+        afectacion:
+          default: "10"
+          enum:
+          - "10"
+          - "20"
+          - "30"
+          type: string
+      required:
+      - nroDoc
+      - tipoDoc
+      - total
+      - valor
     sendInvoice_request:
       properties:
         tipoOperacion:
@@ -2814,6 +3219,11 @@ components:
           maxLength: 3
           minLength: 3
           type: string
+        tipoCambio:
+          exclusiveMinimum: true
+          maximum: 100
+          minimum: 0
+          type: number
         fechaEmision:
           nullable: true
           type: string
@@ -2924,6 +3334,12 @@ components:
         guiaRemision:
           items:
             $ref: "#/components/schemas/sendInvoice_request_guiaRemision_inner"
+          maxItems: 20
+          type: array
+          default: null
+        anticipos:
+          items:
+            $ref: "#/components/schemas/sendInvoice_request_anticipos_inner"
           maxItems: 20
           type: array
           default: null
@@ -3369,6 +3785,11 @@ components:
           maxLength: 3
           minLength: 3
           type: string
+        tipoCambio:
+          exclusiveMinimum: true
+          maximum: 100
+          minimum: 0
+          type: number
         fechaEmision:
           nullable: true
           type: string
@@ -3690,6 +4111,7 @@ components:
           type: string
         destinatarioEmail:
           maxLength: 120
+          nullable: true
           type: string
         entregaReferencia:
           maxLength: 500
@@ -3930,6 +4352,7 @@ components:
           type: string
         destinatarioEmail:
           maxLength: 120
+          nullable: true
           type: string
         entregaReferencia:
           maxLength: 500
@@ -4349,6 +4772,7 @@ components:
           type: string
         destinatarioEmail:
           maxLength: 120
+          nullable: true
           type: string
         entregaReferencia:
           maxLength: 500
@@ -5353,6 +5777,295 @@ components:
       required:
       - data
       - success
+    updateCompany_request_cuentasBancarias_inner:
+      properties:
+        nombre:
+          maxLength: 40
+          minLength: 1
+          type: string
+        bancos:
+          default: []
+          items:
+            maxLength: 20
+            type: string
+          maxItems: 2
+          type: array
+        tipoLabel:
+          maxLength: 40
+          type: string
+        titularLabel:
+          maxLength: 20
+          type: string
+        titular:
+          maxLength: 80
+          type: string
+        titularRuc:
+          maxLength: 11
+          type: string
+        numero:
+          maxLength: 40
+          minLength: 1
+          type: string
+        cci:
+          maxLength: 40
+          type: string
+      required:
+      - nombre
+      - numero
+      - tipoLabel
+    updateCompany_request:
+      properties:
+        ruc:
+          maxLength: 11
+          minLength: 11
+          type: string
+        razonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        nombreComercial:
+          maxLength: 255
+          type: string
+        ubigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        direccion:
+          maxLength: 500
+          type: string
+        departamento:
+          maxLength: 100
+          type: string
+        provincia:
+          maxLength: 100
+          type: string
+        distrito:
+          maxLength: 100
+          type: string
+        urbanizacion:
+          maxLength: 200
+          type: string
+        telefono:
+          maxLength: 50
+          type: string
+        email:
+          format: email
+          maxLength: 120
+          pattern: "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\
+            -]*\\.)+[A-Za-z]{2,}$"
+          type: string
+        web:
+          maxLength: 120
+          nullable: true
+          type: string
+        solUser:
+          maxLength: 50
+          type: string
+        solPassword:
+          maxLength: 100
+          type: string
+        tenantId:
+          format: uuid
+          pattern: "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          type: string
+        greClientId:
+          maxLength: 100
+          type: string
+        greClientSecret:
+          maxLength: 255
+          type: string
+        sireClientId:
+          maxLength: 100
+          type: string
+        sireClientSecret:
+          maxLength: 255
+          type: string
+        sireAutoSync:
+          type: boolean
+        sunatProduction:
+          type: boolean
+        isSandbox:
+          type: boolean
+        cuentasBancarias:
+          items:
+            $ref: "#/components/schemas/updateCompany_request_cuentasBancarias_inner"
+          maxItems: 6
+          type: array
+          default: null
+        terminosTitulo:
+          maxLength: 120
+          nullable: true
+          type: string
+        terminos:
+          items:
+            maxLength: 200
+            type: string
+          maxItems: 8
+          type: array
+          default: null
+        notaPagoTitulo:
+          maxLength: 60
+          nullable: true
+          type: string
+        notaPagoTexto:
+          maxLength: 300
+          nullable: true
+          type: string
+        sireReintentar:
+          type: boolean
+    registerCompany_request_certificado:
+      properties:
+        content:
+          description: Base64 del .p12/.pfx
+          maxLength: 200000
+          minLength: 1
+          type: string
+        password:
+          maxLength: 255
+          minLength: 1
+          type: string
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - content
+      - password
+    registerCompany_request:
+      properties:
+        ruc:
+          pattern: "^(10|15|16|17|20)\\d{9}$"
+          type: string
+        razonSocial:
+          maxLength: 255
+          minLength: 1
+          type: string
+        nombreComercial:
+          maxLength: 255
+          type: string
+        ubigeo:
+          pattern: "^\\d{6}$"
+          type: string
+        direccion:
+          maxLength: 500
+          type: string
+        departamento:
+          maxLength: 100
+          type: string
+        provincia:
+          maxLength: 100
+          type: string
+        distrito:
+          maxLength: 100
+          type: string
+        urbanizacion:
+          maxLength: 200
+          type: string
+        telefono:
+          maxLength: 50
+          type: string
+        email:
+          format: email
+          maxLength: 120
+          pattern: "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\\
+            -]*\\.)+[A-Za-z]{2,}$"
+          type: string
+        web:
+          maxLength: 120
+          nullable: true
+          type: string
+        solUser:
+          maxLength: 50
+          minLength: 1
+          type: string
+        solPassword:
+          maxLength: 100
+          minLength: 1
+          type: string
+        certificado:
+          $ref: "#/components/schemas/registerCompany_request_certificado"
+      required:
+      - certificado
+      - razonSocial
+      - ruc
+    uploadCompanyCertificate_request:
+      properties:
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+        password:
+          maxLength: 255
+          minLength: 1
+          type: string
+        content:
+          description: Base64 del .p12/.pfx
+          maxLength: 200000
+          minLength: 1
+          type: string
+      required:
+      - content
+      - name
+      - password
+    createBranch_request:
+      properties:
+        codigo:
+          pattern: "^\\d{4}$"
+          type: string
+        nombre:
+          maxLength: 255
+          type: string
+        ubigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        direccion:
+          maxLength: 500
+          type: string
+        departamento:
+          maxLength: 100
+          type: string
+        provincia:
+          maxLength: 100
+          type: string
+        distrito:
+          maxLength: 100
+          type: string
+        urbanizacion:
+          maxLength: 200
+          type: string
+        isActive:
+          default: true
+          type: boolean
+      required:
+      - codigo
+    updateBranch_request:
+      properties:
+        nombre:
+          maxLength: 255
+          type: string
+        ubigeo:
+          maxLength: 6
+          minLength: 6
+          type: string
+        direccion:
+          maxLength: 500
+          type: string
+        departamento:
+          maxLength: 100
+          type: string
+        provincia:
+          maxLength: 100
+          type: string
+        distrito:
+          maxLength: 100
+          type: string
+        urbanizacion:
+          maxLength: 200
+          type: string
+        isActive:
+          default: true
+          type: boolean
     createPlan_request:
       properties:
         code:

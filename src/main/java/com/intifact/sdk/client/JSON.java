@@ -110,6 +110,7 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ComputeInvoiceRequestItemsInnerDescuento.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ConsultarCdr200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ConsultarCdrRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreateBranchRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.CreatePlanRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ExportProductoSunat200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ExportProductoSunat200ResponseData.CustomTypeAdapterFactory());
@@ -140,6 +141,8 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ListDocuments200ResponsePagination.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.LoginRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.ReconcileDocument200Response.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.RegisterCompanyRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.RegisterCompanyRequestCertificado.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.RetryDocument202Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SearchProductoSunat200Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SearchProductoSunat200ResponseData.CustomTypeAdapterFactory());
@@ -162,6 +165,7 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendInvoice202Response.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendInvoice202ResponseData.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendInvoiceRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendInvoiceRequestAnticiposInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendInvoiceRequestDetalleInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendInvoiceRequestDetraccion.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendInvoiceRequestFormaPagoInner.CustomTypeAdapterFactory());
@@ -176,7 +180,11 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendVoidedRequest.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SendVoidedRequestItemsInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.SignupRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UpdateBranchRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UpdateCompanyRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UpdateCompanyRequestCuentasBancariasInner.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UpdatePlanRequest.CustomTypeAdapterFactory());
+        gsonBuilder.registerTypeAdapterFactory(new com.intifact.sdk.model.UploadCompanyCertificateRequest.CustomTypeAdapterFactory());
         gson = gsonBuilder.create();
     }
 

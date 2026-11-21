@@ -54,7 +54,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * SendNoteRequest
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-24T07:54:53.593354100-05:00[America/Lima]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-11-21T10:12:02.865034800-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class SendNoteRequest {
   public static final String SERIALIZED_NAME_TIPO_OPERACION = "tipoOperacion";
   @SerializedName(SERIALIZED_NAME_TIPO_OPERACION)
@@ -132,6 +132,11 @@ public class SendNoteRequest {
   @SerializedName(SERIALIZED_NAME_TIPO_MONEDA)
   @javax.annotation.Nullable
   private String tipoMoneda = "PEN";
+
+  public static final String SERIALIZED_NAME_TIPO_CAMBIO = "tipoCambio";
+  @SerializedName(SERIALIZED_NAME_TIPO_CAMBIO)
+  @javax.annotation.Nullable
+  private BigDecimal tipoCambio;
 
   public static final String SERIALIZED_NAME_FECHA_EMISION = "fechaEmision";
   @SerializedName(SERIALIZED_NAME_FECHA_EMISION)
@@ -415,6 +420,27 @@ public class SendNoteRequest {
 
   public void setTipoMoneda(@javax.annotation.Nullable String tipoMoneda) {
     this.tipoMoneda = tipoMoneda;
+  }
+
+
+  public SendNoteRequest tipoCambio(@javax.annotation.Nullable BigDecimal tipoCambio) {
+    this.tipoCambio = tipoCambio;
+    return this;
+  }
+
+  /**
+   * Get tipoCambio
+   * minimum: 0
+   * maximum: 100
+   * @return tipoCambio
+   */
+  @javax.annotation.Nullable
+  public BigDecimal getTipoCambio() {
+    return tipoCambio;
+  }
+
+  public void setTipoCambio(@javax.annotation.Nullable BigDecimal tipoCambio) {
+    this.tipoCambio = tipoCambio;
   }
 
 
@@ -972,6 +998,7 @@ public class SendNoteRequest {
         Objects.equals(this.serie, sendNoteRequest.serie) &&
         Objects.equals(this.correlativo, sendNoteRequest.correlativo) &&
         Objects.equals(this.tipoMoneda, sendNoteRequest.tipoMoneda) &&
+        Objects.equals(this.tipoCambio, sendNoteRequest.tipoCambio) &&
         Objects.equals(this.fechaEmision, sendNoteRequest.fechaEmision) &&
         Objects.equals(this.empresaRuc, sendNoteRequest.empresaRuc) &&
         Objects.equals(this.establecimientoCodigo, sendNoteRequest.establecimientoCodigo) &&
@@ -1003,7 +1030,7 @@ public class SendNoteRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(tipoOperacion, tipoDoc, serie, correlativo, tipoMoneda, fechaEmision, empresaRuc, establecimientoCodigo, clienteTipoDoc, clienteNumDoc, clienteRazonSocial, clienteDireccion, clienteDistrito, clienteProvincia, clienteDepartamento, afectadoTipoDoc, afectadoNumDoc, motivoCod, motivoDes, montoOperGravadas, montoOperExoneradas, montoOperInafectas, montoIgv, totalImpuestos, valorVenta, subTotal, montoImpVenta, descuentoGlobal, descuentoGlobalBase, detalle, leyendas, observacion);
+    return Objects.hash(tipoOperacion, tipoDoc, serie, correlativo, tipoMoneda, tipoCambio, fechaEmision, empresaRuc, establecimientoCodigo, clienteTipoDoc, clienteNumDoc, clienteRazonSocial, clienteDireccion, clienteDistrito, clienteProvincia, clienteDepartamento, afectadoTipoDoc, afectadoNumDoc, motivoCod, motivoDes, montoOperGravadas, montoOperExoneradas, montoOperInafectas, montoIgv, totalImpuestos, valorVenta, subTotal, montoImpVenta, descuentoGlobal, descuentoGlobalBase, detalle, leyendas, observacion);
   }
 
   @Override
@@ -1015,6 +1042,7 @@ public class SendNoteRequest {
     sb.append("    serie: ").append(toIndentedString(serie)).append("\n");
     sb.append("    correlativo: ").append(toIndentedString(correlativo)).append("\n");
     sb.append("    tipoMoneda: ").append(toIndentedString(tipoMoneda)).append("\n");
+    sb.append("    tipoCambio: ").append(toIndentedString(tipoCambio)).append("\n");
     sb.append("    fechaEmision: ").append(toIndentedString(fechaEmision)).append("\n");
     sb.append("    empresaRuc: ").append(toIndentedString(empresaRuc)).append("\n");
     sb.append("    establecimientoCodigo: ").append(toIndentedString(establecimientoCodigo)).append("\n");
@@ -1060,7 +1088,7 @@ public class SendNoteRequest {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("tipoOperacion", "tipoDoc", "serie", "correlativo", "tipoMoneda", "fechaEmision", "empresaRuc", "establecimientoCodigo", "clienteTipoDoc", "clienteNumDoc", "clienteRazonSocial", "clienteDireccion", "clienteDistrito", "clienteProvincia", "clienteDepartamento", "afectadoTipoDoc", "afectadoNumDoc", "motivoCod", "motivoDes", "montoOperGravadas", "montoOperExoneradas", "montoOperInafectas", "montoIgv", "totalImpuestos", "valorVenta", "subTotal", "montoImpVenta", "descuentoGlobal", "descuentoGlobalBase", "detalle", "leyendas", "observacion"));
+    openapiFields = new HashSet<String>(Arrays.asList("tipoOperacion", "tipoDoc", "serie", "correlativo", "tipoMoneda", "tipoCambio", "fechaEmision", "empresaRuc", "establecimientoCodigo", "clienteTipoDoc", "clienteNumDoc", "clienteRazonSocial", "clienteDireccion", "clienteDistrito", "clienteProvincia", "clienteDepartamento", "afectadoTipoDoc", "afectadoNumDoc", "motivoCod", "motivoDes", "montoOperGravadas", "montoOperExoneradas", "montoOperInafectas", "montoIgv", "totalImpuestos", "valorVenta", "subTotal", "montoImpVenta", "descuentoGlobal", "descuentoGlobalBase", "detalle", "leyendas", "observacion"));
 
     // a set of required properties/fields (JSON key names)
     openapiRequiredFields = new HashSet<String>(Arrays.asList("tipoDoc", "serie", "correlativo", "fechaEmision", "empresaRuc", "clienteTipoDoc", "clienteNumDoc", "clienteRazonSocial", "afectadoTipoDoc", "afectadoNumDoc", "motivoCod", "motivoDes", "montoIgv", "totalImpuestos", "valorVenta", "subTotal", "montoImpVenta", "detalle", "leyendas"));

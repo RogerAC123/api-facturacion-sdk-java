@@ -12,6 +12,7 @@
 |**serie** | **String** |  |  |
 |**correlativo** | **String** |  |  |
 |**tipoMoneda** | **String** |  |  [optional] |
+|**tipoCambio** | **BigDecimal** |  |  [optional] |
 |**fechaEmision** | **String** |  |  |
 |**empresaRuc** | **String** |  |  |
 |**establecimientoCodigo** | **String** |  |  [optional] |
@@ -41,6 +42,7 @@
 |**pagos** | [**List&lt;SendInvoiceRequestPagosInner&gt;**](SendInvoiceRequestPagosInner.md) |  |  [optional] |
 |**detraccion** | [**SendInvoiceRequestDetraccion**](SendInvoiceRequestDetraccion.md) |  |  [optional] |
 |**guiaRemision** | [**List&lt;SendInvoiceRequestGuiaRemisionInner&gt;**](SendInvoiceRequestGuiaRemisionInner.md) |  |  [optional] |
+|**anticipos** | [**List&lt;SendInvoiceRequestAnticiposInner&gt;**](SendInvoiceRequestAnticiposInner.md) |  |  [optional] |
 
 
 

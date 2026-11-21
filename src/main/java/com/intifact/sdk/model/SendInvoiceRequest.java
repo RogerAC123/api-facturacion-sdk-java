@@ -19,6 +19,7 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.intifact.sdk.model.SendInvoiceRequestAnticiposInner;
 import com.intifact.sdk.model.SendInvoiceRequestDetalleInner;
 import com.intifact.sdk.model.SendInvoiceRequestDetraccion;
 import com.intifact.sdk.model.SendInvoiceRequestFormaPagoInner;
@@ -58,7 +59,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * SendInvoiceRequest
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-09-24T07:54:53.593354100-05:00[America/Lima]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-11-21T10:12:02.865034800-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class SendInvoiceRequest {
   public static final String SERIALIZED_NAME_TIPO_OPERACION = "tipoOperacion";
   @SerializedName(SERIALIZED_NAME_TIPO_OPERACION)
@@ -136,6 +137,11 @@ public class SendInvoiceRequest {
   @SerializedName(SERIALIZED_NAME_TIPO_MONEDA)
   @javax.annotation.Nullable
   private String tipoMoneda = "PEN";
+
+  public static final String SERIALIZED_NAME_TIPO_CAMBIO = "tipoCambio";
+  @SerializedName(SERIALIZED_NAME_TIPO_CAMBIO)
+  @javax.annotation.Nullable
+  private BigDecimal tipoCambio;
 
   public static final String SERIALIZED_NAME_FECHA_EMISION = "fechaEmision";
   @SerializedName(SERIALIZED_NAME_FECHA_EMISION)
@@ -282,6 +288,11 @@ public class SendInvoiceRequest {
   @javax.annotation.Nullable
   private List<SendInvoiceRequestGuiaRemisionInner> guiaRemision = new ArrayList<>();
 
+  public static final String SERIALIZED_NAME_ANTICIPOS = "anticipos";
+  @SerializedName(SERIALIZED_NAME_ANTICIPOS)
+  @javax.annotation.Nullable
+  private List<SendInvoiceRequestAnticiposInner> anticipos = new ArrayList<>();
+
   public SendInvoiceRequest() {
   }
 
@@ -377,6 +388,27 @@ public class SendInvoiceRequest {
 
   public void setTipoMoneda(@javax.annotation.Nullable String tipoMoneda) {
     this.tipoMoneda = tipoMoneda;
+  }
+
+
+  public SendInvoiceRequest tipoCambio(@javax.annotation.Nullable BigDecimal tipoCambio) {
+    this.tipoCambio = tipoCambio;
+    return this;
+  }
+
+  /**
+   * Get tipoCambio
+   * minimum: 0
+   * maximum: 100
+   * @return tipoCambio
+   */
+  @javax.annotation.Nullable
+  public BigDecimal getTipoCambio() {
+    return tipoCambio;
+  }
+
+  public void setTipoCambio(@javax.annotation.Nullable BigDecimal tipoCambio) {
+    this.tipoCambio = tipoCambio;
   }
 
 
@@ -982,6 +1014,33 @@ public class SendInvoiceRequest {
   }
 
 
+  public SendInvoiceRequest anticipos(@javax.annotation.Nullable List<SendInvoiceRequestAnticiposInner> anticipos) {
+    this.anticipos = anticipos;
+    return this;
+  }
+
+  public SendInvoiceRequest addAnticiposItem(SendInvoiceRequestAnticiposInner anticiposItem) {
+    if (this.anticipos == null) {
+      this.anticipos = new ArrayList<>();
+    }
+    this.anticipos.add(anticiposItem);
+    return this;
+  }
+
+  /**
+   * Get anticipos
+   * @return anticipos
+   */
+  @javax.annotation.Nullable
+  public List<SendInvoiceRequestAnticiposInner> getAnticipos() {
+    return anticipos;
+  }
+
+  public void setAnticipos(@javax.annotation.Nullable List<SendInvoiceRequestAnticiposInner> anticipos) {
+    this.anticipos = anticipos;
+  }
+
+
 
   @Override
   public boolean equals(Object o) {
@@ -997,6 +1056,7 @@ public class SendInvoiceRequest {
         Objects.equals(this.serie, sendInvoiceRequest.serie) &&
         Objects.equals(this.correlativo, sendInvoiceRequest.correlativo) &&
         Objects.equals(this.tipoMoneda, sendInvoiceRequest.tipoMoneda) &&
+        Objects.equals(this.tipoCambio, sendInvoiceRequest.tipoCambio) &&
         Objects.equals(this.fechaEmision, sendInvoiceRequest.fechaEmision) &&
         Objects.equals(this.empresaRuc, sendInvoiceRequest.empresaRuc) &&
         Objects.equals(this.establecimientoCodigo, sendInvoiceRequest.establecimientoCodigo) &&
@@ -1025,12 +1085,13 @@ public class SendInvoiceRequest {
         Objects.equals(this.vendedor, sendInvoiceRequest.vendedor) &&
         Objects.equals(this.pagos, sendInvoiceRequest.pagos) &&
         Objects.equals(this.detraccion, sendInvoiceRequest.detraccion) &&
-        Objects.equals(this.guiaRemision, sendInvoiceRequest.guiaRemision);
+        Objects.equals(this.guiaRemision, sendInvoiceRequest.guiaRemision) &&
+        Objects.equals(this.anticipos, sendInvoiceRequest.anticipos);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tipoOperacion, tipoDoc, serie, correlativo, tipoMoneda, fechaEmision, empresaRuc, establecimientoCodigo, clienteTipoDoc, clienteNumDoc, clienteRazonSocial, clienteDireccion, clienteDistrito, clienteProvincia, clienteDepartamento, montoOperGravadas, montoOperExoneradas, montoOperInafectas, montoOperGratuitas, montoIgv, totalImpuestos, valorVenta, subTotal, montoImpVenta, descuentoGlobal, descuentoGlobalBase, detalle, formaPago, leyendas, observacion, vendedor, pagos, detraccion, guiaRemision);
+    return Objects.hash(tipoOperacion, tipoDoc, serie, correlativo, tipoMoneda, tipoCambio, fechaEmision, empresaRuc, establecimientoCodigo, clienteTipoDoc, clienteNumDoc, clienteRazonSocial, clienteDireccion, clienteDistrito, clienteProvincia, clienteDepartamento, montoOperGravadas, montoOperExoneradas, montoOperInafectas, montoOperGratuitas, montoIgv, totalImpuestos, valorVenta, subTotal, montoImpVenta, descuentoGlobal, descuentoGlobalBase, detalle, formaPago, leyendas, observacion, vendedor, pagos, detraccion, guiaRemision, anticipos);
   }
 
   @Override
@@ -1042,6 +1103,7 @@ public class SendInvoiceRequest {
     sb.append("    serie: ").append(toIndentedString(serie)).append("\n");
     sb.append("    correlativo: ").append(toIndentedString(correlativo)).append("\n");
     sb.append("    tipoMoneda: ").append(toIndentedString(tipoMoneda)).append("\n");
+    sb.append("    tipoCambio: ").append(toIndentedString(tipoCambio)).append("\n");
     sb.append("    fechaEmision: ").append(toIndentedString(fechaEmision)).append("\n");
     sb.append("    empresaRuc: ").append(toIndentedString(empresaRuc)).append("\n");
     sb.append("    establecimientoCodigo: ").append(toIndentedString(establecimientoCodigo)).append("\n");
@@ -1071,6 +1133,7 @@ public class SendInvoiceRequest {
     sb.append("    pagos: ").append(toIndentedString(pagos)).append("\n");
     sb.append("    detraccion: ").append(toIndentedString(detraccion)).append("\n");
     sb.append("    guiaRemision: ").append(toIndentedString(guiaRemision)).append("\n");
+    sb.append("    anticipos: ").append(toIndentedString(anticipos)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -1089,7 +1152,7 @@ public class SendInvoiceRequest {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("tipoOperacion", "tipoDoc", "serie", "correlativo", "tipoMoneda", "fechaEmision", "empresaRuc", "establecimientoCodigo", "clienteTipoDoc", "clienteNumDoc", "clienteRazonSocial", "clienteDireccion", "clienteDistrito", "clienteProvincia", "clienteDepartamento", "montoOperGravadas", "montoOperExoneradas", "montoOperInafectas", "montoOperGratuitas", "montoIgv", "totalImpuestos", "valorVenta", "subTotal", "montoImpVenta", "descuentoGlobal", "descuentoGlobalBase", "detalle", "formaPago", "leyendas", "observacion", "vendedor", "pagos", "detraccion", "guiaRemision"));
+    openapiFields = new HashSet<String>(Arrays.asList("tipoOperacion", "tipoDoc", "serie", "correlativo", "tipoMoneda", "tipoCambio", "fechaEmision", "empresaRuc", "establecimientoCodigo", "clienteTipoDoc", "clienteNumDoc", "clienteRazonSocial", "clienteDireccion", "clienteDistrito", "clienteProvincia", "clienteDepartamento", "montoOperGravadas", "montoOperExoneradas", "montoOperInafectas", "montoOperGratuitas", "montoIgv", "totalImpuestos", "valorVenta", "subTotal", "montoImpVenta", "descuentoGlobal", "descuentoGlobalBase", "detalle", "formaPago", "leyendas", "observacion", "vendedor", "pagos", "detraccion", "guiaRemision", "anticipos"));
 
     // a set of required properties/fields (JSON key names)
     openapiRequiredFields = new HashSet<String>(Arrays.asList("tipoDoc", "serie", "correlativo", "fechaEmision", "empresaRuc", "clienteTipoDoc", "clienteNumDoc", "clienteRazonSocial", "montoIgv", "totalImpuestos", "valorVenta", "subTotal", "montoImpVenta", "detalle", "formaPago", "leyendas"));
@@ -1235,6 +1298,20 @@ public class SendInvoiceRequest {
           // validate the optional field `guiaRemision` (array)
           for (int i = 0; i < jsonArrayguiaRemision.size(); i++) {
             SendInvoiceRequestGuiaRemisionInner.validateJsonElement(jsonArrayguiaRemision.get(i));
+          };
+        }
+      }
+      if (jsonObj.get("anticipos") != null && !jsonObj.get("anticipos").isJsonNull()) {
+        JsonArray jsonArrayanticipos = jsonObj.getAsJsonArray("anticipos");
+        if (jsonArrayanticipos != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("anticipos").isJsonArray()) {
+            throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `anticipos` to be an array in the JSON string but got `%s`", jsonObj.get("anticipos").toString()));
+          }
+
+          // validate the optional field `anticipos` (array)
+          for (int i = 0; i < jsonArrayanticipos.size(); i++) {
+            SendInvoiceRequestAnticiposInner.validateJsonElement(jsonArrayanticipos.get(i));
           };
         }
       }

@@ -21,6 +21,8 @@
 |**web** | **String** |  |  [optional] |
 |**solUser** | **String** |  |  [optional] |
 |**solPassword** | **String** |  |  [optional] |
+|**greClientId** | **String** |  |  [optional] |
+|**greClientSecret** | **String** |  |  [optional] |
 |**certificado** | [**RegisterCompanyRequestCertificado**](RegisterCompanyRequestCertificado.md) |  |  |
 
 

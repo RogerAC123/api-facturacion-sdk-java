@@ -226,4 +226,3 @@ src/main/java/com/intifact/sdk/model/UpdateCompanyRequest.java
 src/main/java/com/intifact/sdk/model/UpdateCompanyRequestCuentasBancariasInner.java
 src/main/java/com/intifact/sdk/model/UpdatePlanRequest.java
 src/main/java/com/intifact/sdk/model/UploadCompanyCertificateRequest.java
-src/test/java/com/intifact/sdk/api/UsageApiTest.java

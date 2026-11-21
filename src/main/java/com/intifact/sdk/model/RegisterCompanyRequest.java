@@ -51,7 +51,7 @@ import com.intifact.sdk.client.JSON;
 /**
  * RegisterCompanyRequest
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-11-21T10:12:02.865034800-05:00[America/Lima]", comments = "Generator version: 7.25.0")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-11-21T14:44:32.274022400-05:00[America/Lima]", comments = "Generator version: 7.25.0")
 public class RegisterCompanyRequest {
   public static final String SERIALIZED_NAME_RUC = "ruc";
   @SerializedName(SERIALIZED_NAME_RUC)
@@ -122,6 +122,16 @@ public class RegisterCompanyRequest {
   @SerializedName(SERIALIZED_NAME_SOL_PASSWORD)
   @javax.annotation.Nullable
   private String solPassword;
+
+  public static final String SERIALIZED_NAME_GRE_CLIENT_ID = "greClientId";
+  @SerializedName(SERIALIZED_NAME_GRE_CLIENT_ID)
+  @javax.annotation.Nullable
+  private String greClientId;
+
+  public static final String SERIALIZED_NAME_GRE_CLIENT_SECRET = "greClientSecret";
+  @SerializedName(SERIALIZED_NAME_GRE_CLIENT_SECRET)
+  @javax.annotation.Nullable
+  private String greClientSecret;
 
   public static final String SERIALIZED_NAME_CERTIFICADO = "certificado";
   @SerializedName(SERIALIZED_NAME_CERTIFICADO)
@@ -397,6 +407,44 @@ public class RegisterCompanyRequest {
   }
 
 
+  public RegisterCompanyRequest greClientId(@javax.annotation.Nullable String greClientId) {
+    this.greClientId = greClientId;
+    return this;
+  }
+
+  /**
+   * Get greClientId
+   * @return greClientId
+   */
+  @javax.annotation.Nullable
+  public String getGreClientId() {
+    return greClientId;
+  }
+
+  public void setGreClientId(@javax.annotation.Nullable String greClientId) {
+    this.greClientId = greClientId;
+  }
+
+
+  public RegisterCompanyRequest greClientSecret(@javax.annotation.Nullable String greClientSecret) {
+    this.greClientSecret = greClientSecret;
+    return this;
+  }
+
+  /**
+   * Get greClientSecret
+   * @return greClientSecret
+   */
+  @javax.annotation.Nullable
+  public String getGreClientSecret() {
+    return greClientSecret;
+  }
+
+  public void setGreClientSecret(@javax.annotation.Nullable String greClientSecret) {
+    this.greClientSecret = greClientSecret;
+  }
+
+
   public RegisterCompanyRequest certificado(@javax.annotation.Nonnull RegisterCompanyRequestCertificado certificado) {
     this.certificado = certificado;
     return this;
@@ -440,6 +488,8 @@ public class RegisterCompanyRequest {
         Objects.equals(this.web, registerCompanyRequest.web) &&
         Objects.equals(this.solUser, registerCompanyRequest.solUser) &&
         Objects.equals(this.solPassword, registerCompanyRequest.solPassword) &&
+        Objects.equals(this.greClientId, registerCompanyRequest.greClientId) &&
+        Objects.equals(this.greClientSecret, registerCompanyRequest.greClientSecret) &&
         Objects.equals(this.certificado, registerCompanyRequest.certificado);
   }
 
@@ -449,7 +499,7 @@ public class RegisterCompanyRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ruc, razonSocial, nombreComercial, ubigeo, direccion, departamento, provincia, distrito, urbanizacion, telefono, email, web, solUser, solPassword, certificado);
+    return Objects.hash(ruc, razonSocial, nombreComercial, ubigeo, direccion, departamento, provincia, distrito, urbanizacion, telefono, email, web, solUser, solPassword, greClientId, greClientSecret, certificado);
   }
 
   private static <T> int hashCodeNullable(JsonNullable<T> a) {
@@ -477,6 +527,8 @@ public class RegisterCompanyRequest {
     sb.append("    web: ").append(toIndentedString(web)).append("\n");
     sb.append("    solUser: ").append(toIndentedString(solUser)).append("\n");
     sb.append("    solPassword: ").append(toIndentedString(solPassword)).append("\n");
+    sb.append("    greClientId: ").append(toIndentedString(greClientId)).append("\n");
+    sb.append("    greClientSecret: ").append(toIndentedString(greClientSecret)).append("\n");
     sb.append("    certificado: ").append(toIndentedString(certificado)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -496,7 +548,7 @@ public class RegisterCompanyRequest {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("ruc", "razonSocial", "nombreComercial", "ubigeo", "direccion", "departamento", "provincia", "distrito", "urbanizacion", "telefono", "email", "web", "solUser", "solPassword", "certificado"));
+    openapiFields = new HashSet<String>(Arrays.asList("ruc", "razonSocial", "nombreComercial", "ubigeo", "direccion", "departamento", "provincia", "distrito", "urbanizacion", "telefono", "email", "web", "solUser", "solPassword", "greClientId", "greClientSecret", "certificado"));
 
     // a set of required properties/fields (JSON key names)
     openapiRequiredFields = new HashSet<String>(Arrays.asList("ruc", "razonSocial", "certificado"));
@@ -571,6 +623,12 @@ public class RegisterCompanyRequest {
       }
       if ((jsonObj.get("solPassword") != null && !jsonObj.get("solPassword").isJsonNull()) && !jsonObj.get("solPassword").isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `solPassword` to be a primitive type in the JSON string but got `%s`", jsonObj.get("solPassword").toString()));
+      }
+      if ((jsonObj.get("greClientId") != null && !jsonObj.get("greClientId").isJsonNull()) && !jsonObj.get("greClientId").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `greClientId` to be a primitive type in the JSON string but got `%s`", jsonObj.get("greClientId").toString()));
+      }
+      if ((jsonObj.get("greClientSecret") != null && !jsonObj.get("greClientSecret").isJsonNull()) && !jsonObj.get("greClientSecret").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `greClientSecret` to be a primitive type in the JSON string but got `%s`", jsonObj.get("greClientSecret").toString()));
       }
       // validate the required field `certificado`
       RegisterCompanyRequestCertificado.validateJsonElement(jsonObj.get("certificado"));

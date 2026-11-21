@@ -5982,6 +5982,14 @@ components:
           maxLength: 100
           minLength: 1
           type: string
+        greClientId:
+          maxLength: 100
+          minLength: 1
+          type: string
+        greClientSecret:
+          maxLength: 255
+          minLength: 1
+          type: string
         certificado:
           $ref: "#/components/schemas/registerCompany_request_certificado"
       required:
